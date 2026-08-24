@@ -78,6 +78,33 @@ function runChain(fights, enterFn, doneLabel, maxTries = 8) {
   }
   if (!has(doneLabel)) throw new Error('任务链未完成: ' + doneLabel + ' ' + JSON.stringify(btns()));
 }
+// 寻踪任务：接单后无地点提示，游荡偶遇「进去」入口，打完回告示板交差
+const HUNT_ACTS = ['查看水迹', '追踪（耗10体力）', '下矿（碰运气）', '进洞', '上前', '冲阵', '闯卡', '截住商队', '迎上去', '趟进去', '推门进去', '下滩', '下水', '冲卡', '闯骨场', '踏进去', '接战', '抬棺（护送入土）', '引出一只', '靠近水边', '慢慢摸过去（稳妥，七成）'];
+function huntJob(doneRow, maxTries = 90) {
+  __runCmd('/heal');
+  let g = 0;
+  while (!has(doneRow) && g++ < maxTries) {
+    if (has('攻击·侧面 (×1.3)')) { fightUntilOver(); continue; }
+    if (has('起身')) { click('起身'); click('离开'); continue; }
+    const actBtn = btns().find(b => HUNT_ACTS.includes(b));
+    if (actBtn) { click(actBtn); continue; }
+    const backBtn = btns().find(b => b.startsWith('回告示板'));
+    if (backBtn) { click(backBtn); continue; }
+    if (has('进去')) { click('进去'); continue; }
+    if (has('继续游荡')) { click('继续游荡'); continue; }
+    if (has('在野外游荡')) { click('在野外游荡'); continue; }
+    if (has('继续走')) { click('继续走'); continue; }
+    if (has('继续赶路')) { click('继续赶路'); continue; }
+    if (has('别管他')) { click('别管他'); continue; }
+    if (has('改天再来')) { click('改天再来'); continue; }
+    if (has('回城')) { click('回城'); continue; }
+    if (has('出城')) { click('出城'); continue; }
+    if (has('离开')) { click('离开'); continue; }
+    if (has('告示板')) { click('告示板'); continue; }
+    throw new Error('寻踪异常: ' + JSON.stringify(btns()));
+  }
+  if (!has(doneRow)) throw new Error('寻踪未完成: ' + doneRow + ' ' + JSON.stringify(btns()));
+}
 
 /* ============ 流程 ============ */
 step('标题→新的开始', () => click('新的开始'));
@@ -105,34 +132,24 @@ step('除兽×3（接单后直达城外）', () => { click('离开'); click('回
   for (let i = 0; i < 3; i++) { fightUntilOver(); if (i < 2) click('继续猎杀'); }
   click('回告示板'); click('交差：除兽（+8铜币）');
   if (st().p.gold !== 9) throw new Error('金币=' + st().p.gold + '（预期9）'); });
-step('巨魔桥（连锁战×2）', () => { click('接：巨魔桥——桥洞住了巨魔（报酬10铜币+旧银币）');
-  if (!has('石桥（巨魔桥）')) throw new Error('接单后应直达城外');
-  click('石桥（巨魔桥）'); click('引出一只'); fightUntilOver();
-  if (st().p.inv.巨魔牙 !== 2) throw new Error('巨魔牙=' + st().p.inv.巨魔牙);
-  click('回告示板交差'); click('交差：巨魔桥（+10铜币+旧银币）');
-  if (st().p.inv.旧银币 !== 1 || st().p.gold !== 19) throw new Error('巨魔桥结算异常'); });
-step('偷蛋（含惊蛇战斗分支）', () => {
+step('巨魔桥（连锁战×2·寻踪）', () => { click('接：巨魔桥——桥洞住了巨魔（报酬10铜币+旧银币）');
+  if (has('石桥（巨魔桥）')) throw new Error('BOSS房不应直接告知地点');
+  huntJob('交差：巨魔桥（+10铜币+旧银币）');
+  click('交差：巨魔桥（+10铜币+旧银币）');
+  if (st().p.inv.巨魔牙 < 2) throw new Error('巨魔牙=' + st().p.inv.巨魔牙);
+  if (st().p.inv.旧银币 !== 1 || st().p.gold < 19) throw new Error('巨魔桥结算异常: 旧银币=' + st().p.inv.旧银币 + ' 金币=' + st().p.gold); });
+step('偷蛋（含惊蛇战斗分支·寻踪）', () => {
   click('接：偷蛋——沼泽巨蛇的蛋（报酬12铜币）');
-  click('沼泽（偷蛋）');
-  let guard = 0;
-  while (st().p.inv.蛇蛋 < 1 && guard++ < 6) {
-    click('慢慢摸过去（稳妥，七成）');
-    if (has('攻击·侧面 (×1.3)')) fightUntilOver();
-    if (st().p.inv.蛇蛋 < 1) {
-      if (has('回城')) { click('回城'); click('告示板'); click('偷蛋：南边沼泽'); click('沼泽（偷蛋）'); }
-      else if (has('告示板')) { click('告示板'); click('偷蛋：南边沼泽'); click('沼泽（偷蛋）'); }
-    }
-  }
+  huntJob('交差：偷蛋（+12铜币）');
   if (st().p.inv.蛇蛋 < 1) throw new Error('未拿到蛇蛋');
-  if (!has('交差：偷蛋（+12铜币）')) { click('离开'); click('告示板'); }
   click('交差：偷蛋（+12铜币）');
-  if (st().p.gold !== 31) throw new Error('金币=' + st().p.gold + '（预期31）'); });
-step('护送·大路（+8）', () => { click('接：护送商队（大路8铜币/小路12铜币）');
+  if (st().p.gold < 31) throw new Error('金币=' + st().p.gold + '（预期≥31）'); });
+step('护送·大路（+8）', () => { const g0 = st().p.gold; click('接：护送商队（大路8铜币/小路12铜币）');
   if (!has('护送进行中：商队在镇口')) throw new Error('接单后应直达城外');
   click('护送进行中：商队在镇口'); click('走大路');
-  click('交差：护送（+8铜币）'); if (st().p.gold !== 39) throw new Error('金币=' + st().p.gold); });
-step('护送·反水→被通缉', () => { click('接：护送商队（大路8铜币/小路12铜币）'); click('护送进行中：商队在镇口'); click('夜深了货就在那');
-  if (!st().p.flags.通缉 || st().p.gold !== 59) throw new Error('反水结算异常');
+  click('交差：护送（+8铜币）'); if (st().p.gold !== g0 + 8) throw new Error('护送金币=' + st().p.gold + ' 预期' + (g0 + 8)); });
+step('护送·反水→被通缉', () => { const g1 = st().p.gold; click('接：护送商队（大路8铜币/小路12铜币）'); click('护送进行中：商队在镇口'); click('夜深了货就在那');
+  if (!st().p.flags.通缉 || st().p.gold !== g1 + 20) throw new Error('反水结算异常: ' + st().p.gold + ' 预期' + (g1 + 20));
   if (!rawBtns().includes('护送：被通缉中——没人敢雇你')) throw new Error('被通缉后护送应下架');
   if (!statusEl.textContent.includes('被通缉')) throw new Error('状态栏未显示通缉'); });
 step('赏金猎人伏击（随机路径）', () => { click('离开'); click('出城');
@@ -155,19 +172,12 @@ step('寻猫（多轮碰运气）', () => { click('回城'); click('告示板');
   }
   if (!st().p.flags.catDone) throw new Error('20次没找到猫');
   click('交差：寻猫（+5铜币）'); });
-step('BOSS委托：吞骨鳄（支线解锁+一次性）', () => {
+step('BOSS委托：吞骨鳄（支线解锁+一次性·寻踪）', () => {
   if (!rawBtns().some(t => t.includes('吞骨鳄'))) throw new Error('jobCount不足未解锁吞骨鳄');
   click('BOSS委托：吞骨鳄（渡口河湾·报酬15铜板）');
-  if (!has('河湾（吞骨鳄）')) throw new Error('接单后应直达城外');
-  click('河湾（吞骨鳄）'); click('靠近水边');
-  let attempts = 0;
-  while (true) {
-    if (++attempts > 6) throw new Error('吞骨鳄重试过多');
-    fightUntilOver(100);
-    if (has('起身')) { console.log('  · 吞骨鳄把主角打回营地（噩梦）'); click('起身'); click('离开'); click('河湾（吞骨鳄）'); click('靠近水边'); continue; }
-    break;
-  }
-  click('回告示板交差'); click('交差：吞骨鳄（+15铜板）');
+  if (has('河湾（吞骨鳄）')) throw new Error('BOSS房不应直接告知地点');
+  huntJob('交差：吞骨鳄（+15铜板）', 120);
+  click('交差：吞骨鳄（+15铜板）');
   if (rawBtns().some(t => t.includes('吞骨鳄'))) throw new Error('吞骨鳄应一次性消失');
   if (!st().p.inv.黑鳄皮) throw new Error('未获得黑鳄皮'); });
 step('猪王讨伐（含死亡重试）', () => { click('接：猪王讨伐（报酬15铜板+旧铁片·仅一次）');
@@ -181,40 +191,38 @@ step('猪王讨伐（含死亡重试）', () => { click('接：猪王讨伐（�
   }
   click('回告示板交差'); click('交差：猪王讨伐（+15铜板+旧铁片）');
   if (!logHas('切片终点')) throw new Error('未到切片终点'); });
-step('匿名委托（猪王后解锁，+30）', () => { click('继续闲逛'); click('告示板');
+step('匿名委托（猪王后解锁，+30·寻踪）', () => { click('继续闲逛'); click('告示板');
   click('匿名委托：出30铜币，别问是什么');
-  click('扎营'); click('休息（恢复全部+存档）'); click('离开');
-  if (has('攻击·侧面 (×1.3)')) fightUntilOver();
-  click('废屋（匿名委托）'); click('进去');
-  fightUntilOver(); if (!st().p.inv.魔化兽皮) throw new Error('未获得魔化兽皮');
+  huntJob('交差：匿名委托（+30铜币）');
+  if (!st().p.inv.魔化兽皮) throw new Error('未获得魔化兽皮');
   click('交差：匿名委托（+30铜币）'); });
 step('阿什沃德新活计（赶鸦+掘墓人）', () => {
   if (st().p.flags.通缉) st().p.flags.通缉 = false; // 避免赏金猎人伏击干扰
+  __runCmd('/heal');
   click('接：赶鸦——田里的食腐鸦（报酬6铜币）');
   if (!has('麦田（赶鸦）')) throw new Error('赶鸦未直达城外: ' + JSON.stringify(btns()));
-  click('麦田（赶鸦）');
-  for (let i = 0; i < 3; i++) { fightUntilOver(); if (i < 2) click('继续赶'); }
-  click('回告示板'); click('交差：赶鸦（+6铜币）');
+  let crowGuard = 0;
+  while (!has('交差：赶鸦（+6铜币）') && crowGuard++ < 10) {
+    const mf = btns().find(b => b.startsWith('麦田（赶鸦）'));
+    if (mf) click(mf);
+    let f2 = 0;
+    while (has('攻击·侧面 (×1.3)') && f2++ < 6) { fightUntilOver(); if (has('起身')) break; }
+    if (has('继续赶')) click('继续赶');
+    if (has('起身')) { click('起身'); click('离开'); }
+    if (has('回告示板')) click('回告示板');
+  }
+  if (!has('交差：赶鸦（+6铜币）')) throw new Error('赶鸦未完成: ' + JSON.stringify(btns()));
+  click('交差：赶鸦（+6铜币）');
   if (!has('BOSS委托：掘墓人（乱葬岗·报酬18铜板+送葬骨灰）')) throw new Error('掘墓人委托缺失: ' + JSON.stringify(btns()));
   click('BOSS委托：掘墓人（乱葬岗·报酬18铜板+送葬骨灰）');
-  click('乱葬岗（掘墓人）');
-  fightUntilOver();
+  huntJob('交差：掘墓人（+18铜板+送葬骨灰×2）');
   click('交差：掘墓人（+18铜板+送葬骨灰×2）');
   if (st().p.inv.送葬骨灰 < 2) throw new Error('送葬骨灰未到账');
   if (!has('接：教训疯乞丐（报酬8铜币）')) throw new Error('疯乞丐委托缺失: ' + JSON.stringify(btns()));
-  // 连环委托：河滩失踪案（3段流程，支持团灭重试）
+  // 连环委托：河滩失踪案（3段流程，寻踪）
   if (!has('连环委托：河滩失踪案（报酬22铜板+旧银币）')) throw new Error('河滩连环委托缺失: ' + JSON.stringify(btns()));
-  __runCmd('/heal');
   click('连环委托：河滩失踪案（报酬22铜板+旧银币）');
-  let gR = 0;
-  while (!has('交差：河滩失踪案（+22铜板+旧银币）') && gR++ < 8) {
-    if (has('河滩（失踪案）')) click('河滩（失踪案）');
-    if (has('查看水迹')) click('查看水迹');
-    let fought = 0;
-    while (has('攻击·侧面 (×1.3)') && fought < 6) { fightUntilOver(); fought++; if (has('起身')) break; }
-    if (has('起身')) { click('起身'); click('离开'); }
-  }
-  if (!has('交差：河滩失踪案（+22铜板+旧银币）')) throw new Error('河滩连环未完成: ' + JSON.stringify(btns()));
+  huntJob('交差：河滩失踪案（+22铜板+旧银币）');
   click('交差：河滩失踪案（+22铜板+旧银币）');
   if (st().p.inv.旧银币 < 1) throw new Error('旧银币未到账');
   // 高危委托：血盐商队（3连战）。测试中直接推高 jobCount 以解锁 /14
@@ -222,11 +230,11 @@ step('阿什沃德新活计（赶鸦+掘墓人）', () => {
   click('离开'); click('告示板');
   if (!has('高危委托：血盐商队（西边商路·报酬45铜板+血盐×4）')) throw new Error('血盐商队委托缺失: ' + JSON.stringify(btns()));
   click('高危委托：血盐商队（西边商路·报酬45铜板+血盐×4）');
-  runChain(3, () => { click('西边商路（血盐商队）'); click('截住商队'); }, '交差：血盐商队（+45铜板+血盐×4）');
+  huntJob('交差：血盐商队（+45铜板+血盐×4）');
   click('交差：血盐商队（+45铜板+血盐×4）');
   if (st().p.inv.血盐 < 4) throw new Error('血盐奖励未到账');
   if (!rawBtns().some(b => b.includes('/16'))) throw new Error('骑士巡逻队锁定行缺失');
-  console.log('  · 赶鸦3群+掘墓人BOSS+河滩失踪案4连战+血盐商队3连战，骑士巡逻队(/16)在列');
+  console.log('  · 赶鸦3群+掘墓人寻踪+河滩失踪案4连战+血盐商队3连战，骑士巡逻队(/16)在列');
 });
 step('野外游荡×12（随机遭遇）', () => {
   click('离开'); click('出城');
@@ -389,26 +397,33 @@ step('逃跑增强（烟幕弹）', () => {
   click('回城');
   console.log('  · 烟幕弹从不可逃跑的战斗中脱身');
 });
-step('护甲四部位', () => {
+step('护甲四部位（购买入背包）', () => {
   __runCmd('/钱 200');
   click('铁匠铺');
   click('买：皮背心（15铜币，胸·+3防）');
   click('买：皮革帽（8铜币，头·+1防）');
+  if (st().p.inv.皮背心 !== 1 || st().p.inv.皮革帽 !== 1) throw new Error('护甲应进背包');
+  if (st().p.def !== 0) throw new Error('购买不应自动装备');
+  click('离开'); click('出城'); click('扎营');
+  click('穿戴护甲');
+  click('皮背心（胸·+3防）');
+  click('穿戴护甲');
+  click('皮革帽（头·+1防）');
   if (st().p.def !== 4) throw new Error('防御=' + st().p.def);
   if (!st().p.gear.胸 || !st().p.gear.头) throw new Error('部位装备失败');
-  click('离开'); click('出城'); click('扎营');
   __runCmd('/item 锁子甲胸甲 1');
   click('穿戴护甲'); click('锁子甲胸甲（胸·+6防）');
   if (st().p.def !== 7) throw new Error('换装后防御=' + st().p.def);
   if (st().p.gear.胸.name !== '锁子甲胸甲') throw new Error('换装失败');
   click('离开'); click('回城');
-  console.log('  · 四部位护甲装备与换装退款正常（防' + st().p.def + '）');
+  console.log('  · 护甲购买入背包+营地带穿戴（防' + st().p.def + '）');
 });
 step('新武器类型（军刀/战戟）', () => {
   __runCmd('/钱 100');
   click('铁匠铺');
   click('买：弯刀（22铜币，+9攻击，军刀）');
-  if (st().p.weapon.type !== '军刀' || st().p.weapon.atk !== 9) throw new Error('弯刀异常: ' + JSON.stringify(st().p.weapon));
+  if (!st().p.owned.some(w => w.name === '弯刀' && w.atk === 9 && w.type === '军刀')) throw new Error('弯刀应进背包: ' + JSON.stringify(st().p.owned));
+  if (st().p.weapon.name !== '木剑') throw new Error('购买不应自动换武器');
   if (!has('买：长戟（45铜币，+12攻击，战戟）')) throw new Error('长戟购买项缺失');
   // 买铁料应留在铁匠铺（曾经跳转杂货铺的 bug）
   click('买：铁料（2铜币/块，定制武器用）');
@@ -423,12 +438,12 @@ step('新武器类型（军刀/战戟）', () => {
   if (!okNames.some(n => st().p.weapon.name.includes(n))) throw new Error('军刀分支异常: ' + st().p.weapon.name);
   click('返回'); click('返回');
   click('离开');
-  // 东方武器：黄刀应带异纹词条
+  // 东方武器：黄刀应带异纹词条（进背包）
   click('异域商人');
   click('买：黄刀（50铜币，+8攻击，对硬直目标+10%）');
-  if (!st().p.weapon.fx || !st().p.weapon.fx.includes('异纹')) throw new Error('黄刀应有异纹词条: ' + JSON.stringify(st().p.weapon.fx));
+  if (!st().p.owned.some(w => w.name === '黄刀' && w.fx && w.fx.includes('异纹'))) throw new Error('黄刀应有异纹词条并入背包');
   click('离开');
-  console.log('  · 弯刀购买+军刀定制+铁料留店+黄刀异纹');
+  console.log('  · 弯刀/黄刀入背包+军刀定制+铁料留店');
 });
 step('铁匠定制武器（多材料锻造）', () => {
   __runCmd('/钱 500');
@@ -481,10 +496,15 @@ step('铁匠定制武器（多材料锻造）', () => {
   console.log('  · 12把+汲血+龙威·疫骨双辅料+护甲辅料，铁匠 Lv.2，当前武器 ' + st().p.weapon.name);
 });
 step('精炼熔断钢铁（大马士革原料）', () => {
-  click('返回'); click('返回'); // → 铁匠铺
-  __runCmd('/item 铁料 25');
-  __runCmd('/钱 100');
-  click('熔炼精钢（铁料×20+50铜币 → 精炼熔断钢铁×1）');
+  if (has('返回')) click('返回');
+  if (has('返回')) click('返回');
+  if (has('铁匠铺')) click('铁匠铺');
+  __runCmd('/item 铁料 40');
+  __runCmd('/钱 200');
+  let mG = 0;
+  while (st().p.inv.精炼熔断钢铁 < 1 && mG++ < 3) {
+    click('熔炼精钢（铁料×20+50铜币 → 精炼熔断钢铁×1）');
+  }
   if (st().p.inv.精炼熔断钢铁 !== 1) throw new Error('熔炼未产出精钢');
   // 用精钢锻造：必出史诗+基础攻击+10
   const entryS = btns().find(b => b.startsWith('定制武器（铁匠 Lv.'));
@@ -507,9 +527,9 @@ step('精炼熔断钢铁（大马士革原料）', () => {
   if (!dam) throw new Error('10个刷新周期没刷出大马士革刀（概率极小）');
   if (!dam.includes('7200') || !dam.includes('+50')) throw new Error('大马士革刀价格/攻击未更新: ' + dam);
   click(dam);
-  if (st().p.weapon.atk !== 50) throw new Error('大马士革刀攻击异常: ' + st().p.weapon.atk);
+  if (!st().p.owned.some(w => w.name === '大马士革刀' && w.atk === 50)) throw new Error('大马士革刀应入背包且+50: ' + JSON.stringify(st().p.owned.filter(w => w.name.includes('大马'))));
   click('离开');
-  console.log('  · 熔炼精钢×1+精钢锻造必史诗+大马士革刀7200铜币+50攻击');
+  console.log('  · 熔炼精钢×1+精钢锻造必史诗+大马士革刀7200铜币+50攻击（入背包）');
 });
 step('连携（匕首→大剑佣兵）', () => {
   __runCmd('/清人');
@@ -519,6 +539,9 @@ step('连携（匕首→大剑佣兵）', () => {
   if (has('铁匠铺')) click('铁匠铺');
   click('买：生锈匕首（10铜币，+5攻击）');
   click('离开'); click('出城'); click('扎营');
+  click('换武器');
+  click('生锈匕首（+5）');
+  if (st().p.weapon.name !== '生锈匕首') throw new Error('匕首未装备');
   let guard = 0, hired = false;
   while (!hired && guard++ < 30) {
     click('离开');
@@ -531,8 +554,10 @@ step('连携（匕首→大剑佣兵）', () => {
   if (!hired) throw new Error('30天没刷出大剑佣兵（概率极小）');
   click('离开'); click('出城');
   st().p.flags.dragonMet = true; // 本步依赖佣兵存活，屏蔽随机大龙（大龙有专门步骤验证）
+  __runCmd('/heal'); // 保证体力≥12，连携按钮可出现
   if (has('攻击·侧面 (×1.3)')) fightWander();
   if (has('起身')) { click('起身'); click('离开'); } // 噩梦恢复
+  __runCmd('/heal');
   click('在野外游荡');
   let g2 = 0;
   while (!has('攻击·侧面 (×1.3)') && g2++ < 15) {
@@ -600,16 +625,13 @@ step('克罗姆福德活计（粮食护送+清蛙潮）', () => {
   click('回告示板'); click('交差：抓蛙供灶（+9铜币）');
   if (!has('BOSS委托：蛙后（南边大泽·报酬25铜板+蛙油膏×2）')) throw new Error('蛙后委托缺失: ' + JSON.stringify(btns()));
   click('BOSS委托：蛙后（南边大泽·报酬25铜板+蛙油膏×2）');
-  click('南边大泽（蛙后）');
-  click('下水');
-  fightUntilOver(); // 护主沼蛙
-  fightUntilOver(); // 蛙后
+  huntJob('交差：蛙后（+25铜板+蛙油膏×2）');
   click('交差：蛙后（+25铜板+蛙油膏×2）');
   if (st().p.inv.蛙油膏 < 2) throw new Error('蛙油膏奖励未到账');
   // 高危委托：沼潮祭坛（3连战）
   if (!has('高危委托：沼潮祭坛（深沼·报酬48铜板+水渍石×3）')) throw new Error('沼潮祭坛委托缺失: ' + JSON.stringify(btns()));
   click('高危委托：沼潮祭坛（深沼·报酬48铜板+水渍石×3）');
-  runChain(3, () => { click('深沼（沼潮祭坛）'); click('趟进去'); }, '交差：沼潮祭坛（+48铜板+水渍石×3）');
+  huntJob('交差：沼潮祭坛（+48铜板+水渍石×3）');
   click('交差：沼潮祭坛（+48铜板+水渍石×3）');
   if (st().p.inv.水渍石 < 3) throw new Error('水渍石奖励未到账');
 });
@@ -665,10 +687,7 @@ step('坦沃：怪物潮+成建制小队', () => {
   if (!has('交差：清虱潮（+15铜币）')) throw new Error('虱潮未完成: ' + JSON.stringify(btns()));
   click('交差：清虱潮（+15铜币）');
   click('接：灰衣骑士小队（成建制，报酬25铜币）');
-  click('灰衣骑士小队：北边路口');
-  click('冲阵');
-  for (let i = 0; i < 3; i++) fightUntilOver();
-  if (!has('交差：灰衣骑士小队（+25铜币）')) throw new Error('小队未完成: ' + JSON.stringify(btns()));
+  huntJob('交差：灰衣骑士小队（+25铜币）');
   click('交差：灰衣骑士小队（+25铜币）');
   click('接：驱赶矿洞流民（报酬10铜币）');
   click('矿洞流民营地：南边矿口');
@@ -680,26 +699,15 @@ step('坦沃：怪物潮+成建制小队', () => {
   for (let i = 0; i < 3; i++) { fightUntilOver(); if (i < 2) click('继续灭鼠'); }
   click('回告示板'); click('交差：灭鼠（+7铜币）');
   if (!has('BOSS委托：灰衣指挥官（报酬45铜板+灰衣队长徽记）')) throw new Error('灰衣指挥官委托缺失: ' + JSON.stringify(btns()));
-  __runCmd('/heal');
   click('BOSS委托：灰衣指挥官（报酬45铜板+灰衣队长徽记）');
-  let guardC = 0;
-  while (!has('交差：灰衣指挥官（+45铜板+灰衣队长徽记）') && guardC++ < 8) {
-    click('灰衣指挥官：北边路口');
-    click('冲阵');
-    for (let i = 0; i < 3; i++) {
-      fightUntilOver();
-      if (has('起身')) break; // 团灭回营地，整链重来
-    }
-    if (has('起身')) { click('起身'); click('离开'); }
-  }
-  if (!has('交差：灰衣指挥官（+45铜板+灰衣队长徽记）')) throw new Error('灰衣指挥官未完成');
+  huntJob('交差：灰衣指挥官（+45铜板+灰衣队长徽记）');
   click('交差：灰衣指挥官（+45铜板+灰衣队长徽记）');
   // 高危委托：灰衣征税总队（3连战）
   if (!has('高危委托：灰衣征税总队（北边税卡·报酬60铜板+灰衣队长徽记×2）')) throw new Error('征税总队委托缺失: ' + JSON.stringify(btns()));
   click('高危委托：灰衣征税总队（北边税卡·报酬60铜板+灰衣队长徽记×2）');
-  runChain(3, () => { click('北边税卡（灰衣征税总队）'); click('闯卡'); }, '交差：灰衣征税总队（+60铜板+灰衣队长徽记×2）');
+  huntJob('交差：灰衣征税总队（+60铜板+灰衣队长徽记×2）');
   click('交差：灰衣征税总队（+60铜板+灰衣队长徽记×2）');
-  console.log('  · 虱潮三波/灰衣小队三连/流民×2/灭鼠×3/灰衣指挥官三连/征税总队三连 全部击破');
+  console.log('  · 虱潮三波/灰衣小队寻踪三连/流民×2/灭鼠×3/灰衣指挥官寻踪/征税总队寻踪三连 全部击破');
 });
 step('旅程→白石镇（正常地区）', () => {
   click('离开'); click('出城');
@@ -722,10 +730,9 @@ step('旅程→白石镇（正常地区）', () => {
   click('回告示板'); click('交差：商路清障（+9铜币）');
   if (!has('BOSS委托：野狼王（北边野林·报酬20铜板+兽皮×3）')) throw new Error('野狼王委托缺失: ' + JSON.stringify(btns()));
   click('BOSS委托：野狼王（北边野林·报酬20铜板+兽皮×3）');
-  click('野狼王：北边野林');
-  fightUntilOver();
+  huntJob('交差：野狼王（+20铜板+兽皮×3）');
   click('交差：野狼王（+20铜板+兽皮×3）');
-  console.log('  · 集市麦饼+巡防骑士入队+商路清障×3+野狼王BOSS');
+  console.log('  · 集市麦饼+巡防骑士入队+商路清障×3+野狼王寻踪');
 });
 step('旅程→利恩菲尔（第四城·蝇灾）', () => {
   click('离开'); click('出城');
@@ -738,6 +745,7 @@ step('旅程→利恩菲尔（第四城·蝇灾）', () => {
   click('离开');
   click('苦蜜铺');
   click('买：蝇纱面罩（10铜币，头·+1防）');
+  if (st().p.inv.蝇纱面罩 !== 1) throw new Error('蝇纱面罩应进背包');
   click('离开');
   click('告示板');
   click('接：驱蝇（蝇群×3，报酬7铜币）');
@@ -756,7 +764,7 @@ step('旅程→利恩菲尔（第四城·蝇灾）', () => {
   click('离开'); click('告示板');
   if (!has('高危委托：教堂大执事（圣坛·报酬55铜板+苦蜜蜡×3）')) throw new Error('教堂大执事委托缺失: ' + JSON.stringify(btns()));
   click('高危委托：教堂大执事（圣坛·报酬55铜板+苦蜜蜡×3）');
-  runChain(3, () => { click('教堂大执事：镇中心圣坛'); click('上前'); }, '交差：教堂大执事（+55铜板+苦蜜蜡×3）');
+  huntJob('交差：教堂大执事（+55铜板+苦蜜蜡×3）');
   click('交差：教堂大执事（+55铜板+苦蜜蜡×3）');
   if (st().p.inv.苦蜜蜡 < 3) throw new Error('苦蜜蜡奖励未到账');
   console.log('  · 教堂独坐+苦蜜铺甲+驱蝇×3+安魂仪式（腐尸×2）+安魂十字+教堂大执事三连');
@@ -768,18 +776,19 @@ step('旅程→沃林（第五城·畜疫灾）', () => {
   if (!has('骨器铺')) throw new Error('未到达沃林: ' + JSON.stringify(btns()));
   click('骨器铺');
   click('买：骨刀（18铜币，+8攻击，骨刃）');
-  if (st().p.weapon.type !== '骨刃' || st().p.weapon.atk !== 8) throw new Error('骨刀异常: ' + JSON.stringify(st().p.weapon));
+  if (!st().p.owned.some(w => w.name === '骨刀' && w.atk === 8 && w.type === '骨刃')) throw new Error('骨刀应入背包');
   click('买：疫骨甲（25铜币，胸·+5防）');
+  if (st().p.inv.疫骨甲 !== 1) throw new Error('疫骨甲应入背包');
   click('离开');
   click('告示板');
   click('接：赶牲口（灰肉牲口×3，报酬8铜币）');
   click('赶牲口：河边草场（还剩 3 头）');
   for (let i = 0; i < 3; i++) { fightUntilOver(); if (i < 2) click('继续赶'); }
   click('回告示板'); click('交差：赶牲口（+8铜币）');
-  // 骨匠帮 3连战
+  // 骨匠帮 3连战（寻踪）
   if (!has('BOSS委托：骨匠帮（北边骨场·报酬30铜板+疫骨×2）')) throw new Error('骨匠帮委托缺失: ' + JSON.stringify(btns()));
   click('BOSS委托：骨匠帮（北边骨场·报酬30铜板+疫骨×2）');
-  runChain(3, () => { click('骨匠帮：北边骨场'); click('闯骨场'); }, '交差：骨匠帮（+30铜板+疫骨×2）');
+  huntJob('交差：骨匠帮（+30铜板+疫骨×2）');
   click('交差：骨匠帮（+30铜板+疫骨×2）');
   if (st().p.inv.疫骨 < 2) throw new Error('疫骨奖励未到账');
   // 骨刃锻造（疫骨辅料 → 必出血腥）
@@ -819,42 +828,31 @@ step('旅程→风角港（沿海·非灾区）', () => {
   }
   if (!has('交差：出海捕鱼（+5铜币）')) throw new Error('捕鱼未完成: ' + JSON.stringify(btns()));
   click('交差：出海捕鱼（+5铜币）');
-  // 驱赶海盗（2连）
+  // 驱赶海盗（2连·寻踪）
   click('接：驱赶海盗（南码头·报酬18铜币+海鱼×2）');
-  runChain(2, () => { click('海盗：南码头'); }, '交差：驱赶海盗（+18铜币+海鱼×2）');
+  huntJob('交差：驱赶海盗（+18铜币+海鱼×2）');
   click('交差：驱赶海盗（+18铜币+海鱼×2）');
-  // 盐鬼 BOSS
+  // 盐鬼 BOSS（寻踪）
   if (!has('BOSS委托：盐鬼（盐田·报酬28铜板+水渍石×2）')) throw new Error('盐鬼委托缺失: ' + JSON.stringify(btns()));
   click('BOSS委托：盐鬼（盐田·报酬28铜板+水渍石×2）');
-  click('盐鬼：盐田');
-  fightUntilOver();
+  huntJob('交差：盐鬼（+28铜板+水渍石×2）');
   click('交差：盐鬼（+28铜板+水渍石×2）');
-  // 探索龙巢穴（三层地城）
+  // 探索龙巢穴（三层地城·寻踪）
   if (!has('地城委托：探索龙巢穴（海崖洞窟·报酬50铜板+龙鳞×2）')) throw new Error('龙巢穴委托缺失: ' + JSON.stringify(btns()));
   click('地城委托：探索龙巢穴（海崖洞窟·报酬50铜板+龙鳞×2）');
-  __runCmd('/heal');
-  let lairGuard = 0;
-  while (!has('交差：探索龙巢穴（+50铜板+龙鳞×2）') && lairGuard++ < 8) {
-    const lb = btns().find(b => b.startsWith('龙巢穴：海崖洞窟'));
-    if (lb) click(lb);
-    if (has('进洞')) { click('进洞'); fightUntilOver(); }
-    let lf = 0;
-    while (has('攻击·侧面 (×1.3)') && lf++ < 4) { fightUntilOver(); if (has('起身')) break; }
-    if (has('上前')) { click('上前'); fightUntilOver(); }
-    if (has('起身')) { click('起身'); click('离开'); }
-  }
-  if (!has('交差：探索龙巢穴（+50铜板+龙鳞×2）')) throw new Error('龙巢穴未完成: ' + JSON.stringify(btns()));
+  huntJob('交差：探索龙巢穴（+50铜板+龙鳞×2）');
   click('交差：探索龙巢穴（+50铜板+龙鳞×2）');
-  // 高危：灯塔怪光（4连，含巢穴之主）
+  // 高危：灯塔怪光（4连，含巢穴之主·寻踪）
   if (!has('高危委托：灯塔怪光（东角灯塔·报酬70铜板+精炼熔断钢铁）')) throw new Error('灯塔怪光委托缺失: ' + JSON.stringify(btns()));
   click('高危委托：灯塔怪光（东角灯塔·报酬70铜板+精炼熔断钢铁）');
-  runChain(4, () => { click('灯塔怪光：东角灯塔'); click('推门进去'); }, '交差：灯塔怪光（+70铜板+精炼熔断钢铁）');
+  huntJob('交差：灯塔怪光（+70铜板+精炼熔断钢铁）');
   click('交差：灯塔怪光（+70铜板+精炼熔断钢铁）');
   if (st().p.inv.精炼熔断钢铁 < 1) throw new Error('精钢奖励未到账');
-  console.log('  · 烤鱼+出海捕鱼三网+海盗2连+盐鬼+龙巢穴三层+灯塔怪光4连');
+  console.log('  · 烤鱼+出海捕鱼三网+海盗寻踪2连+盐鬼寻踪+龙巢穴寻踪三层+灯塔怪光寻踪4连');
 });
 step('龙巢无限下潜（肉鸽·50层臂甲）', () => {
   if (has('离开')) click('离开');
+  __runCmd('/heal');
   click('告示板');
   const el = btns().find(b => b.startsWith('龙巢深处：无限下潜'));
   if (!el) throw new Error('无限下潜未解锁: ' + JSON.stringify(btns()));
@@ -881,6 +879,7 @@ step('龙巢无限下潜（肉鸽·50层臂甲）', () => {
   console.log('  · 无限下潜往返+第50层巨鲸之泉龙+裂纹的臂甲（法伤/队友/生命）');
 });
 step('随从装备定制', () => {
+  if (!st().p.companion) { st().p.companion = { name: '安普卢斯', type: '剑', d: 6 }; } // 寻踪途中可能重伤离队，此处模拟酒厂重逢
   if (has('离开')) click('离开'); // 上一步可能结束在店内或镇里
   click('铁匠铺');
   __runCmd('/item 铁料 10');

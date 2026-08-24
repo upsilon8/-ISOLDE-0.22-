@@ -161,7 +161,7 @@ function migrate(s){
   if(p.flags.ampelosMet===undefined)p.flags.ampelosMet=false;
   if(p.flags.dragonMet===undefined)p.flags.dragonMet=false;
   if(p.lastTown===undefined)p.lastTown='ashwold';
-  for(const k of ['铁料','蛙皮','蛙油膏','覆金属龙皮','烟幕弹','苦蜜蜡','苦蜜酒','骨器','灰肉','疫骨','麦饼','龙鳞','精炼熔断钢铁','海鱼','大鱼','烤鱼','兽皮','野猪肉','绷带','干粮','保养油','旧铁片','猪王皮','胡椒','烤肉','旧银币','巨魔牙','魔化兽皮','蛇蛋','净水袋','草药','陈年果酒','巨魔粗制饰品','磨石','肉桂','丁香','藏红花','血盐','血水结晶','女妖之泪','黑鳄皮','巨魔皮','碎布条','火把','止血膏','醒神草','盐渍肉','猛火油','皮革帽','铁头盔','锁子甲兜帽','板甲头盔','皮背心','锁子甲胸甲','板甲胸甲','皮革护腿','锁子甲护腿','板甲护腿','布披风','皮革披风','游侠短弓','骑士剑','熊皮','蛛丝','骨头','蛇皮','暗影之尘','送葬骨灰','水渍石','摆锤','弃誓之剑','空甲胄壳','虱壳','虱母壳','除虱粉','灰衣甲片','灰衣队长徽记','灰土结晶']){
+  for(const k of ['铁料','蛙皮','蛙油膏','覆金属龙皮','烟幕弹','苦蜜蜡','苦蜜酒','骨器','灰肉','疫骨','麦饼','龙鳞','精炼熔断钢铁','管理者材料','海鱼','大鱼','烤鱼','兽皮','野猪肉','绷带','干粮','保养油','旧铁片','猪王皮','胡椒','烤肉','旧银币','巨魔牙','魔化兽皮','蛇蛋','净水袋','草药','陈年果酒','巨魔粗制饰品','磨石','肉桂','丁香','藏红花','血盐','血水结晶','女妖之泪','黑鳄皮','巨魔皮','碎布条','火把','止血膏','醒神草','盐渍肉','猛火油','皮革帽','铁头盔','锁子甲兜帽','板甲头盔','皮背心','锁子甲胸甲','板甲胸甲','皮革护腿','锁子甲护腿','板甲护腿','布披风','皮革披风','游侠短弓','骑士剑','熊皮','蛛丝','骨头','蛇皮','暗影之尘','送葬骨灰','水渍石','摆锤','弃誓之剑','空甲胄壳','虱壳','虱母壳','除虱粉','灰衣甲片','灰衣队长徽记','灰土结晶']){
     if(p.inv[k]===undefined)p.inv[k]=0;
   }
   for(const k of ['wellJob','wellDone','wellReward','grainJob','grainDone','grainPay','frogJob','frogDone','frogsLeft','tideJob','tideDone','squadJob','squadDone','mineJob','mineDone','crowJob','crowDone','crowsLeft','crowFirst','beggarJob','beggarDone','diggerJob','diggerDone','diggerReward','flagJob','flagDone','flagReward','potFrogJob','potFrogDone','potFrogsLeft','hunterJob2','hunter2Done','hunter2Reward','queenJob','queenDone','queenReward','mudJob','mudDone','mudReward','scavJob','scavDone','ratJob','ratDone','ratsLeft','boneJob','boneDone','boneReward','taxJob','taxDone','taxReward','commanderJob','commanderDone','commanderReward','riverJob','riverStage','riverDone','riverReward','campJob2','campStage','camp2Done','camp2Reward','lostJob','lostStage','lostDone','lostReward','heavyJob','heavyDone','heavyReward','hagJob2','hag2Done','hag2Reward','nestJob','nestDone','nestReward','fliesJob','fliesDone','fliesLeft','riteJob','riteDone','riteReward','robberJob4','robber4Done','robber4Reward','honeyJob4','honey4Done','honey4Reward','relicJob4','relic4Done','relic4Reward','militiaJob4','militia4Done','militia4Reward','churchSit','patrolJob','patrolDone','patrolReward','saltCarJob','saltCarDone','saltCarReward','altarJob','altarDone','altarReward','legionJob','legionDone','legionReward','deaconJob','deaconDone','deaconReward','beastJob','beastDone','beastsLeft','haulerJob','haulerDone','haulerReward','craftJob','craftDone','craftReward','plagueRelicJob5','plagueRelic5Done','plagueRelic5Reward','plagueKnightJob','plagueKnightDone','plagueKnightReward','ferryJob','ferryDone','ferryReward','clearJob','clearDone','clearsLeft','escrowActive','escrowDone','escrowPay','wolfJob','wolfDone','wolfReward','duelJob','duelDone','duelReward','captainJob','captainDone','captainReward','fishJob','fishDone','fishNets','pirateJob','pirateDone','pirateReward','saltGhostJob','saltGhostDone','saltGhostReward','seaWolfJob','seaWolfDone','seaWolfReward','lairJob','lairStage','lairDone','lairReward','lighthouseJob','lighthouseDone','lighthouseReward','lairUnlocked','lairBest','armguardGot']){
@@ -232,7 +232,7 @@ function importSave(){
 function newGame(){
   return { p:{
     hp:110,maxHp:110, mp:50,maxMp:50, sta:100,maxSta:100, atk:12, def:0, gold:0,
-    inv:{兽皮:0,野猪肉:0,绷带:0,干粮:0,保养油:0,旧铁片:0,猪王皮:0,胡椒:0,烤肉:0,旧银币:0,巨魔牙:0,魔化兽皮:0,蛇蛋:0,净水袋:0,草药:0,陈年果酒:0,巨魔粗制饰品:0,磨石:0,肉桂:0,丁香:0,藏红花:0,血盐:0,血水结晶:0,女妖之泪:0,黑鳄皮:0,巨魔皮:0,碎布条:0,火把:0,止血膏:0,醒神草:0,盐渍肉:0,猛火油:0,烟幕弹:0,苦蜜蜡:0,苦蜜酒:0,骨器:0,灰肉:0,疫骨:0,麦饼:0,龙鳞:0,精炼熔断钢铁:0,海鱼:0,大鱼:0,烤鱼:0,皮革帽:0,铁头盔:0,锁子甲兜帽:0,板甲头盔:0,皮背心:0,锁子甲胸甲:0,板甲胸甲:0,皮革护腿:0,锁子甲护腿:0,板甲护腿:0,布披风:0,皮革披风:0,游侠短弓:0,骑士剑:0,铁料:0,蛙皮:0,蛙油膏:0,熊皮:0,蛛丝:0,骨头:0,蛇皮:0,暗影之尘:0,送葬骨灰:0,水渍石:0,摆锤:0,弃誓之剑:0,空甲胄壳:0,虱壳:0,虱母壳:0,除虱粉:0,灰衣甲片:0,灰衣队长徽记:0,灰土结晶:0,覆金属龙皮:0},
+    inv:{兽皮:0,野猪肉:0,绷带:0,干粮:0,保养油:0,旧铁片:0,猪王皮:0,胡椒:0,烤肉:0,旧银币:0,巨魔牙:0,魔化兽皮:0,蛇蛋:0,净水袋:0,草药:0,陈年果酒:0,巨魔粗制饰品:0,磨石:0,肉桂:0,丁香:0,藏红花:0,血盐:0,血水结晶:0,女妖之泪:0,黑鳄皮:0,巨魔皮:0,碎布条:0,火把:0,止血膏:0,醒神草:0,盐渍肉:0,猛火油:0,烟幕弹:0,苦蜜蜡:0,苦蜜酒:0,骨器:0,灰肉:0,疫骨:0,麦饼:0,龙鳞:0,精炼熔断钢铁:0,管理者材料:0,海鱼:0,大鱼:0,烤鱼:0,皮革帽:0,铁头盔:0,锁子甲兜帽:0,板甲头盔:0,皮背心:0,锁子甲胸甲:0,板甲胸甲:0,皮革护腿:0,锁子甲护腿:0,板甲护腿:0,布披风:0,皮革披风:0,游侠短弓:0,骑士剑:0,铁料:0,蛙皮:0,蛙油膏:0,熊皮:0,蛛丝:0,骨头:0,蛇皮:0,暗影之尘:0,送葬骨灰:0,水渍石:0,摆锤:0,弃誓之剑:0,空甲胄壳:0,虱壳:0,虱母壳:0,除虱粉:0,灰衣甲片:0,灰衣队长徽记:0,灰土结晶:0,覆金属龙皮:0},
     weapon:{name:'木剑',atk:3,type:'剑'}, owned:[{name:'木剑',atk:3,type:'剑'}], gear:{头:null,胸:null,腿:null,披风:null}, knight:null, companion:null, accessory:null, armguard:null, lairFloor:1, mercs:[],
     buff:{流血:0,硬直:0,保养:0,磨石:0},
     days:0, level:1, xp:0, shop:{}, forge:{count:0}, journey:null, scene:'ashwold',
@@ -319,12 +319,9 @@ const ARMOR_DEFS={
 function buyArmorPiece(slot,name,price,def,back){
   const backFn=back||gotoSmith;
   if(state.p.gold<price){ print('钱不够','bad'); backFn(); return; }
-  const old=state.p.gear[slot];
-  if(old){ state.p.def-=old.def; state.p.gold+=Math.floor(old.price/2); print('旧的'+old.name+'被换下，折了'+Math.floor(old.price/2)+'铜币','dim'); }
   state.p.gold-=price;
-  state.p.gear[slot]={name,def,price};
-  state.p.def+=def;
-  print('你穿上'+name+'+'+def+'防御','ok'); backFn();
+  addItem(name,1);
+  print('你买下'+name+'，放进了背包（营地「穿戴护甲」可装备）','ok'); backFn();
 }
 function armorInfo(k){
   const parts=k.split('·');
@@ -367,7 +364,7 @@ const CAT_BRANCH={
 const CAT_BASE={剑:8,匕首:5,细剑:6,大剑:11,重剑:12,焰型大剑:12,小锤:8,斧:9,重锤:14,圆形大锤:15,弓:8,弩:9,长枪:11,突刺长枪:11,军刀:9,战戟:12,骨刃:8,盾:5,拳头:3,法杖:3};
 const Q_FACTOR={劣质:0.4,普通:1.0,优良:2.0,稀有:3.6,史诗:6.0};
 const FX_POOL=['锋利','破甲','血腥','剧毒','灵活','轻量'];
-const FORGE_MATS=[['铁料','无特殊'],['旧银币','银辉：攻击+5%'],['巨魔牙','攻击+8%'],['魔化兽皮','必出血腥'],['血水结晶','汲血：命中回复2生命'],['女妖之泪','哀鸣：15%震住'],['暗影之尘','迅影：闪避+10%'],['送葬骨灰','噬魂：对亡灵+30%'],['灰土结晶','尘封：15%震住'],['黑鳄皮','鳄齿：攻击+10%+破甲'],['摆锤','沉重：攻击+8%'],['蛛丝','缠丝：10%震住'],['空甲胄壳','无魂：对骑士+20%'],['灰衣队长徽记','军令：连携+5%/人'],['覆金属龙皮','龙威：攻击+20%·保底优良'],['疫骨','疫蚀：攻击+6%，必出血腥'],['龙鳞','攻击+15%'],['精炼熔断钢铁','必出史诗，基础攻击+10']];
+const FORGE_MATS=[['铁料','无特殊'],['旧银币','银辉：攻击+5%'],['巨魔牙','攻击+8%'],['魔化兽皮','必出血腥'],['血水结晶','汲血：命中回复2生命'],['女妖之泪','哀鸣：15%震住'],['暗影之尘','迅影：闪避+10%'],['送葬骨灰','噬魂：对亡灵+30%'],['灰土结晶','尘封：15%震住'],['黑鳄皮','鳄齿：攻击+10%+破甲'],['摆锤','沉重：攻击+8%'],['蛛丝','缠丝：10%震住'],['空甲胄壳','无魂：对骑士+20%'],['灰衣队长徽记','军令：连携+5%/人'],['覆金属龙皮','龙威：攻击+20%·保底优良'],['疫骨','疫蚀：攻击+6%，必出血腥'],['龙鳞','攻击+15%'],['精炼熔断钢铁','必出史诗，基础攻击+10'],['管理者材料','基础攻击+80（装备武器通用）']];
 const MAT_EFFECT={
  旧银币:{mul:1.05,fx:['银辉']}, 巨魔牙:{mul:1.08}, 魔化兽皮:{fx:['血腥']},
  血水结晶:{fx:['汲血']}, 女妖之泪:{fx:['哀鸣']}, 暗影之尘:{fx:['迅影']},
@@ -375,7 +372,8 @@ const MAT_EFFECT={
  摆锤:{mul:1.08,fx:['沉重']}, 蛛丝:{fx:['缠丝']}, 空甲胄壳:{mul:1.06,fx:['无魂']},
  灰衣队长徽记:{fx:['军令']}, 覆金属龙皮:{mul:1.2,fx:['龙威'],minQ:'优良'},
  疫骨:{mul:1.06,fx:['血腥']}, 龙鳞:{mul:1.15},
- 精炼熔断钢铁:{minQ:'史诗',flatAtk:10}
+ 精炼熔断钢铁:{minQ:'史诗',flatAtk:10},
+ 管理者材料:{flatAtk:80}
 };
 const ORIENTAL=[['环头剑',8,'剑'],['黄刀',8,'剑'],['云剑',16,'剑'],['打刀',20,'大剑'],['太刀',34,'大剑'],['苗刀',34,'大剑'],['胁差',10,'匕首'],['薙刀',34,'长枪'],['马来克力士剑',20,'匕首'],['大马士革刀',50,'剑'],['龙泉剑',22,'剑'],['唐刀',18,'军刀'],['环首刀',24,'军刀'],['陌刀',40,'大剑'],['三尖两刃刀',30,'长枪']];
 function forgeLevel(){
@@ -494,8 +492,9 @@ const ARMOR_FORGE={
  披风:[['布披风',0],['皮革披风',1],['蛙皮披风',1]]
 };
 const ARMOR_MAT_FEE={头:2,胸:4,腿:3,披风:2};
-const ARMOR_MATS=[['铁料','无特殊'],['巨魔皮','+1防'],['灰衣甲片','+1防'],['黑鳄皮','+2防'],['虱母壳','+2防'],['覆金属龙皮','+3防·保底优良'],['龙鳞','+4防']];
-const ARMOR_MAT_EFFECT={巨魔皮:{d:1},灰衣甲片:{d:1},黑鳄皮:{d:2},虱母壳:{d:2},覆金属龙皮:{d:3,minQ:'优良'},龙鳞:{d:4}};
+const ARMOR_MATS=[['铁料','无特殊'],['巨魔皮','+1防'],['灰衣甲片','+1防'],['黑鳄皮','+2防'],['虱母壳','+2防'],['覆金属龙皮','+3防·保底优良'],['龙鳞','+4防'],['管理者材料','+80防']];
+const ARMOR_MAT_EFFECT={巨魔皮:{d:1},灰衣甲片:{d:1},黑鳄皮:{d:2},虱母壳:{d:2},覆金属龙皮:{d:3,minQ:'优良'},龙鳞:{d:4},管理者材料:{d:80}};
+const ARMOR_MAT_NAME={巨魔皮:'巨魔皮甲',灰衣甲片:'灰衣甲',黑鳄皮:'黑鳄皮甲',虱母壳:'虱母壳甲',覆金属龙皮:'龙皮甲',龙鳞:'龙鳞甲',管理者材料:'管理者之甲'};
 function forgeArmorMenu(){
   const lv=forgeLevel();
   clearActs();
@@ -561,7 +560,11 @@ function doForgeArmor(slot,chosen){
   if(minQ && rank[q]<rank[minQ])q=minQ;
   const qf={劣质:0.7,普通:1.0,优良:1.3,稀有:1.7,史诗:2.2}[q];
   const def=Math.max(0,Math.round(pick[1]*qf)+dAdd);
-  const name=pick[0]+'·'+q;
+  // 材质由第一个放入的辅料决定（第一个是铁料则走常规材质池）
+  const first=chosen[0];
+  const matName=(first&&first!=='铁料'&&ARMOR_MAT_NAME[first])?ARMOR_MAT_NAME[first]:pick[0];
+  const name=matName+'·'+q;
+  if(first&&first!=='铁料'&&ARMOR_MAT_NAME[first]) print('材质：'+first+'——整件甲胄都浸透了它的气息','dim');
   print('打好了：'+name+'（'+slot+'·+'+def+'防'+(dAdd?'，辅料加成+'+dAdd:'')+'）','ok');
   addItem(name,1);
   if(!state.p.gear[slot]){
@@ -1007,6 +1010,10 @@ function enemyTurn(){
   else if(ctx.en.name==='龙蜥') drakeTurn(def);
   else if(ctx.en.name==='巢穴之主') lairMotherTurn(def);
   else if(ctx.en.name==='巨鲸之泉龙') whaleDragonTurn(def);
+  else if(ctx.en.name==='泥沼龙') marshDragonTurn(def);
+  else if(ctx.en.name==='旱地龙') duneDragonTurn(def);
+  else if(ctx.en.name==='墓岩龙') cryptDragonTurn(def);
+  else if(ctx.en.name==='渡河龙') fordDragonTurn(def);
   else if(ctx.en.name==='老龙') dragonTurn(def);
   else if(ctx.en.name==='赤河龙') dragonTurn2(def);
   if(ctx.en.bleed&&ctx.en.bleed>0){ ctx.en.hp=Math.max(0,ctx.en.hp-2); print(ctx.en.name+'伤口流血 −2','hit'); ctx.en.bleed--; }
@@ -1432,6 +1439,30 @@ function whaleDragonTurn(def){
   else if(r<0.7){ print('它的长尾扫过洞壁！'); const h=applyEnemyHit(14,def); if(h){ state.p.buff.硬直=1; print('你被扫飞（硬直1回合）','bad'); } }
   else { print('它探颈撕咬，牙缝里滴着鲸泉！'); applyEnemyHit(17,def); }
 }
+function marshDragonTurn(def){
+  const r=Math.random();
+  if(r<0.4){ print('泥沼龙喷出沼息！'); const h=applyEnemyHit(15,def); if(h){ state.p.buff.流血+=1; print('沼息灼着皮肤（+1层）','bad'); } }
+  else if(r<0.7){ print('泥沼龙的尾巴抽来！'); const h=applyEnemyHit(10,def); if(h){ state.p.buff.硬直=1; print('你被抽进泥里（硬直1回合）','bad'); } }
+  else { print('它张嘴咬来！'); applyEnemyHit(13,def); }
+}
+function duneDragonTurn(def){
+  const r=Math.random();
+  if(r<0.4){ print('旱地龙喷出尘息！'); const h=applyEnemyHit(14,def); if(h){ state.p.buff.硬直=1; print('尘沙糊眼（硬直1回合）','bad'); } }
+  else if(r<0.7){ print('它扬尾扫起沙暴！'); const h=applyEnemyHit(9,def); if(h){ state.p.buff.流血+=1; print('沙粒磨破皮肉（+1层）','bad'); } }
+  else { print('它贴地冲撞！'); applyEnemyHit(13,def); }
+}
+function cryptDragonTurn(def){
+  const r=Math.random();
+  if(r<0.4){ print('墓岩龙喷出骨息！'); const h=applyEnemyHit(16,def); if(h){ state.p.buff.流血+=1; print('骨息森冷（+1层）','bad'); } }
+  else if(r<0.7){ print('它用头撞来！'); const h=applyEnemyHit(12,def); if(h){ state.p.buff.硬直=1; print('你被撞飞（硬直1回合）','bad'); } }
+  else { print('它探颈咬来！'); applyEnemyHit(14,def); }
+}
+function fordDragonTurn(def){
+  const r=Math.random();
+  if(r<0.4){ print('渡河龙喷出水息！'); const h=applyEnemyHit(15,def); if(h){ state.p.buff.硬直=1; print('水息劈头盖脸（硬直1回合）','bad'); } }
+  else if(r<0.7){ print('它从水里甩尾！'); applyEnemyHit(11,def); }
+  else { print('它扑上岸咬来！'); applyEnemyHit(14,def); }
+}
 function dragonTurn(def){
   const r=Math.random();
   if(r<0.35){ print('老龙吸气——龙息！'); const h=applyEnemyHit(16,def); if(h){ state.p.buff.流血+=1; print('火焰燎过（+1层）','bad'); } }
@@ -1545,7 +1576,7 @@ function titleScreen(){
 '  ██║███████║╚██████╔╝███████╗╚██████╔╝███████╗██████╔╝███████╗\n'+
 '  ╚═╝╚══════╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚══════╝╚═════╝ ╚══════╝\n</pre>';
   log.appendChild(d);
-  print('原型 0.22 · 第五城沃林·新敌人·新武器 · 若界面没有"杂货铺"和"野外游荡"，说明浏览器在用旧缓存——请 Ctrl+F5 强制刷新','dim');
+  print('原型 0.23 · 寻踪委托·七城·区域龙 · 若界面没有"杂货铺"和"野外游荡"，说明浏览器在用旧缓存——请 Ctrl+F5 强制刷新','dim');
   print('说明：按钮即行动；下方输入框支持 看/状态/背包/帮助，开发者刷数值用 /dev营地休息=存档，也是"过一天"','dim');
   hr();
   const o=[['新的开始',()=>{ state=newGame(); riverScene(); }]];
@@ -1627,7 +1658,7 @@ function gotoSmith(){
     const ad=ARMOR_DEFS[k];
     if(ad) o.push(['新货：'+k+'（'+ad.price+'铜币，'+ad.slot+'·+'+ad.def+'防）',()=>{ takeStock('smith',k); buyArmorPiece(ad.slot,k,ad.price,ad.def); }]);
     else if(k==='小锤') o.push(['新货：小锤（12铜币，+6攻击）',()=>{ takeStock('smith','小锤'); buyWeapon('小锤',12,6,null,'锤'); }]);
-    else if(k==='磨石') o.push(['新货：磨石（5铜币，营地磨刀用）',()=>{ takeStock('smith','磨石'); buyG('磨石',5); }]);
+    else if(k==='磨石') o.push(['新货：磨石（5铜币，营地磨刀用）',()=>{ takeStock('smith','磨石'); buyG('磨石',5,gotoSmith); }]);
   });
   if(state.p.inv.兽皮>0) o.push(['卖：兽皮 ×'+state.p.inv.兽皮+'（3铜币）',()=>sell('兽皮',3)]);
   if(state.p.inv.猪王皮>0) o.push(['卖：猪王皮 ×'+state.p.inv.猪王皮+'（6铜币）',()=>sell('猪王皮',6)]);
@@ -1640,8 +1671,7 @@ function buyWeapon(name,price,atk,mod,type){
   state.p.gold-=price;
   const isOr=ORIENTAL.some(o=>o[0]===name);
   state.p.owned.push({name,atk,mod,type,fx:isOr?['异纹']:[]});
-  state.p.weapon={name,atk,mod,type,fx:isOr?['异纹']:[]};
-  print('你买下'+name+''+(isOr?'异纹微亮——攻击+8%':'')+'（木剑搁进了包袱——它不扔）','ok');
+  print('你买下'+name+'，放进了背包'+(isOr?'——异纹微亮，攻击+8%':'')+'（营地「换武器」可装备）','ok');
   gotoSmith();
 }
 function sell(k,v){
@@ -1668,7 +1698,7 @@ function gotoGoods(){
   st.items.forEach(k=>{
     o.push(['新货：'+k+'（'+CATALOG[k].price+'铜币，'+CATALOG[k].desc+'）',()=>{ takeStock('goods',k); buyG(k,CATALOG[k].price); }]);
   });
-  const SELL_LIST=[['兽皮',3],['猪王皮',6],['魔化兽皮',8],['黑鳄皮',8],['巨魔皮',5],['旧银币',6],['巨魔牙',4],['胡椒',8],['血盐',5],['血水结晶',12],['女妖之泪',15],['碎布条',2],['游侠短弓',8],['骑士剑',10],['锁子甲胸甲',28],['板甲胸甲',45],['板甲头盔',30],['锁子甲护腿',18],['板甲护腿',35],['巨魔粗制饰品',3],['蛇蛋',10],['熊皮',5],['蛛丝',3],['骨头',2],['蛇皮',4],['暗影之尘',8],['送葬骨灰',6],['水渍石',5],['摆锤',7],['弃誓之剑',15],['空甲胄壳',12],['虱壳',3],['虱母壳',8],['灰衣甲片',6],['灰衣队长徽记',15],['灰土结晶',10],['覆金属龙皮',15],['苦蜜蜡',6],['蛙皮',4],['蛙油膏',4],['骨器',5],['灰肉',4],['疫骨',10],['龙鳞',40],['海鱼',3],['大鱼',8],['烤鱼',2]];
+  const SELL_LIST=[['兽皮',3],['猪王皮',6],['魔化兽皮',8],['黑鳄皮',8],['巨魔皮',5],['旧银币',6],['巨魔牙',4],['胡椒',8],['血盐',5],['血水结晶',12],['女妖之泪',15],['碎布条',2],['游侠短弓',8],['骑士剑',10],['锁子甲胸甲',28],['板甲胸甲',45],['板甲头盔',30],['锁子甲护腿',18],['板甲护腿',35],['巨魔粗制饰品',3],['蛇蛋',10],['熊皮',5],['蛛丝',3],['骨头',2],['蛇皮',4],['暗影之尘',8],['送葬骨灰',6],['水渍石',5],['摆锤',7],['弃誓之剑',15],['空甲胄壳',12],['虱壳',3],['虱母壳',8],['灰衣甲片',6],['灰衣队长徽记',15],['灰土结晶',10],['覆金属龙皮',15],['苦蜜蜡',6],['蛙皮',4],['蛙油膏',4],['骨器',5],['灰肉',4],['疫骨',10],['龙鳞',40],['管理者材料',80],['海鱼',3],['大鱼',8],['烤鱼',2]];
   let hasSell=false;
   for(const pair of SELL_LIST){
     const k=pair[0], v=pair[1];
@@ -1734,17 +1764,17 @@ function gotoBoard(){
   if(f.catJob&&!f.catDone) o.push(['找猫（碰碰运气）',catSearch]);
   if(f.catDone) o.push(['交差：寻猫（+5铜币）',collectCat]);
   if(!f.trollJob&&!f.trollDone) o.push(['接：巨魔桥——桥洞住了巨魔（报酬10铜币+旧银币）',acceptTroll]);
-  if(f.trollJob&&!f.trollDone) o.push(['巨魔桥：东边石桥',gotoTrollBridge]);
+  if(f.trollJob&&!f.trollDone) o.push(['寻踪：巨魔桥（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.trollDone&&!f.trollReward) o.push(['交差：巨魔桥（+10铜币+旧银币）',collectTroll]);
   if(!f.eggJob&&!f.eggDone) o.push(['接：偷蛋——沼泽巨蛇的蛋（报酬12铜币）',acceptEgg]);
-  if(f.eggJob&&!f.eggDone) o.push(['偷蛋：南边沼泽',gotoSwamp]);
+  if(f.eggJob&&!f.eggDone) o.push(['寻踪：蛇窝（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.eggDone) o.push(['交差：偷蛋（+12铜币）',collectEgg]);
   if(!f.kingJob&&!f.kingDone) o.push(['接：猪王讨伐（报酬15铜板+旧铁片·仅一次）',acceptKing]);
   if(f.kingJob&&!f.kingDone) o.push(['猪王讨伐：它就在南边农田',gotoFarm]);
   if(f.kingDone&&!f.kingReward) o.push(['交差：猪王讨伐（+15铜板+旧铁片）',collectKing]);
   if(f.kingDone){
     if(!f.hitJob&&!f.hitDone) o.push(['匿名委托：出30铜币，别问是什么',acceptHit]);
-    if(f.hitJob&&!f.hitDone) o.push(['匿名委托：城西废屋',gotoRuin]);
+    if(f.hitJob&&!f.hitDone) o.push(['寻踪：废屋（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.hitDone) o.push(['交差：匿名委托（+30铜币）',collectHit]);
   }
   if(!f.crowJob&&!f.crowDone) o.push(['接：赶鸦——田里的食腐鸦（报酬6铜币）',acceptCrow]);
@@ -1755,52 +1785,52 @@ function gotoBoard(){
   if(f.beggarDone) o.push(['交差：教训疯乞丐（+8铜币）',collectBeggar]);
   if(f.jobCount>=3){
     if(!f.diggerJob&&!f.diggerDone&&!f.diggerReward) o.push(['BOSS委托：掘墓人（乱葬岗·报酬18铜板+送葬骨灰）',acceptDigger]);
-    if(f.diggerJob&&!f.diggerDone) o.push(['掘墓人：城西乱葬岗',gotoDigger]);
+    if(f.diggerJob&&!f.diggerDone) o.push(['寻踪：掘墓人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.diggerDone&&!f.diggerReward) o.push(['交差：掘墓人（+18铜板+送葬骨灰×2）',collectDigger]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=10){
     if(!f.flagJob&&!f.flagDone&&!f.flagReward) o.push(['BOSS委托：教团苦修者（废弃教堂·报酬40铜板+血盐×3）',acceptFlag]);
-    if(f.flagJob&&!f.flagDone) o.push(['教团苦修者：郊外废墟教堂',gotoFlag]);
+    if(f.flagJob&&!f.flagDone) o.push(['寻踪：教团苦修者（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.flagDone&&!f.flagReward) o.push(['交差：教团苦修者（+40铜板+血盐×3）',collectFlag]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
   if(f.jobCount>=6){
     if(!f.riverJob&&!f.riverDone&&!f.riverReward) o.push(['连环委托：河滩失踪案（报酬22铜板+旧银币）',acceptRiver]);
-    if(f.riverJob&&!f.riverDone) o.push(['河滩失踪案：第'+(f.riverStage+1)+'步',gotoRiver]);
+    if(f.riverJob&&!f.riverDone) o.push(['寻踪：河滩失踪案（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.riverDone&&!f.riverReward) o.push(['交差：河滩失踪案（+22铜板+旧银币）',collectRiver]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=12){
     if(!f.heavyJob&&!f.heavyDone&&!f.heavyReward) o.push(['高阶委托：重甲骑士（东边桥头·报酬35铜板）',acceptHeavy]);
-    if(f.heavyJob&&!f.heavyDone) o.push(['重甲骑士：东边桥头',gotoHeavy]);
+    if(f.heavyJob&&!f.heavyDone) o.push(['寻踪：重甲骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.heavyDone&&!f.heavyReward) o.push(['交差：重甲骑士（+35铜板）',collectHeavy]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/12）',()=>{},true]);
   if(f.jobCount>=14){
     if(!f.saltCarJob&&!f.saltCarDone&&!f.saltCarReward) o.push(['高危委托：血盐商队（西边商路·报酬45铜板+血盐×4）',acceptSaltCar]);
-    if(f.saltCarJob&&!f.saltCarDone) o.push(['血盐商队：西边商路',gotoSaltCar]);
+    if(f.saltCarJob&&!f.saltCarDone) o.push(['寻踪：血盐商队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.saltCarDone&&!f.saltCarReward) o.push(['交差：血盐商队（+45铜板+血盐×4）',collectSaltCar]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   if(f.jobCount>=16){
     if(!f.patrolJob&&!f.patrolDone&&!f.patrolReward) o.push(['高危委托：骑士巡逻队（成建制·报酬55铜板+骑士剑）',acceptPatrol]);
-    if(f.patrolJob&&!f.patrolDone) o.push(['骑士巡逻队：南边官道',gotoPatrol]);
+    if(f.patrolJob&&!f.patrolDone) o.push(['寻踪：骑士巡逻队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.patrolDone&&!f.patrolReward) o.push(['交差：骑士巡逻队（+55铜板+骑士剑）',collectPatrol]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/16）',()=>{},true]);
   if(f.jobCount>=2){
     if(!f.gatorJob&&!f.gatorDone&&!f.gatorReward) o.push(['BOSS委托：吞骨鳄（渡口河湾·报酬15铜板）',acceptGator]);
-    if(f.gatorJob&&!f.gatorDone) o.push(['吞骨鳄：渡口河湾',gotoGator]);
+    if(f.gatorJob&&!f.gatorDone) o.push(['寻踪：吞骨鳄（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.gatorDone&&!f.gatorReward) o.push(['交差：吞骨鳄（+15铜板）',collectGator]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/2）',()=>{},true]);
   if(f.jobCount>=4){
     if(!f.twinsJob&&!f.twinsDone&&!f.twinsReward) o.push(['BOSS委托：断桥双魔（石桥·报酬20铜板）',acceptTwins]);
-    if(f.twinsJob&&!f.twinsDone) o.push(['断桥双魔：石桥',gotoTwins]);
+    if(f.twinsJob&&!f.twinsDone) o.push(['寻踪：断桥双魔（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.twinsDone&&!f.twinsReward) o.push(['交差：断桥双魔（+20铜板+巨魔皮×3）',collectTwins]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/4）',()=>{},true]);
   if(f.jobCount>=6){
     if(!f.cellarJob&&!f.cellarDone&&!f.cellarReward) o.push(['BOSS委托：酒窖母（酒庄地窖·报酬12铜板+果酒×2）',acceptCellar]);
-    if(f.cellarJob&&!f.cellarDone) o.push(['酒窖母：酒庄地窖',gotoCellar]);
+    if(f.cellarJob&&!f.cellarDone) o.push(['寻踪：酒窖母（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.cellarDone&&!f.cellarReward) o.push(['交差：酒窖母（+12铜板+陈年果酒×2）',collectCellar]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=8){
     if(!f.bellJob&&!f.bellDone&&!f.bellReward) o.push(['BOSS委托：铜铃女（夜间道路·报酬：铜铃+10铜板）',acceptBell]);
-    if(f.bellJob&&!f.bellDone) o.push(['铜铃女：夜间道路',gotoBell]);
+    if(f.bellJob&&!f.bellDone) o.push(['寻踪：铜铃女（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.bellDone&&!f.bellReward) o.push(['交差：铜铃女（铜铃+碎布条×3+10铜板）',collectBell]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/8）',()=>{},true]);
   o.push(['离开',backToTown]);
@@ -2065,8 +2095,7 @@ function buyExoticWeapon(name,price,atk,mod,type){
   state.p.gold-=price;
   const isOr=ORIENTAL.some(o=>o[0]===name);
   state.p.owned.push({name,atk,mod,type,fx:isOr?['异纹']:[]});
-  state.p.weapon={name,atk,mod,type,fx:isOr?['异纹']:[]};
-  print('你买下'+name+'异域的钢，异域的刃'+(isOr?'异纹微亮——攻击+8%':'')+'（木剑还在包袱里）','ok');
+  print('你买下'+name+'，放进了背包'+(isOr?'——异纹微亮，攻击+8%':'')+'（营地「换武器」可装备）','ok');
   gotoExotic();
 }
 function buyItem(k,v){
@@ -2093,21 +2122,21 @@ function gotoRoad(){
   o.push(['野地（除兽任务）',gotoWilds]);
   o.push(['农田（猪王讨伐）',gotoFarm]);
   if(f.escortActive) o.push(['护送进行中：商队在镇口',escortRoute]);
-  if(f.trollJob&&!f.trollDone) o.push(['石桥（巨魔桥）',gotoTrollBridge]);
-  if(f.eggJob&&!f.eggDone) o.push(['沼泽（偷蛋）',gotoSwamp]);
-  if(f.hitJob&&!f.hitDone) o.push(['废屋（匿名委托）',gotoRuin]);
-  if(f.gatorJob&&!f.gatorDone) o.push(['河湾（吞骨鳄）',gotoGator]);
-  if(f.twinsJob&&!f.twinsDone) o.push(['石桥（断桥双魔）',gotoTwins]);
-  if(f.cellarJob&&!f.cellarDone) o.push(['酒庄地窖（酒窖母）',gotoCellar]);
-  if(f.bellJob&&!f.bellDone) o.push(['夜间道路（铜铃女）',gotoBell]);
+  if(f.trollJob&&!f.trollDone) o.push(['寻踪：巨魔桥（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.eggJob&&!f.eggDone) o.push(['寻踪：蛇窝（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.hitJob&&!f.hitDone) o.push(['寻踪：废屋（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.gatorJob&&!f.gatorDone) o.push(['寻踪：吞骨鳄（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.twinsJob&&!f.twinsDone) o.push(['寻踪：断桥双魔（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.cellarJob&&!f.cellarDone) o.push(['寻踪：酒窖母（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.bellJob&&!f.bellDone) o.push(['寻踪：铜铃女（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.catJob&&!f.catDone) o.push(['找猫',catSearch]);
   if(f.crowJob&&!f.crowDone) o.push(['麦田（赶鸦）',gotoCrowField]);
-  if(f.diggerJob&&!f.diggerDone) o.push(['乱葬岗（掘墓人）',gotoDigger]);
-  if(f.flagJob&&!f.flagDone) o.push(['废墟教堂（教团苦修者）',gotoFlag]);
-  if(f.riverJob&&!f.riverDone) o.push(['河滩（失踪案）',gotoRiver]);
-  if(f.heavyJob&&!f.heavyDone) o.push(['东边桥头（重甲骑士）',gotoHeavy]);
-  if(f.saltCarJob&&!f.saltCarDone) o.push(['西边商路（血盐商队）',gotoSaltCar]);
-  if(f.patrolJob&&!f.patrolDone) o.push(['南边官道（骑士巡逻队）',gotoPatrol]);
+  if(f.diggerJob&&!f.diggerDone) o.push(['寻踪：掘墓人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.flagJob&&!f.flagDone) o.push(['寻踪：教团苦修者（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.riverJob&&!f.riverDone) o.push(['寻踪：河滩失踪案（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.heavyJob&&!f.heavyDone) o.push(['寻踪：重甲骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.saltCarJob&&!f.saltCarDone) o.push(['寻踪：血盐商队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.patrolJob&&!f.patrolDone) o.push(['寻踪：骑士巡逻队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   o.push(['河滩',()=>{ scene('河滩','河水还和那天一样响你没有待太久',[['回城',gotoAshwold]]); }]);
   o.push(['扎营',gotoCamp]);
   o.push(['北上：前往克罗姆福德（蛙灾之地）',journeyToCromford]);
@@ -2304,9 +2333,10 @@ function wander(){
     return;
   }
   if(f.dragonMet && Math.random()<0.012){
-    startCombat({name:'赤河龙',lv:40,xp:400,hp:900,atk:30,def:12,physRes:0.6,intro:'河水红了，一条比老龙更大的龙从河里升起——赤河龙'},{canFlee:false,items:{覆金属龙皮:3,龙鳞:2,精炼熔断钢铁:1},onWin:wanderNext});
+    startCombat({name:'赤河龙',lv:40,xp:400,hp:900,atk:30,def:12,physRes:0.6,intro:'河水红了，一条比老龙更大的龙从河里升起——赤河龙'},{canFlee:false,items:{覆金属龙皮:3,龙鳞:2,精炼熔断钢铁:1,管理者材料:1},onWin:wanderNext});
     return;
   }
+  if(huntCheck(()=>scene('野外','你绕开了，继续走',[['继续游荡',wander],['回城',gotoAshwold]]))) return;
   if(roll<0.35){ scene('野外','你走了半天只有风和草',[['继续游荡',wander],['回城',gotoAshwold]]); return; }
   if(roll<0.52){
     const pick=['野狗','狼','野猪','巨蛛','骷髅兵','食腐乌鸦群','荆棘猎犬'][Math.floor(Math.random()*7)];
@@ -2551,6 +2581,62 @@ function chainFights(arr,done){
    onWin:()=>{ if(e.after)e.after(); chainFights(arr.slice(1),done); },
    onFlee:()=>{ print('你从混战中脱身','dim'); done(); }});
 }
+/* ---------- 寻踪：BOSS委托不再告知地点，野外游荡偶遇 ---------- */
+const HUNT_LIST=[
+ {flag:'trollJob',done:'trollDone',name:'巨魔桥',desc:'桥洞方向的风里飘来巨魔的臭味',fight:gotoTrollBridge},
+ {flag:'eggJob',done:'eggDone',name:'蛇窝',desc:'沼泽里的草被压出一条蛇道，尽头有蛋壳的反光',fight:gotoSwamp},
+ {flag:'hitJob',done:'hitDone',name:'废屋',desc:'城西的废屋里有什么在喘气',fight:gotoRuin},
+ {flag:'gatorJob',done:'gatorDone',name:'吞骨鳄',desc:'河湾的水在翻，泥里浮起过一张巨口',fight:gotoGator},
+ {flag:'twinsJob',done:'twinsDone',name:'断桥双魔',desc:'断桥的影子在夜里像两个巨人',fight:gotoTwins},
+ {flag:'cellarJob',done:'cellarDone',name:'酒窖母',desc:'酒庄地窖口结着厚厚的蛛网，里面传出吮吸声',fight:gotoCellar},
+ {flag:'bellJob',done:'bellDone',name:'铜铃女',desc:'夜路上传来铜铃声，忽远忽近',fight:gotoBell},
+ {flag:'diggerJob',done:'diggerDone',name:'掘墓人',desc:'乱葬岗方向有铲子掘土的声音',fight:gotoDigger},
+ {flag:'flagJob',done:'flagDone',name:'教团苦修者',desc:'废墟教堂方向有鞭子抽在肉上的声音',fight:gotoFlag},
+ {flag:'heavyJob',done:'heavyDone',name:'重甲骑士',desc:'桥头传来甲片摩擦声，像一座铁塔在移动',fight:gotoHeavy},
+ {flag:'saltCarJob',done:'saltCarDone',name:'血盐商队',desc:'西边商路上有车辙，辙里是暗红色的盐',fight:gotoSaltCar},
+ {flag:'patrolJob',done:'patrolDone',name:'骑士巡逻队',desc:'官道上有马蹄声，三骑成列',fight:gotoPatrol},
+ {flag:'riverJob',done:'riverDone',name:'河滩失踪案',desc:'河滩方向有血水的腥气',fight:gotoRiver},
+ {flag:'hunterJob2',done:'hunter2Done',name:'沼泽猎人',desc:'泥滩上有新鲜脚印，通向芦苇深处',fight:gotoHunter2},
+ {flag:'queenJob',done:'queenDone',name:'蛙后',desc:'大泽方向蛙声突然停了——蛙后醒了',fight:gotoQueen},
+ {flag:'mudJob',done:'mudDone',name:'泥浆巨像',desc:'老磨坊方向的水洼在冒泡',fight:gotoMud},
+ {flag:'hagJob2',done:'hag2Done',name:'沼泽妖婆',desc:'雾沼方向飘来煮锅的怪味',fight:gotoHag2},
+ {flag:'altarJob',done:'altarDone',name:'沼潮祭坛',desc:'深沼中央有泥浆堆成的影子在起伏',fight:gotoAltar},
+ {flag:'campJob2',done:'camp2Done',name:'蛙皮野人营地',desc:'沼泽边缘有营地篝火的烟，混着鼓声',fight:gotoCamp2},
+ {flag:'squadJob',done:'squadDone',name:'灰衣骑士小队',desc:'雾里有成列的脚步声和盾牌碰撞声',fight:gotoSquad},
+ {flag:'commanderJob',done:'commanderDone',name:'灰衣指挥官',desc:'北边路口的雾里，有剑出鞘的声音',fight:gotoCommander},
+ {flag:'legionJob',done:'legionDone',name:'灰衣征税总队',desc:'税卡方向插着一排灰旗',fight:gotoLegion},
+ {flag:'nestJob',done:'nestDone',name:'虱母巢穴',desc:'旱谷方向的地面在鼓动，像颗跳动的土瘤',fight:gotoNest},
+ {flag:'lostJob',done:'lostDone',name:'失踪矿工',desc:'矿洞方向的风里有铁锈和镐子的味道',fight:gotoLost},
+ {flag:'boneJob',done:'boneDone',name:'贩骨人',desc:'荒道方向有骨头的腥气',fight:gotoBone},
+ {flag:'taxJob',done:'taxDone',name:'假税吏',desc:'路口传来税杖拄地的声音',fight:gotoTax},
+ {flag:'robberJob4',done:'robber4Done',name:'墓贼',desc:'古墓地里有短铲挖土的声音',fight:gotoRobber4},
+ {flag:'honeyJob4',done:'honey4Done',name:'苦蜜猎人',desc:'蜜草坡方向有蜂群和猎叉的响动',fight:gotoHoney4},
+ {flag:'relicJob4',done:'relic4Done',name:'蝇群遗族',desc:'腐田方向有蝇云聚成的黑柱',fight:gotoRelic4},
+ {flag:'militiaJob4',done:'militia4Done',name:'教堂民兵',desc:'镇中心方向有长戟拄地的节奏',fight:gotoMilitia4},
+ {flag:'deaconJob',done:'deaconDone',name:'教堂大执事',desc:'圣坛方向有念经声，苍蝇都绕道飞',fight:gotoDeacon},
+ {flag:'haulerJob',done:'haulerDone',name:'纤夫帮',desc:'码头方向有拉纤的号子，掺着骂声',fight:gotoHauler},
+ {flag:'craftJob',done:'craftDone',name:'骨匠帮',desc:'骨场方向堆着小山一样的骨头',fight:gotoCraft},
+ {flag:'plagueRelicJob5',done:'plagueRelic5Done',name:'疫岸遗族',desc:'南岸的雾里有灰布裹着的人影',fight:gotoPlagueRelic5},
+ {flag:'plagueKnightJob',done:'plagueKnightDone',name:'疫岸野骑士',desc:'北岸传来马蹄声，蹄印里全是疫锈',fight:gotoPlagueKnight5},
+ {flag:'ferryJob',done:'ferryDone',name:'渡口怪事',desc:'老渡口方向的水在打旋，雾里有三个影子',fight:gotoFerry},
+ {flag:'wolfJob',done:'wolfDone',name:'野狼王',desc:'野林边有狼嚎，比别的狼更长',fight:gotoWolf},
+ {flag:'duelJob',done:'duelDone',name:'巡防骑士比武',desc:'校场方向有木剑交击的声音',fight:gotoDuel},
+ {flag:'captainJob',done:'captainDone',name:'巡防队长',desc:'大路方向有整齐的甲片声，还有号令',fight:gotoCaptain6},
+ {flag:'pirateJob',done:'pirateDone',name:'海盗',desc:'南码头方向有火把和黑锚的旗子',fight:gotoPirate},
+ {flag:'saltGhostJob',done:'saltGhostDone',name:'盐鬼',desc:'盐田方向的雾里站着个白花花的人形',fight:gotoSaltGhost},
+ {flag:'seaWolfJob',done:'seaWolfDone',name:'海狼群',desc:'北滩方向有海狼的嚎叫，混着浪声',fight:gotoSeaWolf},
+ {flag:'lairJob',done:'lairDone',name:'龙巢穴',desc:'海崖方向的风里有龙鳞的腥气',fight:gotoLair},
+ {flag:'lighthouseJob',done:'lighthouseDone',name:'灯塔怪光',desc:'东角灯塔的灯在白天自己亮了一下',fight:gotoLighthouseJob}
+];
+function huntCheck(back){
+  const f=state.p.flags;
+  const act=HUNT_LIST.filter(h=>f[h.flag]&&!f[h.done]);
+  if(!act.length)return false;
+  if(Math.random()>0.25)return false;
+  const h=act[Math.floor(Math.random()*act.length)];
+  scene('寻踪·'+h.name,h.desc, [['进去',h.fight],['改天再来',back]]);
+  return true;
+}
 function liceEvent(cb){
   const roll=Math.random();
   if(roll<0.5){
@@ -2630,13 +2716,13 @@ function gotoRoad2(){
   if(f.grainJob&&!f.grainDone) o.push(['粮食护送：粮车在北边路口',grainRoute]);
   if(f.frogJob&&!f.frogDone) o.push(['清蛙潮：还剩 '+f.frogsLeft+' 只',gotoFrogField]);
   if(f.potFrogJob&&!f.potFrogDone) o.push(['抓蛙供灶：还剩 '+f.potFrogsLeft+' 只',gotoPotFrog]);
-  if(f.hunterJob2&&!f.hunter2Done) o.push(['西边泥滩（沼泽猎人）',gotoHunter2]);
+  if(f.hunterJob2&&!f.hunter2Done) o.push(['寻踪：沼泽猎人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.scavJob&&!f.scavDone) o.push(['北边浅滩（拾荒）',gotoScav]);
-  if(f.queenJob&&!f.queenDone) o.push(['南边大泽（蛙后）',gotoQueen]);
-  if(f.mudJob&&!f.mudDone) o.push(['老磨坊（怪声）',gotoMud]);
-  if(f.campJob2&&!f.camp2Done) o.push(['蛙皮野人营地（第'+(f.campStage+1)+'步）',gotoCamp2]);
-  if(f.hagJob2&&!f.hag2Done) o.push(['北边雾沼（沼泽妖婆）',gotoHag2]);
-  if(f.altarJob&&!f.altarDone) o.push(['深沼（沼潮祭坛）',gotoAltar]);
+  if(f.queenJob&&!f.queenDone) o.push(['寻踪：蛙后（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.mudJob&&!f.mudDone) o.push(['寻踪：泥浆巨像（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.campJob2&&!f.camp2Done) o.push(['寻踪：蛙皮野人营地（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.hagJob2&&!f.hag2Done) o.push(['寻踪：沼泽妖婆（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.altarJob&&!f.altarDone) o.push(['寻踪：沼潮祭坛（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   o.push(['扎营',gotoCamp]);
   o.push(['⚙ 系统',sysMenu]);
   o.push(['回城',gotoCromford]);
@@ -2724,34 +2810,34 @@ function gotoBoard2(){
   if(f.potFrogJob&&!f.potFrogDone) o.push(['抓蛙供灶：还剩 '+f.potFrogsLeft+' 只',gotoPotFrog]);
   if(f.potFrogDone) o.push(['交差：抓蛙供灶（+9铜币）',collectPotFrog]);
   if(!f.hunterJob2&&!f.hunter2Done&&!f.hunter2Reward) o.push(['接：猎人头颅（沼泽猎人·报酬12铜币）',()=>{ f.hunterJob2=true; print('一个沼泽猎人袭了商路','dim'); gotoRoad2(); }]);
-  if(f.hunterJob2&&!f.hunter2Done) o.push(['沼泽猎人：西边泥滩',gotoHunter2]);
+  if(f.hunterJob2&&!f.hunter2Done) o.push(['寻踪：沼泽猎人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.hunter2Done&&!f.hunter2Reward) o.push(['交差：猎人头颅（+12铜币+蛙皮×2）',collectHunter2]);
   if(!f.scavJob&&!f.scavDone) o.push(['接：沼泽拾荒（报酬看运气）',acceptScav]);
   if(f.scavJob&&!f.scavDone) o.push(['拾荒：北边浅滩',gotoScav]);
   if(f.scavDone) o.push(['交差：沼泽拾荒（+5铜币）',collectScav]);
   if(f.jobCount>=3){
     if(!f.queenJob&&!f.queenDone&&!f.queenReward) o.push(['BOSS委托：蛙后（南边大泽·报酬25铜板+蛙油膏×2）',acceptQueen]);
-    if(f.queenJob&&!f.queenDone) o.push(['蛙后：南边大泽',gotoQueen]);
+    if(f.queenJob&&!f.queenDone) o.push(['寻踪：蛙后（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.queenDone&&!f.queenReward) o.push(['交差：蛙后（+25铜板+蛙油膏×2）',collectQueen]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=5){
     if(!f.mudJob&&!f.mudDone&&!f.mudReward) o.push(['BOSS委托：磨坊怪声（泥浆巨像·报酬30铜板+水渍石×2）',acceptMud]);
-    if(f.mudJob&&!f.mudDone) o.push(['磨坊怪声：老磨坊',gotoMud]);
+    if(f.mudJob&&!f.mudDone) o.push(['寻踪：泥浆巨像（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.mudDone&&!f.mudReward) o.push(['交差：磨坊怪声（+30铜板+水渍石×2）',collectMud]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/5）',()=>{},true]);
   if(f.jobCount>=6){
     if(!f.campJob2&&!f.camp2Done&&!f.camp2Reward) o.push(['连环委托：蛙皮野人营地（报酬20铜板+蛙皮×3）',acceptCamp2]);
-    if(f.campJob2&&!f.camp2Done) o.push(['蛙皮野人营地：第'+(f.campStage+1)+'步',gotoCamp2]);
+    if(f.campJob2&&!f.camp2Done) o.push(['寻踪：蛙皮野人营地（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.camp2Done&&!f.camp2Reward) o.push(['交差：蛙皮野人营地（+20铜板+蛙皮×3）',collectCamp2]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=12){
     if(!f.hagJob2&&!f.hag2Done&&!f.hag2Reward) o.push(['高阶委托：沼泽妖婆（雾沼·报酬30铜板+草药×2）',acceptHag2]);
-    if(f.hagJob2&&!f.hag2Done) o.push(['沼泽妖婆：北边雾沼',gotoHag2]);
+    if(f.hagJob2&&!f.hag2Done) o.push(['寻踪：沼泽妖婆（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.hag2Done&&!f.hag2Reward) o.push(['交差：沼泽妖婆（+30铜板+草药×2）',collectHag2]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/12）',()=>{},true]);
   if(f.jobCount>=14){
     if(!f.altarJob&&!f.altarDone&&!f.altarReward) o.push(['高危委托：沼潮祭坛（深沼·报酬48铜板+水渍石×3）',acceptAltar]);
-    if(f.altarJob&&!f.altarDone) o.push(['沼潮祭坛：深沼',gotoAltar]);
+    if(f.altarJob&&!f.altarDone) o.push(['寻踪：沼潮祭坛（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.altarDone&&!f.altarReward) o.push(['交差：沼潮祭坛（+48铜板+水渍石×3）',collectAltar]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   o.push(['离开',gotoCromford]);
@@ -2927,15 +3013,15 @@ function gotoRoad3(){
   o.push(['在野外游荡',wanderTanwo]);
   o.push(['南下：回克罗姆福德（3段路程）',journeyToCromfordBack]);
   if(f.tideJob&&!f.tideDone) o.push(['虱潮：东边荒地',gotoTide]);
-  if(f.squadJob&&!f.squadDone) o.push(['灰衣骑士小队：北边路口',gotoSquad]);
+  if(f.squadJob&&!f.squadDone) o.push(['寻踪：灰衣骑士小队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.mineJob&&!f.mineDone) o.push(['矿洞流民营地：南边矿口',gotoMine]);
   if(f.ratJob&&!f.ratDone) o.push(['灭鼠：粮仓（还剩 '+f.ratsLeft+' 群）',gotoRats]);
-  if(f.boneJob&&!f.boneDone) o.push(['南边荒道（贩骨人）',gotoBone]);
-  if(f.taxJob&&!f.taxDone) o.push(['西边路口（假税吏）',gotoTax]);
-  if(f.commanderJob&&!f.commanderDone) o.push(['灰衣指挥官：北边路口',gotoCommander]);
-  if(f.lostJob&&!f.lostDone) o.push(['矿洞（失踪矿工）',gotoLost]);
-  if(f.nestJob&&!f.nestDone) o.push(['东边旱谷（虱母巢）',gotoNest]);
-  if(f.legionJob&&!f.legionDone) o.push(['北边税卡（灰衣征税总队）',gotoLegion]);
+  if(f.boneJob&&!f.boneDone) o.push(['寻踪：贩骨人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.taxJob&&!f.taxDone) o.push(['寻踪：假税吏（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.commanderJob&&!f.commanderDone) o.push(['寻踪：灰衣指挥官（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.lostJob&&!f.lostDone) o.push(['寻踪：失踪矿工（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.nestJob&&!f.nestDone) o.push(['寻踪：虱母巢穴（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.legionJob&&!f.legionDone) o.push(['寻踪：灰衣征税总队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   o.push(['北上：前往白石镇（正常地区）',journeyToWhitestone]);
   o.push(['扎营',gotoCamp]);
   o.push(['⚙ 系统',sysMenu]);
@@ -2958,8 +3044,7 @@ function buyLiceWeapon(name,price,atk,type){
   if(state.p.gold<price){ print('钱不够','bad'); gotoLiceShop(); return; }
   state.p.gold-=price;
   state.p.owned.push({name,atk,type});
-  state.p.weapon={name,atk,type};
-  print('你买下'+name+'','ok');
+  print('你买下'+name+'，放进了背包（营地「换武器」可装备）','ok');
   gotoLiceShop();
 }
 function gotoTavern3(){
@@ -2987,7 +3072,7 @@ function gotoBoard3(){
   if(f.tideJob&&!f.tideDone) o.push(['清虱潮：东边荒地',gotoTide]);
   if(f.tideDone) o.push(['交差：清虱潮（+15铜币）',collectTide]);
   if(!f.squadJob&&!f.squadDone) o.push(['接：灰衣骑士小队（成建制，报酬25铜币）',()=>{ f.squadJob=true; print('一支灰衣骑士小队盘踞在北边路口他们有队形，有口令，有队长','dim'); gotoRoad3(); }]);
-  if(f.squadJob&&!f.squadDone) o.push(['灰衣骑士小队：北边路口',gotoSquad]);
+  if(f.squadJob&&!f.squadDone) o.push(['寻踪：灰衣骑士小队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.squadDone) o.push(['交差：灰衣骑士小队（+25铜币）',collectSquad]);
   if(!f.mineJob&&!f.mineDone) o.push(['接：驱赶矿洞流民（报酬10铜币）',()=>{ f.mineJob=true; print('矿洞流民在镇外扎了营','dim'); gotoRoad3(); }]);
   if(f.mineJob&&!f.mineDone) o.push(['矿洞流民营地：南边矿口',gotoMine]);
@@ -2996,29 +3081,29 @@ function gotoBoard3(){
   if(f.ratJob&&!f.ratDone) o.push(['灭鼠：还剩 '+f.ratsLeft+' 群',gotoRats]);
   if(f.ratDone) o.push(['交差：灭鼠（+7铜币）',collectRats]);
   if(!f.boneJob&&!f.boneDone&&!f.boneReward) o.push(['接：贩骨人（报酬14铜币+骨头×2）',acceptBone]);
-  if(f.boneJob&&!f.boneDone) o.push(['贩骨人：南边荒道',gotoBone]);
+  if(f.boneJob&&!f.boneDone) o.push(['寻踪：贩骨人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.boneDone&&!f.boneReward) o.push(['交差：贩骨人（+14铜币+骨头×2）',collectBone]);
   if(!f.taxJob&&!f.taxDone&&!f.taxReward) o.push(['接：假税吏（报酬18铜币）',acceptTax]);
-  if(f.taxJob&&!f.taxDone) o.push(['假税吏：西边路口',gotoTax]);
+  if(f.taxJob&&!f.taxDone) o.push(['寻踪：假税吏（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.taxDone&&!f.taxReward) o.push(['交差：假税吏（+18铜币）',collectTax]);
   if(f.jobCount>=8){
     if(!f.commanderJob&&!f.commanderDone&&!f.commanderReward) o.push(['BOSS委托：灰衣指挥官（报酬45铜板+灰衣队长徽记）',acceptCommander]);
-    if(f.commanderJob&&!f.commanderDone) o.push(['灰衣指挥官：北边路口',gotoCommander]);
+    if(f.commanderJob&&!f.commanderDone) o.push(['寻踪：灰衣指挥官（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.commanderDone&&!f.commanderReward) o.push(['交差：灰衣指挥官（+45铜板+灰衣队长徽记）',collectCommander]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/8）',()=>{},true]);
   if(f.jobCount>=6){
     if(!f.lostJob&&!f.lostDone&&!f.lostReward) o.push(['连环委托：失踪的矿工（报酬24铜板+铁料×2）',acceptLost]);
-    if(f.lostJob&&!f.lostDone) o.push(['失踪矿工：第'+(f.lostStage+1)+'步',gotoLost]);
+    if(f.lostJob&&!f.lostDone) o.push(['寻踪：失踪矿工（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.lostDone&&!f.lostReward) o.push(['交差：失踪矿工（+24铜板+铁料×2）',collectLost]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=12){
     if(!f.nestJob&&!f.nestDone&&!f.nestReward) o.push(['高阶委托：虱母巢穴（东边旱谷·报酬28铜板）',acceptNest]);
-    if(f.nestJob&&!f.nestDone) o.push(['虱母巢穴：东边旱谷',gotoNest]);
+    if(f.nestJob&&!f.nestDone) o.push(['寻踪：虱母巢穴（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.nestDone&&!f.nestReward) o.push(['交差：虱母巢穴（+28铜板）',collectNest]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/12）',()=>{},true]);
   if(f.jobCount>=16){
     if(!f.legionJob&&!f.legionDone&&!f.legionReward) o.push(['高危委托：灰衣征税总队（北边税卡·报酬60铜板+灰衣队长徽记×2）',acceptLegion]);
-    if(f.legionJob&&!f.legionDone) o.push(['灰衣征税总队：北边税卡',gotoLegion]);
+    if(f.legionJob&&!f.legionDone) o.push(['寻踪：灰衣征税总队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.legionDone&&!f.legionReward) o.push(['交差：灰衣征税总队（+60铜板+灰衣队长徽记×2）',collectLegion]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/16）',()=>{},true]);
   o.push(['离开',backToTown]);
@@ -3170,8 +3255,13 @@ function wanderTanwo(){
   const roll=Math.random();
   if(!f.dragonMet && Math.random()<0.03){
     startCombat({name:'老龙',lv:20,xp:50,hp:400,atk:18,def:8,physRes:0.5,intro:'它落下来的时候，风先到了'},{canFlee:false,items:{覆金属龙皮:2,精炼熔断钢铁:1},onWin:wanderTanwoNext});
+  if(f.dragonMet && Math.random()<0.01){
+    startCombat({name:'旱地龙',lv:28,xp:180,hp:600,atk:22,def:9,physRes:0.55,intro:'旱地里隆起一个沙丘——不，那是旱地龙的背'},{canFlee:false,items:{覆金属龙皮:2,龙鳞:2},onWin:wanderTanwoNext});
     return;
   }
+    return;
+  }
+  if(huntCheck(()=>scene('坦沃郊野','你绕开了，继续走',[['继续游荡',wanderTanwo],['回城',gotoTanwo]]))) return;
   if(roll<0.3){ scene('坦沃郊野','你走了半天地面沙沙响',[['继续游荡',wanderTanwo],['回城',gotoTanwo]]); return; }
   if(roll<0.55){
     const pick=Math.random();
@@ -3217,8 +3307,13 @@ function wanderCromford(){
   const roll=Math.random();
   if(!f.dragonMet && Math.random()<0.03){
     startCombat({name:'老龙',lv:20,xp:50,hp:400,atk:18,def:8,physRes:0.5,intro:'它落下来的时候，风先到了'},{canFlee:false,items:{覆金属龙皮:2,精炼熔断钢铁:1},onWin:wanderCromfordNext});
+  if(f.dragonMet && Math.random()<0.01){
+    startCombat({name:'泥沼龙',lv:28,xp:180,hp:600,atk:22,def:9,physRes:0.55,intro:'泥沼炸开，一条龙从底下升起来——泥沼龙'},{canFlee:false,items:{覆金属龙皮:2,龙鳞:2},onWin:wanderCromfordNext});
     return;
   }
+    return;
+  }
+  if(huntCheck(()=>scene('克罗姆福德郊野','你绕开了，继续走',[['继续游荡',wanderCromford],['回城',gotoCromford]]))) return;
   if(roll<0.32){ scene('克罗姆福德郊野','你踩着泥走蛙声从四面八方来',[['继续游荡',wanderCromford],['回城',gotoCromford]]); return; }
   if(roll<0.62){
     const pick=Math.random();
@@ -3311,11 +3406,11 @@ function gotoRoad4(){
   o.push(['南下：回白石镇（3段路程）',journeyToWhitestone3]);
   if(f.fliesJob&&!f.fliesDone) o.push(['驱蝇：镇口晒场（还剩 '+f.fliesLeft+' 群）',gotoFlies]);
   if(f.riteJob&&!f.riteDone) o.push(['安魂仪式：灵柩停在教堂后',gotoRite]);
-  if(f.robberJob4&&!f.robber4Done) o.push(['墓贼：镇外古墓地',gotoRobber4]);
-  if(f.honeyJob4&&!f.honey4Done) o.push(['苦蜜猎人：蜜草坡',gotoHoney4]);
-  if(f.relicJob4&&!f.relic4Done) o.push(['蝇群遗族：北边腐田',gotoRelic4]);
-  if(f.militiaJob4&&!f.militia4Done) o.push(['教堂民兵：镇中心',gotoMilitia4]);
-  if(f.deaconJob&&!f.deaconDone) o.push(['教堂大执事：镇中心圣坛',gotoDeacon]);
+  if(f.robberJob4&&!f.robber4Done) o.push(['寻踪：墓贼（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.honeyJob4&&!f.honey4Done) o.push(['寻踪：苦蜜猎人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.relicJob4&&!f.relic4Done) o.push(['寻踪：蝇群遗族（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.militiaJob4&&!f.militia4Done) o.push(['寻踪：教堂民兵（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.deaconJob&&!f.deaconDone) o.push(['寻踪：教堂大执事（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   o.push(['北上：前往沃林（畜疫灾之地）',journeyToWarrin]);
   o.push(['扎营',gotoCamp]);
   o.push(['⚙ 系统',sysMenu]);
@@ -3381,26 +3476,26 @@ function gotoBoard4(){
   if(f.riteJob&&!f.riteDone) o.push(['安魂仪式：灵柩停在教堂后',gotoRite]);
   if(f.riteDone&&!f.riteReward) o.push(['交差：安魂仪式（+12铜币+安魂十字）',collectRite]);
   if(!f.honeyJob4&&!f.honey4Done&&!f.honey4Reward) o.push(['接：苦蜜猎人（蜜草坡·报酬14铜币+苦蜜蜡）',()=>{ f.honeyJob4=true; print('蜜草坡的苦蜜猎人劫了采蜜人','dim'); gotoRoad4(); }]);
-  if(f.honeyJob4&&!f.honey4Done) o.push(['苦蜜猎人：蜜草坡',gotoHoney4]);
+  if(f.honeyJob4&&!f.honey4Done) o.push(['寻踪：苦蜜猎人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.honey4Done&&!f.honey4Reward) o.push(['交差：苦蜜猎人（+14铜币+苦蜜蜡×2）',collectHoney4]);
   if(f.jobCount>=3){
     if(!f.robberJob4&&!f.robber4Done&&!f.robber4Reward) o.push(['BOSS委托：墓贼（古墓地·报酬20铜板+苦蜜蜡×2）',acceptRobber4]);
-    if(f.robberJob4&&!f.robber4Done) o.push(['墓贼：镇外古墓地',gotoRobber4]);
+    if(f.robberJob4&&!f.robber4Done) o.push(['寻踪：墓贼（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.robber4Done&&!f.robber4Reward) o.push(['交差：墓贼（+20铜板+苦蜜蜡×2）',collectRobber4]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=6){
     if(!f.relicJob4&&!f.relic4Done&&!f.relic4Reward) o.push(['BOSS委托：蝇群遗族（北边腐田·报酬28铜板+苦蜜蜡×3）',acceptRelic4]);
-    if(f.relicJob4&&!f.relic4Done) o.push(['蝇群遗族：北边腐田',gotoRelic4]);
+    if(f.relicJob4&&!f.relic4Done) o.push(['寻踪：蝇群遗族（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.relic4Done&&!f.relic4Reward) o.push(['交差：蝇群遗族（+28铜板+苦蜜蜡×3）',collectRelic4]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=10){
     if(!f.militiaJob4&&!f.militia4Done&&!f.militia4Reward) o.push(['BOSS委托：教堂民兵（成建制·报酬40铜板+苦蜜酒×2）',acceptMilitia4]);
-    if(f.militiaJob4&&!f.militia4Done) o.push(['教堂民兵：镇中心',gotoMilitia4]);
+    if(f.militiaJob4&&!f.militia4Done) o.push(['寻踪：教堂民兵（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.militia4Done&&!f.militia4Reward) o.push(['交差：教堂民兵（+40铜板+苦蜜酒×2）',collectMilitia4]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
   if(f.jobCount>=14){
     if(!f.deaconJob&&!f.deaconDone&&!f.deaconReward) o.push(['高危委托：教堂大执事（圣坛·报酬55铜板+苦蜜蜡×3）',acceptDeacon]);
-    if(f.deaconJob&&!f.deaconDone) o.push(['教堂大执事：镇中心圣坛',gotoDeacon]);
+    if(f.deaconJob&&!f.deaconDone) o.push(['寻踪：教堂大执事（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.deaconDone&&!f.deaconReward) o.push(['交差：教堂大执事（+55铜板+苦蜜蜡×3）',collectDeacon]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   o.push(['离开',backToTown]);
@@ -3495,8 +3590,13 @@ function wanderLienfiel(){
   const roll=Math.random();
   if(!f.dragonMet && Math.random()<0.03){
     startCombat({name:'老龙',lv:20,xp:50,hp:400,atk:18,def:8,physRes:0.5,intro:'它落下来的时候，风先到了，苍蝇先散了'},{canFlee:false,items:{覆金属龙皮:2,精炼熔断钢铁:1},onWin:wanderLienfielNext});
+  if(f.dragonMet && Math.random()<0.01){
+    startCombat({name:'墓岩龙',lv:30,xp:220,hp:650,atk:23,def:10,physRes:0.55,intro:'古墓地的土塌了下去，墓岩龙从地底爬出来'},{canFlee:false,items:{覆金属龙皮:2,龙鳞:2},onWin:wanderLienfielNext});
     return;
   }
+    return;
+  }
+  if(huntCheck(()=>scene('利恩菲尔郊野','你绕开了，继续走',[['继续游荡',wanderLienfiel],['回城',gotoLienfiel]]))) return;
   if(roll<0.32){ scene('利恩菲尔郊野','你走在腐田之间嗡声包围着你',[['继续游荡',wanderLienfiel],['回城',gotoLienfiel]]); return; }
   if(roll<0.6){
     const pick=Math.random();
@@ -3591,11 +3691,11 @@ function gotoRoad5(){
   o.push(['在野外游荡',wanderWarrin]);
   o.push(['南下：回利恩菲尔（3段路程）',journeyToLienfielBack]);
   if(f.beastJob&&!f.beastDone) o.push(['赶牲口：河边草场（还剩 '+f.beastsLeft+' 头）',gotoBeast]);
-  if(f.haulerJob&&!f.haulerDone) o.push(['纤夫帮：西码头',gotoHauler]);
-  if(f.craftJob&&!f.craftDone) o.push(['骨匠帮：北边骨场',gotoCraft]);
-  if(f.plagueRelicJob5&&!f.plagueRelic5Done) o.push(['疫岸遗族：渡口南岸',gotoPlagueRelic5]);
-  if(f.plagueKnightJob&&!f.plagueKnightDone) o.push(['疫岸野骑士：渡口北岸',gotoPlagueKnight5]);
-  if(f.ferryJob&&!f.ferryDone) o.push(['渡口怪事：老渡口',gotoFerry]);
+  if(f.haulerJob&&!f.haulerDone) o.push(['寻踪：纤夫帮（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.craftJob&&!f.craftDone) o.push(['寻踪：骨匠帮（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.plagueRelicJob5&&!f.plagueRelic5Done) o.push(['寻踪：疫岸遗族（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.plagueKnightJob&&!f.plagueKnightDone) o.push(['寻踪：疫岸野骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.ferryJob&&!f.ferryDone) o.push(['寻踪：渡口怪事（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   o.push(['北上：前往风角港（沿海之地）',journeyToWindcap]);
   o.push(['扎营',gotoCamp]);
   o.push(['⚙ 系统',sysMenu]);
@@ -3616,8 +3716,7 @@ function buyBoneWeapon(name,price,atk,type){
   if(state.p.gold<price){ print('钱不够','bad'); gotoBoneShop(); return; }
   state.p.gold-=price;
   state.p.owned.push({name,atk,type});
-  state.p.weapon={name,atk,type};
-  print('你买下'+name,'ok');
+  print('你买下'+name+'，放进了背包（营地「换武器」可装备）','ok');
   gotoBoneShop();
 }
 function gotoTavern5(){
@@ -3645,26 +3744,26 @@ function gotoBoard5(){
   if(f.beastJob&&!f.beastDone) o.push(['赶牲口：还剩 '+f.beastsLeft+' 头',gotoBeast]);
   if(f.beastDone) o.push(['交差：赶牲口（+8铜币）',collectBeast]);
   if(!f.haulerJob&&!f.haulerDone&&!f.haulerReward) o.push(['接：纤夫帮（西码头·报酬14铜币+骨器×2）',()=>{ f.haulerJob=true; print('纤夫帮占了西码头，不交份子钱不让上船','dim'); gotoRoad5(); }]);
-  if(f.haulerJob&&!f.haulerDone) o.push(['纤夫帮：西码头',gotoHauler]);
+  if(f.haulerJob&&!f.haulerDone) o.push(['寻踪：纤夫帮（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.haulerDone&&!f.haulerReward) o.push(['交差：纤夫帮（+14铜币+骨器×2）',collectHauler]);
   if(f.jobCount>=3){
     if(!f.craftJob&&!f.craftDone&&!f.craftReward) o.push(['BOSS委托：骨匠帮（北边骨场·报酬30铜板+疫骨×2）',acceptCraft]);
-    if(f.craftJob&&!f.craftDone) o.push(['骨匠帮：北边骨场',gotoCraft]);
+    if(f.craftJob&&!f.craftDone) o.push(['寻踪：骨匠帮（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.craftDone&&!f.craftReward) o.push(['交差：骨匠帮（+30铜板+疫骨×2）',collectCraft]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=6){
     if(!f.plagueRelicJob5&&!f.plagueRelic5Done&&!f.plagueRelic5Reward) o.push(['BOSS委托：疫岸遗族（渡口南岸·报酬35铜板+骨器×3）',acceptPlagueRelic5]);
-    if(f.plagueRelicJob5&&!f.plagueRelic5Done) o.push(['疫岸遗族：渡口南岸',gotoPlagueRelic5]);
+    if(f.plagueRelicJob5&&!f.plagueRelic5Done) o.push(['寻踪：疫岸遗族（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.plagueRelic5Done&&!f.plagueRelic5Reward) o.push(['交差：疫岸遗族（+35铜板+骨器×3）',collectPlagueRelic5]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=10){
     if(!f.plagueKnightJob&&!f.plagueKnightDone&&!f.plagueKnightReward) o.push(['高阶委托：疫岸野骑士（渡口北岸·报酬48铜板+疫骨×3）',acceptPlagueKnight5]);
-    if(f.plagueKnightJob&&!f.plagueKnightDone) o.push(['疫岸野骑士：渡口北岸',gotoPlagueKnight5]);
+    if(f.plagueKnightJob&&!f.plagueKnightDone) o.push(['寻踪：疫岸野骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.plagueKnightDone&&!f.plagueKnightReward) o.push(['交差：疫岸野骑士（+48铜板+疫骨×3）',collectPlagueKnight5]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
   if(f.jobCount>=14){
     if(!f.ferryJob&&!f.ferryDone&&!f.ferryReward) o.push(['高危委托：渡口怪事（老渡口·报酬65铜板+骨器×4）',acceptFerry]);
-    if(f.ferryJob&&!f.ferryDone) o.push(['渡口怪事：老渡口',gotoFerry]);
+    if(f.ferryJob&&!f.ferryDone) o.push(['寻踪：渡口怪事（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.ferryDone&&!f.ferryReward) o.push(['交差：渡口怪事（+65铜板+骨器×4）',collectFerry]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   o.push(['离开',backToTown]);
@@ -3742,8 +3841,13 @@ function wanderWarrin(){
   const roll=Math.random();
   if(!f.dragonMet && Math.random()<0.03){
     startCombat({name:'老龙',lv:20,xp:50,hp:400,atk:18,def:8,physRes:0.5,intro:'它落下来的时候，风先到了，河面先裂开了'},{canFlee:false,items:{覆金属龙皮:2,精炼熔断钢铁:1},onWin:wanderWarrinNext});
+  if(f.dragonMet && Math.random()<0.01){
+    startCombat({name:'渡河龙',lv:32,xp:240,hp:700,atk:24,def:10,physRes:0.55,intro:'河水向两边分开，渡河龙趟水而来'},{canFlee:false,items:{覆金属龙皮:2,龙鳞:2},onWin:wanderWarrinNext});
     return;
   }
+    return;
+  }
+  if(huntCheck(()=>scene('沃林郊野','你绕开了，继续走',[['继续游荡',wanderWarrin],['回城',gotoWarrin]]))) return;
   if(roll<0.32){ scene('沃林郊野','河风里都是煮骨头的味',[['继续游荡',wanderWarrin],['回城',gotoWarrin]]); return; }
   if(roll<0.6){
     const pick=Math.random();
@@ -3844,9 +3948,9 @@ function gotoRoad6(){
   o.push(['南下：回坦沃（3段路程）',journeyToWhitestone4]);
   if(f.clearJob&&!f.clearDone) o.push(['商路清障：西边山道（还剩 '+f.clearsLeft+' 伙）',gotoClear]);
   if(f.escrowActive&&!f.escrowDone) o.push(['税银护送：税车在镇口',escrowRoute]);
-  if(f.wolfJob&&!f.wolfDone) o.push(['野狼王：北边野林',gotoWolf]);
-  if(f.duelJob&&!f.duelDone) o.push(['巡防骑士比武：镇外校场',gotoDuel]);
-  if(f.captainJob&&!f.captainDone) o.push(['巡防队长：镇外大路',gotoCaptain6]);
+  if(f.wolfJob&&!f.wolfDone) o.push(['寻踪：野狼王（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.duelJob&&!f.duelDone) o.push(['寻踪：巡防骑士比武（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.captainJob&&!f.captainDone) o.push(['寻踪：巡防队长（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   o.push(['扎营',gotoCamp]);
   o.push(['⚙ 系统',sysMenu]);
   o.push(['回城',gotoWhitestone]);
@@ -3916,17 +4020,17 @@ function gotoBoard6(){
   if(f.escrowDone) o.push(['交差：护送税银（+'+(f.escrowPay||0)+'铜币）',collectEscrow]);
   if(f.jobCount>=3){
     if(!f.wolfJob&&!f.wolfDone&&!f.wolfReward) o.push(['BOSS委托：野狼王（北边野林·报酬20铜板+兽皮×3）',acceptWolf]);
-    if(f.wolfJob&&!f.wolfDone) o.push(['野狼王：北边野林',gotoWolf]);
+    if(f.wolfJob&&!f.wolfDone) o.push(['寻踪：野狼王（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.wolfDone&&!f.wolfReward) o.push(['交差：野狼王（+20铜板+兽皮×3）',collectWolf]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=6){
     if(!f.duelJob&&!f.duelDone&&!f.duelReward) o.push(['高阶委托：巡防骑士比武（校场·报酬25铜板+骑士剑）',acceptDuel]);
-    if(f.duelJob&&!f.duelDone) o.push(['巡防骑士比武：镇外校场',gotoDuel]);
+    if(f.duelJob&&!f.duelDone) o.push(['寻踪：巡防骑士比武（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.duelDone&&!f.duelReward) o.push(['交差：巡防骑士比武（+25铜板+骑士剑）',collectDuel]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=10){
     if(!f.captainJob&&!f.captainDone&&!f.captainReward) o.push(['高危委托：巡防队长（镇外大路·报酬55铜板+骑士剑×2）',acceptCaptain6]);
-    if(f.captainJob&&!f.captainDone) o.push(['巡防队长：镇外大路',gotoCaptain6]);
+    if(f.captainJob&&!f.captainDone) o.push(['寻踪：巡防队长（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.captainDone&&!f.captainReward) o.push(['交差：巡防队长（+55铜板+骑士剑×2）',collectCaptain6]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
   o.push(['离开',backToTown]);
@@ -3995,6 +4099,7 @@ function wanderWhitestone(){
     startCombat({name:'老龙',lv:20,xp:50,hp:400,atk:18,def:8,physRes:0.5,intro:'它落下来的时候，风先到了，田里的麦子先伏下了'},{canFlee:false,items:{覆金属龙皮:2,精炼熔断钢铁:1},onWin:wanderWhitestoneNext});
     return;
   }
+  if(huntCheck(()=>scene('白石镇郊野','你绕开了，继续走',[['继续游荡',wanderWhitestone],['回城',gotoWhitestone]]))) return;
   if(roll<0.35){ scene('白石镇郊野','官道笔直，两边的麦田绿得发亮',[['继续游荡',wanderWhitestone],['回城',gotoWhitestone]]); return; }
   if(roll<0.62){
     const pick=Math.random();
@@ -4072,12 +4177,12 @@ function gotoRoad7(){
   o.push(['在野外游荡',wanderWindcap]);
   o.push(['南下：回沃林（3段路程）',journeyToWarrinBack]);
   if(f.fishJob&&!f.fishDone) o.push(['出海捕鱼：码头（还剩 '+f.fishNets+' 网）',gotoFish]);
-  if(f.pirateJob&&!f.pirateDone) o.push(['海盗：南码头',gotoPirate]);
-  if(f.saltGhostJob&&!f.saltGhostDone) o.push(['盐鬼：盐田',gotoSaltGhost]);
-  if(f.seaWolfJob&&!f.seaWolfDone) o.push(['海狼群：北滩',gotoSeaWolf]);
-  if(f.lairJob&&!f.lairDone) o.push(['龙巢穴：海崖洞窟（第'+(f.lairStage+1)+'层）',gotoLair]);
+  if(f.pirateJob&&!f.pirateDone) o.push(['寻踪：海盗（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.saltGhostJob&&!f.saltGhostDone) o.push(['寻踪：盐鬼（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.seaWolfJob&&!f.seaWolfDone) o.push(['寻踪：海狼群（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
+  if(f.lairJob&&!f.lairDone) o.push(['寻踪：龙巢穴（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.lairUnlocked||f.lairReward||f.lairDone) o.push(['龙巢深处：无限下潜（最高第'+f.lairBest+'层）',gotoLairEndless]);
-  if(f.lighthouseJob&&!f.lighthouseDone) o.push(['灯塔怪光：东角灯塔',gotoLighthouseJob]);
+  if(f.lighthouseJob&&!f.lighthouseDone) o.push(['寻踪：灯塔怪光（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   o.push(['扎营',gotoCamp]);
   o.push(['⚙ 系统',sysMenu]);
   o.push(['回城',gotoWindcap]);
@@ -4137,27 +4242,27 @@ function gotoBoard7(){
   if(f.fishJob&&!f.fishDone) o.push(['出海捕鱼：还剩 '+f.fishNets+' 网',gotoFish]);
   if(f.fishDone) o.push(['交差：出海捕鱼（+5铜币）',collectFish]);
   if(!f.pirateJob&&!f.pirateDone&&!f.pirateReward) o.push(['接：驱赶海盗（南码头·报酬18铜币+海鱼×2）',()=>{ f.pirateJob=true; print('一伙海盗占了南码头，见船就抢','dim'); gotoRoad7(); }]);
-  if(f.pirateJob&&!f.pirateDone) o.push(['海盗：南码头',gotoPirate]);
+  if(f.pirateJob&&!f.pirateDone) o.push(['寻踪：海盗（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.pirateDone&&!f.pirateReward) o.push(['交差：驱赶海盗（+18铜币+海鱼×2）',collectPirate]);
   if(f.jobCount>=3){
     if(!f.saltGhostJob&&!f.saltGhostDone&&!f.saltGhostReward) o.push(['BOSS委托：盐鬼（盐田·报酬28铜板+水渍石×2）',acceptSaltGhost]);
-    if(f.saltGhostJob&&!f.saltGhostDone) o.push(['盐鬼：盐田',gotoSaltGhost]);
+    if(f.saltGhostJob&&!f.saltGhostDone) o.push(['寻踪：盐鬼（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.saltGhostDone&&!f.saltGhostReward) o.push(['交差：盐鬼（+28铜板+水渍石×2）',collectSaltGhost]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=6){
     if(!f.seaWolfJob&&!f.seaWolfDone&&!f.seaWolfReward) o.push(['高阶委托：海狼群（北滩·报酬30铜板+兽皮×3）',acceptSeaWolf]);
-    if(f.seaWolfJob&&!f.seaWolfDone) o.push(['海狼群：北滩',gotoSeaWolf]);
+    if(f.seaWolfJob&&!f.seaWolfDone) o.push(['寻踪：海狼群（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.seaWolfDone&&!f.seaWolfReward) o.push(['交差：海狼群（+30铜板+兽皮×3）',collectSeaWolf]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=10){
     if(!f.lairJob&&!f.lairDone&&!f.lairReward) o.push(['地城委托：探索龙巢穴（海崖洞窟·报酬50铜板+龙鳞×2）',acceptLair]);
-    if(f.lairJob&&!f.lairDone) o.push(['龙巢穴：海崖洞窟（第'+(f.lairStage+1)+'层）',gotoLair]);
+    if(f.lairJob&&!f.lairDone) o.push(['寻踪：龙巢穴（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.lairDone&&!f.lairReward) o.push(['交差：探索龙巢穴（+50铜板+龙鳞×2）',collectLair]);
     if(f.lairUnlocked||f.lairReward||f.lairDone) o.push(['龙巢深处：无限下潜（肉鸽·最高第'+f.lairBest+'层）',gotoLairEndless]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
   if(f.jobCount>=14){
     if(!f.lighthouseJob&&!f.lighthouseDone&&!f.lighthouseReward) o.push(['高危委托：灯塔怪光（东角灯塔·报酬70铜板+精炼熔断钢铁）',acceptLighthouseJob]);
-    if(f.lighthouseJob&&!f.lighthouseDone) o.push(['灯塔怪光：东角灯塔',gotoLighthouseJob]);
+    if(f.lighthouseJob&&!f.lighthouseDone) o.push(['寻踪：灯塔怪光（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.lighthouseDone&&!f.lighthouseReward) o.push(['交差：灯塔怪光（+70铜板+精炼熔断钢铁）',collectLighthouseJob]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   o.push(['离开',backToTown]);
@@ -4336,6 +4441,7 @@ function wanderWindcap(){
     startCombat({name:'老龙',lv:20,xp:50,hp:400,atk:18,def:8,physRes:0.5,intro:'它落下来的时候，风先到了，海鸟先散了'},{canFlee:false,items:{覆金属龙皮:2,精炼熔断钢铁:1},onWin:wanderWindcapNext});
     return;
   }
+  if(huntCheck(()=>scene('风角港郊野','你绕开了，继续走',[['继续游荡',wanderWindcap],['回城',gotoWindcap]]))) return;
   if(roll<0.34){ scene('风角港郊野','浪一下一下拍着礁石',[['继续游荡',wanderWindcap],['回城',gotoWindcap]]); return; }
   if(roll<0.62){
     const pick=Math.random();
@@ -4513,7 +4619,7 @@ function runCmd(s){
   else if(c==='/白'){ state.p.journey=null; gotoWhitestone(); }
   else if(c==='/风'){ state.p.journey=null; gotoWindcap(); }
   else if(c==='/龙'){ state.p.flags.dragonMet=false; startCombat({name:'老龙',lv:20,xp:50,hp:400,atk:18,def:8,physRes:0.5,intro:'它落下来的时候，风先到了'},{canFlee:false,items:{覆金属龙皮:2,精炼熔断钢铁:1},onWin:()=>{ scene('野外','它倒下了，这不是它该有的结局',[['继续走',backToTown]]); }}); }
-  else if(c==='/赤龙'){ startCombat({name:'赤河龙',lv:40,xp:400,hp:900,atk:30,def:12,physRes:0.6,intro:'河水红了，赤河龙从河里升起'},{canFlee:false,items:{覆金属龙皮:3,龙鳞:2,精炼熔断钢铁:1},onWin:()=>{ scene('河滩','它沉回了河里，河水慢慢变清',[['继续走',backToTown]]); }}); }
+  else if(c==='/赤龙'){ startCombat({name:'赤河龙',lv:40,xp:400,hp:900,atk:30,def:12,physRes:0.6,intro:'河水红了，赤河龙从河里升起'},{canFlee:false,items:{覆金属龙皮:3,龙鳞:2,精炼熔断钢铁:1,管理者材料:1},onWin:()=>{ scene('河滩','它沉回了河里，河水慢慢变清',[['继续走',backToTown]]); }}); }
   else if(c==='敌情'){ if(ctx){ print('敌情：'+ctx.en.name+' Lv.'+(ctx.en.lv||'?')+' · 生命 '+Math.max(0,ctx.en.hp)+'/'+ctx.en.maxHp+' · 攻击'+ctx.en.atk+' · 防御'+ctx.en.def+(ctx.en.狂暴?' · 狂暴':'')+(ctx.en.stunned?' · 被震住':'')+(ctx.en.bleed?' · 流血'+ctx.en.bleed:'')+(ctx.exposed?' · 腹部暴露':'')); } else print('当前没有战斗','dim'); }
   else if(c==='/reset'||c==='/重置'){ state=newGame(); riverScene(); }
   else print('听不懂（试试：看 / 状态 / 背包 / 帮助 / /dev）','dim');
