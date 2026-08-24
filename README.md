@@ -102,3 +102,131 @@ node verify-tw.js       # 验证打字机逐字打印 + 存档码编解码往返
 
 - **0.22**：七座城镇（含正常地区白石镇、沿海风角港）、大马士革刀 7200 铜币/+50、精炼熔断钢铁、龙巢无限下潜肉鸽与第 50 层裂纹的臂甲、巨鲸之泉龙
 - 更早：四/五城扩张、连环与高危委托、多材料锻造、打字机效果、存档码导入导出、东方武器异纹等
+- 如有问题和疑惑欢迎给我的邮箱；en114514896@outlook.com
+- 或者直接发送到我的qq； 195048316
+
+# ISOLDE —— Prototype (0.22)
+
+A single-file dark medieval fantasy text game prototype.
+
+> This repository contains only the prototype itself and its automated test scripts. It does not include any build tools or dependencies. **The game itself has zero dependencies and requires no installation.**
+
+---
+
+## 1. File List
+
+| File                    | Purpose                                                                        | Requires Node.js?             |
+| ----------------------- | ------------------------------------------------------------------------------ | ----------------------------- |
+| `isolde-prototype.html` | **The game itself** (the only entry point; all code is contained in this file) | No, just double-click to play |
+| `smoke-test.js`         | Smoke test: automatically plays through the entire game flow (50 steps)        | Yes                           |
+| `fuzz-test.js`          | Fuzz test: randomly clicks buttons and enters random commands to find crashes  | Yes                           |
+| `verify-tw.js`          | Verifies the typewriter effect and save-code encode/decode round-trip          | Yes                           |
+| `README.md`             | This documentation                                                             | —                             |
+
+---
+
+## 2. How to Run
+
+### Play Directly (Recommended)
+
+* After downloading or cloning the repository, **double-click `isolde-prototype.html`** and open it with any modern browser (Chrome / Edge / Firefox).
+* It can also be opened in a mobile browser, but the experience is better on a computer.
+
+### Local Server (Optional)
+
+If you want to access the game over `http://`, start any static server in the repository directory. For example:
+
+```bash
+python -m http.server 8000
+# or
+npx http-server -p 8000
+```
+
+Then visit:
+
+```text
+http://localhost:8000/isolde-prototype.html
+```
+
+### After Updating to a New Version
+
+* If the interface looks like an old version: **press Ctrl+F5 to force-refresh the page**
+* The title screen displays the current version number (currently `Prototype 0.22`)
+
+---
+
+## 3. Gameplay Overview
+
+* **Interface**: Terminal-style UI. Text is displayed character by character (the "Typewriter Effect" can be disabled in the system menu). Action buttons are displayed below, with a command input box at the bottom.
+* **Combat**: Turn-based. Attack · Front (×0.8) / Side (×1.3) / Stab the Abdomen (weak point) / Team-up (companion coordination, +15% per companion) / Weapon Skill (one skill per weapon, 2-turn cooldown) / Block / Dodge / Items / Flee
+* **Progression**: Resting at camp = save + advance one day. Take jobs from the bulletin board → travel to an outdoor mission location → complete the job. Accumulating jobs unlocks BOSS / advanced / high-risk contracts.
+* **Smithing**: Customize weapons and armor at the blacksmith. You can stack up to **20 supplementary materials** (affixes, attack bonuses, and quality guarantees all stack). "Smelt Refined Steel" produces materials for Damascus blades.
+* **Dragon's Nest Roguelike**: After completing the "Explore the Dragon's Nest" contract in Cape Horn Harbor, "Depths of the Dragon's Nest · Infinite Descent" is unlocked — infinite floors, with a Giant Whale Spring Dragon every 10 floors. **Floor 50 rewards the irreplaceable "Cracked Bracer."**
+* **Death**: After a nightmare, you return to camp. Your save is not deleted.
+
+### Towns (South to North)
+
+Ashwood → Cromford → Tanwo → Whitestone → Lienfield → Wolin → Cape Horn Harbor
+
+---
+
+## 4. Command Input
+
+Commands can be entered at any time. Commands **without a slash** are player commands, while commands **with a slash** are developer commands:
+
+| Command                        | Effect                                                         |
+| ------------------------------ | -------------------------------------------------------------- |
+| `看`                            | Re-display the current scene description                       |
+| `状态` / `背包` / `帮助`             | Open the corresponding panel                                   |
+| `敌情`                           | View enemy stats during combat                                 |
+| `/dev`                         | List all developer commands                                    |
+| `/钱 数量` `/级 数量` `/item 名称 数量`  | Add resources                                                  |
+| `/heal` `/god` `/kill` `/天 数量` | Fully heal / toggle invincibility / instantly kill / skip days |
+| `/通缉` `/清人` `/reset`           | Toggle wanted status / remove all companions / reset           |
+| `/克` `/坦` `/利` `/沃` `/白` `/风`  | Instantly travel to the corresponding town                     |
+| `/龙` `/赤龙`                     | Trigger the Ancient Dragon / Level 40 Red River Dragon         |
+
+---
+
+## 5. Save System
+
+* Saves are stored **locally in the browser** using `localStorage`, with the keys `isolde_proto_v1` and `isolde_settings`.
+* Resting at camp automatically saves the game. The system menu also allows manual saving and loading.
+* **Save Codes**: Selecting "Export Save" from the system menu generates a text code beginning with `ISOLDE...`. Copy it and use "Import Save" in any browser to continue playing — this allows saves to be transferred between devices or shared with friends.
+* **Legacy Save Compatibility**: Every version update automatically migrates old saves and fills in newly added fields. Old saves will never become invalid.
+* Clearing the browser's site data will delete the save. Exported save codes can be used as backups.
+
+---
+
+## 6. Automated Tests (Developers)
+
+[Node.js](https://nodejs.org) is required **only for running the tests, not for playing the game**:
+
+```bash
+node smoke-test.js      # Smoke test: plays from a new game to the ending (50-step assertions)
+node fuzz-test.js [seed] [steps]   # Fuzz test: randomly interacts with the game to find crashes, e.g. node fuzz-test.js 7 600
+node verify-tw.js       # Verifies the typewriter effect + save-code encode/decode round-trip
+```
+
+* The smoke test passes if it outputs:
+
+```text
+=== Smoke Test v3: ALL PASSED ===
+```
+
+* The fuzz test passes if the final output shows:
+
+```text
+Crashes=0
+```
+
+---
+
+## 7. Version History (Summary)
+
+* **0.22**: Seven towns (including the normal Whitestone region and coastal Cape Horn Harbor), Damascus Blade — 7,200 copper / +50 attack, refined steel smelting, infinite-descent Dragon's Nest roguelike mode, Floor 50 Cracked Bracer, and Giant Whale Spring Dragon.
+* Earlier versions: Expansion from four/five towns, combo and high-risk contracts, multi-material smithing, typewriter effect, save-code import/export, Eastern-style weapons with unique patterns, and more.
+* If you have any questions or encounter any issues, feel free to contact me by email: `en114514896@outlook.com`
+* Or send me a message on QQ: `195048316`
+
+- 
