@@ -50,7 +50,7 @@ npx http-server -p 8000
 - **伙伴成长**：战斗胜利后，除佣兵外的伙伴（安普卢斯/骑士/轩辕十四）与主角分享同样的经验，升级提升基础攻击与生命上限；**铁匠铺「定制随从装备」锻造的是队友的基础攻防**（武器：基础攻击+2，可锻10次 / 护甲：基础防御+1，可锻10次，每4点防御自动加1层挡刀）
 - **队友换武器**：营地「给队友换武器」——骑士/安普卢斯/轩辕十四可从你的武器库里挑选武器（武器攻击的 40% 转化为每击伤害），也可卸下；佣兵自备家伙不在此列
 - **换装**：穿戴新护甲/饰物时，旧的自动放回包袱（不再折价消失）；**锻造护甲进「护甲包」**（对象存防御/部位，营地「穿戴护甲」可换装，背包命令可见），不会出现"显示装入背包却消失"
-- **轩辕十四（王者）**：30级后，随机一座城镇的告示板会贴出「狮子之瞳」——五个前置一步步唤醒他：①狮子之瞳（随机城镇·寻回失物·精英狮瞳守卫）②多足的野兽（沃林）③狮心剑（白石镇：旧书摊→档案室→铁匠→狮子岩三界石解密；基础40攻·狮心/暴怒/追猎，主角不可装备）④坠星之地（利恩菲尔：三城郊野寻星图残片+占星台解密+星坠之狮）⑤闪耀的小国王（白石镇）。五件遗物齐后，野外刷新**两只50级狮形野兽（各4000血）**——把单只削弱到半血或你的生命跌到20，轩辕十四降临（40级·基础攻防比40级主角高20），全队恢复；杀穿双狮后永久入队：每回合两次攻击判定（狮心剑两击·暴怒半血+20%·追猎流血）、开场恢复全队10%生命、受击减伤25%；他的基础攻防始终比**同等级的你**高20，可换武器（默认狮心剑）
+- **轩辕十四**：30级后，随机一座城镇的告示板会贴出「狮子之瞳」
 - **成长**：等级上限 1000 级。1-119 级平缓成长；**120-200 级是黄金期**（每级加成最猛）；**200 级之后所需经验按指数增长（每级+1%），加成递减**；升级所需经验 = 等级×80（200级前）。15/30/50/70 级有攻击里程碑；武器显示「伤害+X」
 - **进度**：营地「休息」= 存档 + 过一天；每座主城都有「歇脚」（恢复+存档+过一天）；告示板接活计，累计活计解锁 BOSS / 高阶 / 高危 / 地城委托
 - **寻踪**：BOSS 与委托任务**不直接告知地点**——接单后到城外游荡，偶遇「寻踪·×××」场景再进去；多个任务同时追踪时随机遇其一
@@ -62,7 +62,7 @@ npx http-server -p 8000
 - **龙巢肉鸽**：完成风角港「探索龙巢穴」委托后解锁「龙巢深处·无限下潜」——无限层数
 - **死亡**：噩梦后回营地，不删档
 
-### 城镇与道路（第一章·九灾南境）
+### 城镇与道路（第一章·南境）
 阿什沃德（血灾）→ 克罗姆福德（蛙灾）→ 坦沃（虱灾）→ 白石镇（正常地区）→ 利恩菲尔（蝇灾）→ 沃林（畜疫灾）→ 风角港（沿海·非灾区）→ 渡口镇（中转）→ 古战场（阴气之地）→ **兰德尔（疮灾·枢纽）** → 卡尔沃（雹灾·北门）——北上是斯特恩（蝗灾），第二章未开放
 
 - **三座枢纽镇**：石桥镇/灰岩镇/白水镇（去兰德尔路上，各向多城镇辐射，有直达旧灾区的路：石桥镇⇄沃林、灰岩镇⇄利恩菲尔、白水镇⇄白石镇）
@@ -137,7 +137,7 @@ node verify-tw.js       # 验证打字机逐字打印 + 存档码编解码往返
 
 
 
-# ISOLDE ——Prototype (0.24)
+# ISOLDE —— Prototype (0.24)
 
 A single-file dark medieval fantasy text game prototype.
 
@@ -186,18 +186,81 @@ Then visit `http://localhost:8000/isolde-prototype.html`.
 ## 3. Gameplay Overview
 
 * **Interface**: Terminal-style UI. Text is displayed character by character (the "Typewriter Effect" can be disabled in the system menu). Action buttons are displayed below, with a command input box at the bottom.
-* **Combat**: Turn-based. Attack · Front (×0.8) / Side (×1.3) / Stab the Abdomen (weak point) / Team-up (companion coordination, +15% per companion) / Weapon Skill (one skill per weapon, 2-turn cooldown) / Block / Dodge / Items / Flee
-* **Progression**: Resting at camp = save + advance one day. Take jobs from the bulletin board. Accumulating completed jobs unlocks BOSS / advanced / high-risk / dungeon contracts.
-* **Tracking**: BOSS encounters and contracts **do not directly reveal their locations**. After accepting a job, wander around the wilderness until you encounter a "Tracking · ×××" scene, then enter it. When tracking multiple quests simultaneously, one of them is selected at random.
-* **Equipment**: Weapons and armor purchased from shops **are added to your inventory**. Equip them manually at camp using "Change Weapon" or "Equip Armor". Equipment is no longer automatically equipped, and old equipment is no longer automatically sold at a reduced price.
-* **Smithing**: Customize weapons and armor at the blacksmith. You can stack up to **20 supplementary materials** (affixes, attack bonuses, and quality guarantees all stack). **The first supplementary material determines the armor's material** (for example, putting Dragon Scale in first produces Dragon Scale Armor). "Smelt Refined Steel" produces materials for Damascus blades. **Administrator Materials** provide +80 Attack for weapons and +80 Defense for armor.
-* **Dragons**: The Ancient Dragon (a battle requiring everything you've got) → regional dragons (Red River Dragon / Swamp Dragon / Dryland Dragon / Grave Rock Dragon / River-Crossing Dragon), all of which can be killed.
-* **Dragon's Nest Roguelike**: Complete the "Explore the Dragon's Nest" contract in Cape Horn Harbor to unlock "Depths of the Dragon's Nest · Infinite Descent" — with unlimited floors.
+
+* **Combat**: Turn-based. Attack · Front (×0.8) / Side (×1.3) / Stab the Abdomen (weak point) / Team-up (companion coordination, +15% per companion) / Weapon Skill (one skill per weapon, 2-turn cooldown) / Block / Dodge / Items / Flee.
+
+* **Combat Information**: Before each turn, **"Hostility"** is displayed. Enemies telegraph their next attack and target, and may target one of your companions. Shield-bearing enemies can block, halving the damage of your next attack. Companions have HP and can be commanded to **Defend** (take half damage and temporarily stop attacking) or **Attack**. Stamina costs are shown in the combat interface and under "Help": Attack 10 · Team-up 12 · Weapon Skill varies by weapon · Block 5 · Dodge 10. When stamina falls below 10, damage is reduced by 40%.
+
+* **Party**: After you act in each battle, every companion enters a decision phase in sequence (Combat / Defend / Dodge / Item / Flee). The **Party** panel (accessible from every town, the system menu, and camp, or by entering `队伍`) displays **companions** (Knight / Amplus / Regulus) with their level, EXP, base Attack/Defense, weapon, HP, and passive abilities. Mercenaries do not display a level. You can also **change the party leader**:
+
+  * Protagonist — *Lead from the Front*: +1 damage to the entire party
+  * Fallen Knight — *Military Morale*: +1 damage to the entire party, +1 additional damage for himself
+  * Amplus — *Oath of Companionship*: companions take 1 less damage
+  * Regulus — *Lionheart Throne*: +2 damage to the entire party
+    Mercenaries cannot become party leader. If the party leader leaves, leadership automatically returns to the protagonist.
+
+* **Companion Growth**: After winning a battle, all non-mercenary companions (Amplus / Knight / Regulus) share the same EXP as the protagonist. Leveling up increases their base Attack and maximum HP. **"Custom Companion Equipment" at the blacksmith improves the companions' base stats**: weapons provide +2 base Attack and can be forged 10 times; armor provides +1 base Defense and can be forged 10 times. Every 4 points of Defense automatically grant one additional Block layer.
+
+* **Companion Weapons**: At camp, use "Change Companion Weapon" to let the Knight / Amplus / Regulus choose a weapon from your weapon inventory. **40% of the weapon's Attack is converted into damage per hit.** Weapons can also be removed. Mercenaries use their own equipment and are not included in this system.
+
+* **Equipment**: When equipping new armor or accessories, the old equipment is automatically returned to your inventory instead of being sold or disappearing. **Forged armor goes into the Armor Bag**, where its Defense and slot are stored. You can change armor at camp using "Equip Armor", and armor is also visible through the inventory command. This prevents forged armor from appearing to enter the inventory while actually disappearing.
+
+* **Regulus**: After reaching Level 30, a random town's bulletin board will post the quest **"Eye of the Lion."**
+
+* **Progression**: The level cap is 1000. Levels 1–119 have steady growth; **levels 120–200 are the Golden Age**, with the strongest per-level bonuses; **after Level 200, required EXP grows exponentially (+1% per level) while stat bonuses gradually decrease**. Required EXP is `Level × 80` before Level 200. Attack milestones occur at Levels 15 / 30 / 50 / 70. Weapons display their bonus as `Damage +X`.
+
+* **Progress**: Resting at camp = save + advance one day. Every major town has a "Rest" option that restores HP, saves the game, and advances one day. Take jobs from bulletin boards; accumulating completed jobs unlocks BOSS / advanced / high-risk / dungeon contracts.
+
+* **Tracking**: BOSS encounters and contracts **do not directly reveal their locations**. After accepting a contract, wander outside the town until you encounter a "Tracking · ×××" scene, then enter it. If multiple quests are being tracked simultaneously, one is selected at random.
+
+* **Equipment**: Weapons and armor purchased from shops **are added to your inventory**. Equip them manually at camp using "Change Weapon" or "Equip Armor". They are no longer automatically equipped, and old equipment is no longer automatically sold at a reduced price.
+
+* **Smithing**: Customize weapons and armor at the blacksmith. You can stack up to **20 supplementary materials** (affixes, attack bonuses, and quality guarantees all stack). **The first supplementary material determines the armor's material** — for example, putting Dragon Scale in first produces Dragon Scale Armor. "Smelt Refined Steel" produces materials for Damascus blades. **Administrator Materials** provide +80 Attack for weapons and +80 Defense for armor.
+
+* **Dragons**: The Ancient Dragon — a battle requiring everything you've got → regional dragons (Red River Dragon / Swamp Dragon / Dryland Dragon / Grave Rock Dragon / River-Crossing Dragon), all of which can be defeated.
+
+* **Legendary Knights**: Starting at Level 15, one legendary knight may be encountered while wandering the outskirts of each of the seven towns. Once defeated, they do not respawn, and you can flee from them:
+
+  * **Fell Knight Phylos** — Ashwood · Tear-Eroded
+  * **Corrupted Knight Domingo** — Cromford · Venom-Eroded
+  * **Broken-Bow Knight Mateo** — Tanwo · Broken-Bow Demon Arrow
+  * **Pale Knight Silas** — Lienfield · Undead · Revives twice
+  * **Cold-Iron Knight Veronica** — Wolin · Freeze
+  * **Broken-Sword Knight Cesar** — Whitestone · Broken Sword / Iron Fist
+  * **Whalebone Knight Joaquin** — Cape Horn Harbor · Whale Oil · Fear of Fire
+    Each knight drops a unique weapon and forging materials, with some also dropping accessories or armor materials.
+
+* **Elite Drops**: Elite and BOSS enemies have a chance to drop exclusive equipment after battle. Weapons go into your inventory and can be equipped at camp; armor and materials go into your inventory for equipping or forging.
+
+* **Dragon's Nest Roguelike**: Complete the "Explore the Dragon's Nest" contract in Cape Horn Harbor to unlock **"Depths of the Dragon's Nest · Infinite Descent"** — with unlimited floors.
+
 * **Death**: After a nightmare, you return to camp. Your save is not deleted.
 
-### Towns (South to North)
+### Towns and Roads (Chapter 1 · Southern Frontier)
 
-Ashwood (Blood Plague) → Cromford (Frog Plague) → Tanwo (Lice Plague) → Whitestone (Normal Region) → Lienfield (Fly Plague) → Wolin (Livestock Plague) → Cape Horn Harbor (Coastal · Non-Plague Region)
+Ashwood (Blood Plague) → Cromford (Frog Plague) → Tanwo (Lice Plague) → Whitestone (Normal Region) → Lienfield (Fly Plague) → Wolin (Livestock Plague) → Cape Horn Harbor (Coastal · Non-Plague Region) → Ferry Town (Transit) → Ancient Battlefield (Haunted Region) → **Randall (Sore Plague · Hub)** → Calvo (Hail Plague · Northern Gate)
+
+North of Calvo lies Stern (Locust Plague), which belongs to Chapter 2 and is currently unavailable.
+
+* **Three Hub Towns**: Stonebridge / Grayrock / Whitewater. Located along the route to Randall, each serves as a branching hub connecting multiple towns. They also provide direct routes to old plague regions: Stonebridge ⇄ Wolin, Grayrock ⇄ Lienfield, Whitewater ⇄ Whitestone.
+
+* **Eastern Sea Route**: Mountains block the way north from Randall. Travel east through East Ridge → Songwind → Cliffside → Bluestone → Northspring → Tidehymn Harbor. Four additional towns branch off along the route: White Mist / Deercry / Echoing Water / Seaview. After completing the main quest **"Clear the Harbor Route"**, you can take a ship across the Northern Ridge Sea to North Ridge Harbor (5 segments; sea wolves, pirates, or sirens may attack). Continue through Frostvale → Silvershield, then pass through Graywall Fortress. The garrison will inspect you, requiring a battle, though you can also take the mountain pass around the western side. From there you can reach Calvo.
+
+* **Sea Route Connections**: After clearing the harbor route, Tidehymn Harbor ⇄ North Ridge Harbor ⇄ Cape Horn Harbor become connected by ship, with all three routes taking 5 segments.
+
+* **Northern High-Risk Zone**: Six segments north of Northwatch lies Blackthorn City. Its bulletin board offers 24 high-risk contracts: 8 repeatable and 16 one-time contracts. The ultimate target is the Lord of Blackthorn City. Six segments west of Blackthorn City leads to Cape Horn Harbor. Two segments south leads into the Black Plains. Farther south lies the Northern Ancient Battlefield, where you can encounter the powerful high-risk BOSS **Northern Warlord**. There is also a **Legion Event**: the Northern Warlord leads a mixed force of 12–48 soldiers into a series of battles against you. The lineup consists of Northern Soldiers / Oathbreak Knights / Battlefield Spirits / Headless War Souls / Banner Wraiths / Fortress Runaways. A force of 40 has the highest probability.
+
+* **Ancient Battlefield Area**:
+
+  * Northwatch — north: Randall / east: Wasteland / Blackthorn City
+  * South Tomb — south: Ferry Town / Stonebridge
+  * Eastern Wasteland — east: wilderness area, with a route to East Ridge
+
+* **Bulletin Boards**: Every newly added town has 4 delivery contracts + 4 general bounties (Mountain Bandits / Salt Smugglers / Wolf Packs / Routed Soldiers). These begin combat immediately and can be repeated.
+
+* **Roads**: Travel between towns takes multiple segments (3 segments per journey). Along the way, you can set up camp, explore, or encounter regional events. Roads are no longer one-way; hub towns provide branching routes to multiple destinations.
+
+* **Map**: Enter `地图` or press the "Map" button in the system menu or at new towns to view the world map. The current town is highlighted in gold.
 
 ---
 
@@ -205,19 +268,22 @@ Ashwood (Blood Plague) → Cromford (Frog Plague) → Tanwo (Lice Plague) → Wh
 
 Commands can be entered at any time. Commands **without a slash** are player commands, while commands **with a slash** are developer commands:
 
-| Command                        | Effect                                                         |
-| ------------------------------ | -------------------------------------------------------------- |
-| `看`                            | Re-display the current scene description                       |
-| `状态` / `背包` / `帮助`             | Open the corresponding panel                                   |
-| `敌情`                           | View enemy stats during combat                                 |
-| `/dev`                         | List all developer commands                                    |
-| `/钱 数量` `/级 数量` `/item 名称 数量`  | Add resources                                                  |
-| `/heal` `/god` `/kill` `/天 数量` | Fully heal / toggle invincibility / instantly kill / skip days |
-| `/通缉` `/清人` `/reset`           | Toggle wanted status / remove all companions / reset           |
-| `/克` `/坦` `/利` `/沃` `/白` `/风`  | Instantly travel to the corresponding town                     |
-| `/龙` `/赤龙`                     | Trigger the Ancient Dragon / Level 40 Red River Dragon         |
-| `/狮子` `/双狮`                     | One-shot prerequisites (Lv30 + five relics + Lionheart Sword) / start the Two Lions trial |
-| `/骑士 N`                     | Fight a legendary knight directly (1 Mourner / 2 Rotten / 3 Broken-bow / 4 Pale / 5 Frost / 6 Broken-sword / 7 Whalebone) |
+| Command                        | Effect                                                                                                                                     |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `看`                            | Re-display the current scene description                                                                                                   |
+| `状态` / `背包` / `帮助`             | Open the corresponding panel                                                                                                               |
+| `敌情`                           | View enemy stats during combat                                                                                                             |
+| `/dev`                         | List all developer commands                                                                                                                |
+| `/钱 数量` `/级 数量` `/item 名称 数量`  | Add resources                                                                                                                              |
+| `/管理员 数量` (`/管理` also works)   | Add Administrator Materials (forging material: +80 Attack for weapons / +80 Defense for armor)                                             |
+| `/heal` `/god` `/kill` `/天 数量` | Fully heal / toggle invincibility / instantly kill / skip days                                                                             |
+| `/活 数量`                        | Directly set the number of completed jobs (unlocks major bulletin-board contracts)                                                         |
+| `/通缉` `/清人` `/reset`           | Toggle wanted status / remove all companions / reset                                                                                       |
+| `/克` `/坦` `/利` `/沃` `/白` `/风`  | Instantly travel to the corresponding town                                                                                                 |
+| `/龙` `/赤龙`                     | Trigger the Ancient Dragon / Level 40 Red River Dragon                                                                                     |
+| `/狮子` `/双狮`                    | Set up the prerequisites (Level 30 + five relics + Lionheart Sword) / directly start the Twin Lions Trial                                  |
+| `/骑士 N`                        | Directly challenge a Legendary Knight (1 Fell / 2 Corrupted / 3 Broken-Bow / 4 Pale / 5 Cold-Iron / 6 Broken-Sword / 7 Whalebone)          |
+| `/军团`                          | Trigger the Northern Ancient Battlefield special event: the Northern Warlord leads a mixed force of 12–48 soldiers into sequential battles |
 
 ---
 
@@ -257,11 +323,11 @@ Crashes=0
 
 ## 7. Version History (Summary)
 
-* **0.24**: The Regulus storyline reworked — quest texts no longer name Regulus or call the five items "relics" (they are only referred to as "lost things"); he reveals his own name only when he appears. Guidance strengthened for "Where the Star Fell" (45% fragment chance, the astrologer lists the remaining regions) and the Lionheart Sword chain (each clue points to the next location). Cracked Bracer buffed (spell damage +25%, ally damage +4, max HP +100, legacy saves auto-compensated). Added seven legendary knights (one per region, wilderness encounters from level 15+, once per save, flee-able): Mourner / Rotten / Broken-bow / Pale (undead, revives twice) / Frost / Broken-sword / Whalebone — each with unique moves, intent telegraphs and guaranteed unique drops. Added five regional bosses as side quests (Blood Salt Colossus / Frog Mother / Louse King / Crypt Guard / Ford Bone Dragon) and five regional side bosses (Red River Drowned Soul / Marsh Crawler / Plague Weaver / Coffin Saint / Ferryman), plus five repeatable regional knight bounties (Red River / Tideshore / Grey-armor / Rot-armor / Plague-shore Knights). Elite loot reworked — one-time bosses always drop their weapons; repeatable enemies have low drop rates (0.15-0.2). Party leader switching, companion XP growth, old equipment returns to the bag. New dev commands `/骑士` `/狮子` `/双狮` `/活` `/管理员` (admin material for +80 forge), elite buff (Lv20+ one-time elites +25% HP / +15% ATK / +30% XP), scaled growth curve (level cap 1000, golden era 120-200 with the strongest gains, exponential XP cost and diminishing gains past 200), blackthorn board/camp return fix, ally equipment (camp weapon swap, smith forges base ATK/DEF, Regulus base stats 20 above the protagonist at the same level, team panel shows ally levels — mercs excluded).
+* **0.24**: **Chapter 1 · Nine Plagues of the Southern Frontier** — added Ferry Town (transit), Ancient Battlefield (haunted wilderness zone), Randall (Sore Plague · hub town with routes branching to multiple towns), and Calvo (Hail Plague · northern gate and endpoint of Chapter 1). North of Calvo lies Stern, the starting area of Chapter 2. Added 18 enemy types: Gray Shell Marauder / Mine Overseer / Blacksmith Knight / Gray Shell Descendant / Sore Beast / Hail-Iron Hunter / Garrison Patrol / Lightning Rod Smith / Scorched-Earth Descendant / Hail Wolf / Battlefield Spirit / Vein Dragon / Thundercliff Dragon / Vein Colossus / Thundercliff Thunderbird / Armored Knight Ernesto / Ash Knight Ruwen / Empty Armor Knight Augustine. Added new bounties, side BOSSes, and forging materials (Hail Iron / Thunder Core / Vein Core / Ash Core / Empty Armor Core / Gray Shell Fragment / Sore Salve, etc.). **Map System** added (`地图` command + button, with the current town highlighted in gold). Regulus now appears only once; starting from the second battle, he automatically joins the party. Regulus's side quest no longer explicitly names him or mentions "relics"; the Astrologer and Lionheart Sword guidance has been strengthened. The Cracked Bracer was upgraded (Magic Damage +25% / +4 companion damage / +100 HP). Added seven Legendary Knights, five regional BOSSes, five side BOSSes, and five regional knight bounties. Elite drops were redesigned: one-time BOSSes always drop their signature weapons, while repeatable enemies have a low drop rate. **Elite enemies were strengthened**: one-time elites and bosses at Lv.20+ gain +25% HP / +15% Attack / +30% EXP (Legendary Knights and peak-level BOSSes are unchanged). **Progression curve reworked**: level cap increased to 1000; HP/Stamina growth accelerates every 10 levels; Attack milestones at Lv.15 / 30 / 50 / 70; **Lv.120–200 is the Golden Age with the strongest bonuses; after Lv.200, EXP requirements grow exponentially while bonuses gradually decrease**. **Administrator Materials** added with the `/管理员` command; old names "Administrator Materials / Administrator Items" are automatically merged and remain usable for forging (weapons +80 Attack / armor +80 Defense). Fixed the Blackthorn City bulletin-board and camp-return errors. **Armor Bag** added: forged armor no longer "disappears after entering the inventory" — it is stored in the Armor Bag and can be viewed from the camp's armor menu or the inventory command; unequipped armor is also returned to the bag. **Party System** added: "Change Companion Weapon" at camp (40% of weapon Attack converted into damage per hit, excluding mercenaries), companion forging at the blacksmith now increases base Attack/Defense (weapons +2 Attack ×10 forging / armor +1 Defense ×10 forging, every 4 Defense = 1 Block layer), Regulus's base Attack/Defense is 20 higher than the protagonist's at the same level and recalculated as he levels, and the Party panel now displays companion level / Attack / Defense / weapon (mercenaries do not display levels). Added party leader switching, shared companion EXP, and equipment returning to the inventory. Added three hub towns (Stonebridge / Grayrock / Whitewater) and the eastern port chain (East Ridge → Songwind → Cliffside → Bluestone → Northspring → Tidehymn Harbor; after clearing the harbor route, take a ship to North Ridge Harbor → Frostvale → Silvershield → Graywall Fortress → Calvo). The three ports are interconnected by sea routes (Tidehymn Harbor ⇄ North Ridge Harbor ⇄ Cape Horn Harbor). Added the **Northern High-Risk Zone**: Blackthorn City with 24 high-risk contracts (8 repeatable + 16 one-time), enhanced high-risk enemies with unique abilities, and the Lord of Blackthorn City as the ultimate target. Blackthorn City is six segments west of Cape Horn Harbor. Added the **Legion Event** to the Northern Ancient Battlefield (Northern Warlord leads a mixed force of 12–48 soldiers into sequential battles; 40 is the most likely size: Northern Soldiers / Oathbreak Knights / Battlefield Spirits / Headless War Souls / Banner Wraiths / Fortress Runaways; Northern Soldiers have half HP). Added the five-segment Seaview ⇄ Deercry route. Added new enemies including Headless War Souls, Black Plains Hounds, and the Northern Warlord. Added commands `/骑士`, `/狮子`, `/双狮`, `/活`, `/渡`, `/兰`, `/卡`, `/北港`, `/霜`, `/银`, `/塞`, `/黑`, `/北望`, `/观`, `/黑原`, `/北古`.
 
-* **0.23**: Added the tracking system (BOSS contracts no longer reveal their locations; wander the wilderness to encounter BOSS rooms), purchased weapons/equipment are now added to the inventory and must be manually equipped at camp, armor material is determined by the first supplementary material used in smithing, universal "Administrator Materials" (+80 Attack / +80 Defense), regional dragons (Red River / Swamp / Dryland / Grave Rock / River-Crossing Dragons), and a fix for shop navigation.
+* **0.23**: Added the tracking system (BOSS contracts no longer reveal their locations; wander the wilderness to encounter BOSS rooms), purchased weapons/equipment are now added to the inventory and must be manually equipped at camp, armor material is determined by the first supplementary material used in smithing, universal Administrator Materials (+80 Attack / +80 Defense), regional dragons (Red River / Swamp / Dryland / Grave Rock / River-Crossing Dragons), shop navigation fixes, combat intent previews, enemy blocking, companion commands and HP, major-town resting, displayed stat and stamina rules, unified "Copper" terminology, and weapon damage display as `Damage +X`.
 
-* **0.22**: Seven towns (including the normal Whitestone region and coastal Cape Horn Harbor), Damascus Blade — 7,200 copper / +50 Attack, refined steel smelting, infinite-descent Dragon's Nest roguelike mode, Floor 50 Cracked Bracer, and Giant Whale Spring Dragon.
+* **0.22**: Seven towns (including the normal Whitestone region and coastal Cape Horn Harbor), Damascus Blade — 7,200 Copper / +50 Attack, refined steel smelting, infinite-descent Dragon's Nest roguelike mode, Floor 50 Cracked Bracer, and Giant Whale Spring Dragon.
 
 * Earlier versions: Expansion from four/five towns, chain and high-risk contracts, multi-material smithing, typewriter effect, save-code import/export, Eastern-style weapons with unique patterns, and more.
 
