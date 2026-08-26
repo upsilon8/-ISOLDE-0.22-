@@ -62,6 +62,9 @@ function autofight(maxRounds = 50) {
     else if (has('刺腹部 (×2.0)')) act('刺腹部 (×2.0)');
     else if (st().p.hp < 30 && has('格挡 (减伤50%)')) act('格挡 (减伤50%)');
     else act(pick(['攻击·正面 (×0.8)', '攻击·侧面 (×1.3)']));
+    // 伙伴决策阶段
+    let ag = 0;
+    while (has('战斗') && !has('攻击·侧面 (×1.3)') && ag++ < 8) act('战斗');
   }
   if (g >= maxRounds && has('攻击·侧面 (×1.3)')) {
     // 无逃跑按钮的强敌（老龙/赤河龙）低等级打不死：用开发者 /kill 脱出
