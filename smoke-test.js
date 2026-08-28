@@ -620,13 +620,13 @@ step('寻猫（多轮碰运气）', () => { click('回城'); click('告示板');
   click('交差：寻猫（+5铜币）'); });
 step('BOSS委托：吞骨鳄（支线解锁+一次性·寻踪）', () => {
   if (!rawBtns().some(t => t.includes('吞骨鳄'))) throw new Error('jobCount不足未解锁吞骨鳄');
-  click('BOSS委托：吞骨鳄（渡口河湾·报酬15铜币）');
+  click('BOSS委托：吞骨鳄（报酬15铜币）');
   if (has('河湾（吞骨鳄）')) throw new Error('BOSS房不应直接告知地点');
   huntJob('交差：吞骨鳄（+15铜币）', 120);
   click('交差：吞骨鳄（+15铜币）');
   if (rawBtns().some(t => t.includes('吞骨鳄'))) throw new Error('吞骨鳄应一次性消失');
   if (!st().p.inv.黑鳄皮) throw new Error('未获得黑鳄皮'); });
-step('猪王讨伐（含死亡重试）', () => { click('接：猪王讨伐（报酬15铜币+旧铁片·仅一次）');
+step('猪王讨伐（含死亡重试）', () => { click('接：猪王讨伐（报酬15铜币+旧铁片）');
   click('农田（猪王讨伐）'); click('走近');
   let attempts = 0;
   while (true) {
@@ -659,8 +659,8 @@ step('阿什沃德新活计（赶鸦+掘墓人）', () => {
   }
   if (!has('交差：赶鸦（+6铜币）')) throw new Error('赶鸦未完成: ' + JSON.stringify(btns()));
   click('交差：赶鸦（+6铜币）');
-  if (!has('BOSS委托：掘墓人（乱葬岗·报酬18铜币+送葬骨灰）')) throw new Error('掘墓人委托缺失: ' + JSON.stringify(btns()));
-  click('BOSS委托：掘墓人（乱葬岗·报酬18铜币+送葬骨灰）');
+  if (!has('BOSS委托：掘墓人（报酬18铜币+送葬骨灰）')) throw new Error('掘墓人委托缺失: ' + JSON.stringify(btns()));
+  click('BOSS委托：掘墓人（报酬18铜币+送葬骨灰）');
   huntJob('交差：掘墓人（+18铜币+送葬骨灰×2）');
   click('交差：掘墓人（+18铜币+送葬骨灰×2）');
   if (st().p.inv.送葬骨灰 < 2) throw new Error('送葬骨灰未到账');
@@ -674,8 +674,8 @@ step('阿什沃德新活计（赶鸦+掘墓人）', () => {
   // 高危委托：血盐商队（3连战）。测试中直接推高 jobCount 以解锁 /14
   st().p.flags.jobCount = 14;
   click('离开'); click('告示板');
-  if (!has('高危委托：血盐商队（西边商路·报酬45铜币+血盐×4）')) throw new Error('血盐商队委托缺失: ' + JSON.stringify(btns()));
-  click('高危委托：血盐商队（西边商路·报酬45铜币+血盐×4）');
+  if (!has('高危委托：血盐商队（报酬45铜币+血盐×4）')) throw new Error('血盐商队委托缺失: ' + JSON.stringify(btns()));
+  click('高危委托：血盐商队（报酬45铜币+血盐×4）');
   huntJob('交差：血盐商队（+45铜币+血盐×4）');
   click('交差：血盐商队（+45铜币+血盐×4）');
   if (st().p.inv.血盐 < 4) throw new Error('血盐奖励未到账');
@@ -1069,7 +1069,7 @@ step('克罗姆福德活计（粮食护送+清蛙潮）', () => {
   click('粮食护送：粮车在北边路口');
   click('走大路');
   click('交差：护送磨坊粮食（+8铜币）');
-  click('接：清蛙潮（沼蛙×3，报酬8铜币）');
+  click('接：清蛙潮（报酬8铜币）');
   click('清蛙潮：还剩 3 只');
   // 战技测试（第一只沼蛙）
   const skBtn = btns().find(b => b.startsWith('战技·'));
@@ -1080,18 +1080,18 @@ step('克罗姆福德活计（粮食护送+清蛙潮）', () => {
   for (let i = 0; i < 2; i++) { if (has('继续打')) click('继续打'); fightUntilOver(); }
   click('回告示板'); click('交差：清蛙潮（+8铜币）');
   // 新活计：抓蛙供灶 + 蛙后BOSS
-  click('接：抓蛙供灶（沼蛙×3，报酬9铜币）');
+  click('接：抓蛙供灶（报酬9铜币）');
   click('抓蛙供灶：还剩 3 只');
   for (let i = 0; i < 3; i++) { fightUntilOver(); if (i < 2) click('继续抓'); }
   click('回告示板'); click('交差：抓蛙供灶（+9铜币）');
-  if (!has('BOSS委托：蛙后（南边大泽·报酬25铜币+蛙油膏×2）')) throw new Error('蛙后委托缺失: ' + JSON.stringify(btns()));
-  click('BOSS委托：蛙后（南边大泽·报酬25铜币+蛙油膏×2）');
+  if (!has('BOSS委托：蛙后（报酬25铜币+蛙油膏×2）')) throw new Error('蛙后委托缺失: ' + JSON.stringify(btns()));
+  click('BOSS委托：蛙后（报酬25铜币+蛙油膏×2）');
   huntJob('交差：蛙后（+25铜币+蛙油膏×2）');
   click('交差：蛙后（+25铜币+蛙油膏×2）');
   if (st().p.inv.蛙油膏 < 2) throw new Error('蛙油膏奖励未到账');
   // 高危委托：沼潮祭坛（3连战）
-  if (!has('高危委托：沼潮祭坛（深沼·报酬48铜币+水渍石×3）')) throw new Error('沼潮祭坛委托缺失: ' + JSON.stringify(btns()));
-  click('高危委托：沼潮祭坛（深沼·报酬48铜币+水渍石×3）');
+  if (!has('高危委托：沼潮祭坛（报酬48铜币+水渍石×3）')) throw new Error('沼潮祭坛委托缺失: ' + JSON.stringify(btns()));
+  click('高危委托：沼潮祭坛（报酬48铜币+水渍石×3）');
   huntJob('交差：沼潮祭坛（+48铜币+水渍石×3）');
   click('交差：沼潮祭坛（+48铜币+水渍石×3）');
   if (st().p.inv.水渍石 < 3) throw new Error('水渍石奖励未到账');
@@ -1139,7 +1139,7 @@ step('旅程→坦沃（第三镇）', () => {
 });
 step('坦沃：怪物潮+成建制小队', () => {
   click('告示板');
-  click('接：清虱潮（三波怪物潮，报酬15铜币）');
+  click('接：清虱潮（报酬15铜币）');
   click('虱潮：东边荒地');
   click('踏入潮中');
   __runCmd('敌情');
@@ -1147,7 +1147,7 @@ step('坦沃：怪物潮+成建制小队', () => {
   for (let i = 0; i < 3; i++) fightUntilOver();
   if (!has('交差：清虱潮（+15铜币）')) throw new Error('虱潮未完成: ' + JSON.stringify(btns()));
   click('交差：清虱潮（+15铜币）');
-  click('接：灰衣骑士小队（成建制，报酬25铜币）');
+  click('接：灰衣骑士小队（报酬25铜币）');
   // 敌阵验证：三敌同场+号令+盾阵+切换目标+横扫
   let sq = 0;
   while (sq++ < 200 && !btns().some(b => b.startsWith('切换目标→'))) {
@@ -1184,7 +1184,7 @@ step('坦沃：怪物潮+成建制小队', () => {
   for (let i = 0; i < 2; i++) fightUntilOver();
   click('交差：驱赶矿洞流民（+10铜币）');
   // 新活计：灭鼠 + 灰衣指挥官BOSS
-  click('接：灭鼠（鼠群×3，报酬7铜币）');
+  click('接：灭鼠（报酬7铜币）');
   click('灭鼠：粮仓（还剩 3 群）');
   for (let i = 0; i < 3; i++) { fightUntilOver(); if (i < 2) click('继续灭鼠'); }
   click('回告示板'); click('交差：灭鼠（+7铜币）');
@@ -1193,8 +1193,8 @@ step('坦沃：怪物潮+成建制小队', () => {
   huntJob('交差：灰衣指挥官（+45铜币+灰衣队长徽记）');
   click('交差：灰衣指挥官（+45铜币+灰衣队长徽记）');
   // 高危委托：灰衣征税总队（3连战）
-  if (!has('高危委托：灰衣征税总队（北边税卡·报酬60铜币+灰衣队长徽记×2）')) throw new Error('征税总队委托缺失: ' + JSON.stringify(btns()));
-  click('高危委托：灰衣征税总队（北边税卡·报酬60铜币+灰衣队长徽记×2）');
+  if (!has('高危委托：灰衣征税总队（报酬60铜币+灰衣队长徽记×2）')) throw new Error('征税总队委托缺失: ' + JSON.stringify(btns()));
+  click('高危委托：灰衣征税总队（报酬60铜币+灰衣队长徽记×2）');
   huntJob('交差：灰衣征税总队（+60铜币+灰衣队长徽记×2）');
   click('交差：灰衣征税总队（+60铜币+灰衣队长徽记×2）');
   console.log('  · 虱潮三波/灰衣小队寻踪三连/流民×2/灭鼠×3/灰衣指挥官寻踪/征税总队寻踪三连 全部击破');
@@ -1219,12 +1219,12 @@ step('旅程→白石镇（正常地区）', () => {
   if (!st().p.knight || st().p.knight.name !== '巡防骑士') throw new Error('巡防骑士未入队');
   click('离开');
   click('告示板');
-  click('接：商路清障（山贼×3，报酬9铜币）');
+  click('接：商路清障（报酬9铜币）');
   click('商路清障：西边山道（还剩 3 伙）');
   for (let i = 0; i < 3; i++) { fightUntilOver(); if (i < 2) click('继续清障'); }
   click('回告示板'); click('交差：商路清障（+9铜币）');
-  if (!has('BOSS委托：野狼王（北边野林·报酬20铜币+兽皮×3）')) throw new Error('野狼王委托缺失: ' + JSON.stringify(btns()));
-  click('BOSS委托：野狼王（北边野林·报酬20铜币+兽皮×3）');
+  if (!has('BOSS委托：野狼王（报酬20铜币+兽皮×3）')) throw new Error('野狼王委托缺失: ' + JSON.stringify(btns()));
+  click('BOSS委托：野狼王（报酬20铜币+兽皮×3）');
   huntJob('交差：野狼王（+20铜币+兽皮×3）');
   click('交差：野狼王（+20铜币+兽皮×3）');
   console.log('  · 集市麦饼+巡防骑士入队+商路清障×3+野狼王寻踪');
@@ -1243,11 +1243,11 @@ step('旅程→利恩菲尔（第四城·蝇灾）', () => {
   if (st().p.inv.蝇纱面罩 !== 1) throw new Error('蝇纱面罩应进背包');
   click('离开');
   click('告示板');
-  click('接：驱蝇（蝇群×3，报酬7铜币）');
+  click('接：驱蝇（报酬7铜币）');
   click('驱蝇：镇口晒场（还剩 3 群）');
   for (let i = 0; i < 3; i++) { fightUntilOver(); if (i < 2) click('继续驱蝇'); }
   click('回告示板'); click('交差：驱蝇（+7铜币）');
-  click('接：安魂仪式（护灵柩入土，报酬12铜币+安魂十字）');
+  click('接：安魂仪式（报酬12铜币+安魂十字）');
   click('离开'); click('告示板');
   click('安魂仪式：灵柩停在教堂后');
   click('抬棺（护送入土）');
@@ -1257,8 +1257,8 @@ step('旅程→利恩菲尔（第四城·蝇灾）', () => {
   if (!st().p.accBag.some(a => a.name === '安魂十字') && !st().p.accs.some(a => a.name === '安魂十字')) throw new Error('安魂十字未获得');
   // 高危委托：教堂大执事（3连战）——交差后在教堂，需回告示板
   click('离开'); click('告示板');
-  if (!has('高危委托：教堂大执事（圣坛·报酬55铜币+苦蜜蜡×3）')) throw new Error('教堂大执事委托缺失: ' + JSON.stringify(btns()));
-  click('高危委托：教堂大执事（圣坛·报酬55铜币+苦蜜蜡×3）');
+  if (!has('高危委托：教堂大执事（报酬55铜币+苦蜜蜡×3）')) throw new Error('教堂大执事委托缺失: ' + JSON.stringify(btns()));
+  click('高危委托：教堂大执事（报酬55铜币+苦蜜蜡×3）');
   huntJob('交差：教堂大执事（+55铜币+苦蜜蜡×3）');
   click('交差：教堂大执事（+55铜币+苦蜜蜡×3）');
   if (st().p.inv.苦蜜蜡 < 3) throw new Error('苦蜜蜡奖励未到账');
@@ -1276,13 +1276,13 @@ step('旅程→沃林（第五城·畜疫灾）', () => {
   if (st().p.inv.疫骨甲 !== 1) throw new Error('疫骨甲应入背包');
   click('离开');
   click('告示板');
-  click('接：赶牲口（灰肉牲口×3，报酬8铜币）');
+  click('接：赶牲口（报酬8铜币）');
   click('赶牲口：河边草场（还剩 3 头）');
   for (let i = 0; i < 3; i++) { fightUntilOver(); if (i < 2) click('继续赶'); }
   click('回告示板'); click('交差：赶牲口（+8铜币）');
   // 骨匠帮 3连战（寻踪）
-  if (!has('BOSS委托：骨匠帮（北边骨场·报酬30铜币+疫骨×2）')) throw new Error('骨匠帮委托缺失: ' + JSON.stringify(btns()));
-  click('BOSS委托：骨匠帮（北边骨场·报酬30铜币+疫骨×2）');
+  if (!has('BOSS委托：骨匠帮（报酬30铜币+疫骨×2）')) throw new Error('骨匠帮委托缺失: ' + JSON.stringify(btns()));
+  click('BOSS委托：骨匠帮（报酬30铜币+疫骨×2）');
   huntJob('交差：骨匠帮（+30铜币+疫骨×2）');
   click('交差：骨匠帮（+30铜币+疫骨×2）');
   if (st().p.inv.疫骨 < 2) throw new Error('疫骨奖励未到账');
@@ -1311,7 +1311,7 @@ step('旅程→风角港（沿海·非灾区）', () => {
   click('离开');
   click('告示板');
   // 出海捕鱼（三网小玩法）
-  click('接：出海捕鱼（三网，渔获归你，报酬5铜币）');
+  click('接：出海捕鱼（报酬5铜币）');
   let fishGuard = 0;
   while (!has('交差：出海捕鱼（+5铜币）') && fishGuard++ < 12) {
     if (has('攻击·侧面 (×1.3)')) { fightUntilOver(); continue; }
@@ -1324,22 +1324,22 @@ step('旅程→风角港（沿海·非灾区）', () => {
   if (!has('交差：出海捕鱼（+5铜币）')) throw new Error('捕鱼未完成: ' + JSON.stringify(btns()));
   click('交差：出海捕鱼（+5铜币）');
   // 驱赶海盗（2连·寻踪）
-  click('接：驱赶海盗（南码头·报酬18铜币+海鱼×2）');
+  click('接：驱赶海盗（报酬18铜币+海鱼×2）');
   huntJob('交差：驱赶海盗（+18铜币+海鱼×2）');
   click('交差：驱赶海盗（+18铜币+海鱼×2）');
   // 盐鬼 BOSS（寻踪）
-  if (!has('BOSS委托：盐鬼（盐田·报酬28铜币+水渍石×2）')) throw new Error('盐鬼委托缺失: ' + JSON.stringify(btns()));
-  click('BOSS委托：盐鬼（盐田·报酬28铜币+水渍石×2）');
+  if (!has('BOSS委托：盐鬼（报酬28铜币+水渍石×2）')) throw new Error('盐鬼委托缺失: ' + JSON.stringify(btns()));
+  click('BOSS委托：盐鬼（报酬28铜币+水渍石×2）');
   huntJob('交差：盐鬼（+28铜币+水渍石×2）');
   click('交差：盐鬼（+28铜币+水渍石×2）');
   // 探索龙巢穴（三层地城·寻踪）
-  if (!has('地城委托：探索龙巢穴（海崖洞窟·报酬50铜币+龙鳞×2）')) throw new Error('龙巢穴委托缺失: ' + JSON.stringify(btns()));
-  click('地城委托：探索龙巢穴（海崖洞窟·报酬50铜币+龙鳞×2）');
+  if (!has('地城委托：探索龙巢穴（报酬50铜币+龙鳞×2）')) throw new Error('龙巢穴委托缺失: ' + JSON.stringify(btns()));
+  click('地城委托：探索龙巢穴（报酬50铜币+龙鳞×2）');
   huntJob('交差：探索龙巢穴（+50铜币+龙鳞×2）');
   click('交差：探索龙巢穴（+50铜币+龙鳞×2）');
   // 高危：灯塔怪光（4连，含巢穴之主·寻踪）
-  if (!has('高危委托：灯塔怪光（东角灯塔·报酬70铜币+精炼熔断钢铁）')) throw new Error('灯塔怪光委托缺失: ' + JSON.stringify(btns()));
-  click('高危委托：灯塔怪光（东角灯塔·报酬70铜币+精炼熔断钢铁）');
+  if (!has('高危委托：灯塔怪光（报酬70铜币+精炼熔断钢铁）')) throw new Error('灯塔怪光委托缺失: ' + JSON.stringify(btns()));
+  click('高危委托：灯塔怪光（报酬70铜币+精炼熔断钢铁）');
   huntJob('交差：灯塔怪光（+70铜币+精炼熔断钢铁）');
   click('交差：灯塔怪光（+70铜币+精炼熔断钢铁）');
   if (st().p.inv.精炼熔断钢铁 < 1) throw new Error('精钢奖励未到账');
@@ -1482,13 +1482,13 @@ step('0.24队伍按钮·城镇与系统菜单直达', () => {
 step('0.24新委托·七城告示板解锁', () => {
   __runCmd('/活 20');
   const checks = [
-    ['/阿', '极危委托：血池之眼（河滩上游·报酬60铜币+血水结晶×3）'],
-    ['/克', '极危委托：沼底巨蟾（大泽最深处·报酬45铜币+蛙油膏×3）'],
-    ['/坦', '极危委托：灰衣督军（北边税关·报酬65铜币+灰衣甲片×4）'],
-    ['/利', '极危委托：无面神父（教堂后门·报酬50铜币+送葬骨灰×3）'],
-    ['/沃', '极危委托：骨瘟术士（疫雾深处·报酬55铜币+疫骨×5）'],
-    ['/白', '极危委托：山贼王（西边山道·报酬40铜币+烟幕弹×2）'],
-    ['/风', '极危委托：深潜海妖（北滩·报酬70铜币+大鱼×3）']
+    ['/阿', '极危委托：血池之眼（报酬60铜币+血水结晶×3）'],
+    ['/克', '极危委托：沼底巨蟾（报酬45铜币+蛙油膏×3）'],
+    ['/坦', '极危委托：灰衣督军（报酬65铜币+灰衣甲片×4）'],
+    ['/利', '极危委托：无面神父（报酬50铜币+送葬骨灰×3）'],
+    ['/沃', '极危委托：骨瘟术士（报酬55铜币+疫骨×5）'],
+    ['/白', '极危委托：山贼王（报酬40铜币+烟幕弹×2）'],
+    ['/风', '极危委托：深潜海妖（报酬70铜币+大鱼×3）']
   ];
   for (const [cmd, row] of checks) {
     __runCmd(cmd);
@@ -1503,7 +1503,7 @@ step('0.24新BOSS·血池之眼（寻踪讨伐→交差）', () => {
   __runCmd('/阿');
   __runCmd('/heal');
   click('告示板');
-  const row = '极危委托：血池之眼（河滩上游·报酬60铜币+血水结晶×3）';
+  const row = '极危委托：血池之眼（报酬60铜币+血水结晶×3）';
   if (!has(row)) throw new Error('血池之眼委托缺失: ' + JSON.stringify(btns()));
   click(row);
   if (!has('在野外游荡')) throw new Error('接单后应到城外: ' + JSON.stringify(btns()));
@@ -1563,10 +1563,10 @@ step('0.25狮子之瞳·30级随机城镇告示板', () => {
   const dc = st().p.flags.dragonChainDone;
   st().p.flags.dragonChainDone = true;
   __runCmd('/god');
-  huntJob('交差：狮子之瞳（+80铜币，宝石归你）');
+  huntJob('交差：狮子之瞳（+80铜币）');
   __runCmd('/god');
   st().p.flags.dragonChainDone = dc;
-  click('交差：狮子之瞳（+80铜币，宝石归你）');
+  click('交差：狮子之瞳（+80铜币）');
   if (!st().p.flags.regulus1) throw new Error('regulus1未置位');
   if (!(st().p.inv.狮子之瞳 >= 1)) throw new Error('狮子之瞳遗物未到账');
   console.log('  · 狮子之瞳：30级解锁→随机城镇告示板（异城有提示）→寻踪精英狮瞳守卫→交差');
@@ -1981,8 +1981,8 @@ step('0.24地区BOSS与骑士悬赏', () => {
   if (has('离开')) click('离开');
   __runCmd('/阿'); __runCmd('/活 22');
   click('告示板');
-  if (!has('支线BOSS：血盐巨像（赤河源头·寻踪·报酬120铜币）')) throw new Error('血盐巨像委托缺失: ' + JSON.stringify(btns()));
-  click('支线BOSS：血盐巨像（赤河源头·寻踪·报酬120铜币）');
+  if (!has('支线BOSS：血盐巨像（报酬120铜币）')) throw new Error('血盐巨像委托缺失: ' + JSON.stringify(btns()));
+  click('支线BOSS：血盐巨像（报酬120铜币）');
   const dc = st().p.flags.dragonChainDone;
   st().p.flags.dragonChainDone = true;
   __runCmd('/god');
@@ -1994,14 +1994,14 @@ step('0.24地区BOSS与骑士悬赏', () => {
   if (!(st().p.inv.血盐核心 >= 1)) throw new Error('血盐核心未入包');
   if (!st().p.flags.saltGolemReward) throw new Error('血盐巨像奖励未结算');
   // 赤河骑士可重复悬赏
-  click('悬赏：赤河骑士（寻踪·可重复·报酬45铜币）');
+  click('悬赏：赤河骑士（报酬45铜币）');
   st().p.flags.dragonChainDone = true;
   __runCmd('/god');
   huntJob('交差：赤河骑士（+45铜币）');
   st().p.flags.dragonChainDone = dc;
   click('交差：赤河骑士（+45铜币）');
   __runCmd('/god');
-  if (!has('悬赏：赤河骑士（寻踪·可重复·报酬45铜币）')) throw new Error('赤河骑士悬赏应可重接: ' + JSON.stringify(btns()));
+  if (!has('悬赏：赤河骑士（报酬45铜币）')) throw new Error('赤河骑士悬赏应可重接: ' + JSON.stringify(btns()));
   console.log('  · 血盐巨像：寻踪→击杀→专属掉落（武器+材料）；赤河骑士悬赏可重复接取');
 });
 step('0.24第一章·地图与北境道路', () => {
@@ -2084,8 +2084,8 @@ step('0.24古战场新敌与野兽的呼唤', () => {
 step('0.24第一章·矿脉巨像', () => {
   __runCmd('/兰'); __runCmd('/活 24');
   click('告示板');
-  if (!has('支线BOSS：矿脉巨像（废弃矿脉·寻踪·报酬150铜币）')) throw new Error('矿脉巨像委托缺失: ' + JSON.stringify(btns()));
-  click('支线BOSS：矿脉巨像（废弃矿脉·寻踪·报酬150铜币）');
+  if (!has('支线BOSS：矿脉巨像（报酬150铜币）')) throw new Error('矿脉巨像委托缺失: ' + JSON.stringify(btns()));
+  click('支线BOSS：矿脉巨像（报酬150铜币）');
   const dc = st().p.flags.dragonChainDone;
   st().p.flags.dragonChainDone = true;
   __runCmd('/god');
@@ -2115,17 +2115,17 @@ step('0.24第一章·东线港口链与要塞', () => {
   if (!has('告示板')) throw new Error('松风镇未到达: ' + JSON.stringify(btns()));
   // 松风镇告示板：委托≥8（4交付+4悬赏）
   click('告示板');
-  for (const t of ['悬赏：山道劫匪（报酬30铜币·当场开打）','悬赏：走私盐贩（报酬35铜币·当场开打）','悬赏：野狼群（报酬25铜币·当场开打）','悬赏：溃兵（报酬28铜币·当场开打）']) {
+  for (const t of ['悬赏：山道劫匪（报酬30铜币）','悬赏：走私盐贩（报酬35铜币）','悬赏：野狼群（报酬25铜币）','悬赏：溃兵（报酬28铜币）']) {
     if (!has(t)) throw new Error('松风镇告示板缺少 ' + t + ' ' + JSON.stringify(btns()));
   }
   // 试接一个悬赏：当场开打
-  click('悬赏：山道劫匪（报酬30铜币·当场开打）');
+  click('悬赏：山道劫匪（报酬30铜币）');
   if (!has('攻击·侧面 (×1.3)')) throw new Error('悬赏战未开始');
   fightUntilOver(80);
   if (!has('交差：山道劫匪（+30铜币）')) { click('告示板'); } // 悬赏完成后留在城镇，自行去告示板交差
   if (!has('交差：山道劫匪（+30铜币）')) throw new Error('悬赏交差行缺失: ' + JSON.stringify(btns()));
   click('交差：山道劫匪（+30铜币）');
-  if (!has('悬赏：山道劫匪（报酬30铜币·当场开打）')) throw new Error('悬赏应可重接');
+  if (!has('悬赏：山道劫匪（报酬30铜币）')) throw new Error('悬赏应可重接');
   click('离开'); click('出城');
   click('东行：前往峭壁镇（3段路程）');
   for (let i = 0; i < 3; i++) { click('扎营（休息+存档，过一天）'); }
@@ -2142,8 +2142,8 @@ step('0.24第一章·东线港口链与要塞', () => {
   click('码头'); // 主线前：港道堵着
   if (!logHas('港道还堵着')) throw new Error('主线前码头应提示堵港');
   click('告示板');
-  if (!has('主线：疏通港道（寻踪·海盗与海妖·报酬120铜币）')) throw new Error('主线委托缺失: ' + JSON.stringify(btns()));
-  click('主线：疏通港道（寻踪·海盗与海妖·报酬120铜币）');
+  if (!has('主线：疏通港道（报酬120铜币）')) throw new Error('主线委托缺失: ' + JSON.stringify(btns()));
+  click('主线：疏通港道（报酬120铜币）');
   if (!has('港道（主线进行中）')) { click('回城'); click('告示板'); }
   click('港道（主线进行中）');
   click('开打');
@@ -2151,8 +2151,8 @@ step('0.24第一章·东线港口链与要塞', () => {
   // 主线完成后留在潮音港（不再跳告示板），自行去告示板交差
   if (!has('码头') && !has('告示板')) throw new Error('主线完成后未留在潮音港: ' + JSON.stringify(btns()));
   click('告示板');
-  if (!has('交差：疏通港道（+120铜币，港道恢复通航）')) throw new Error('主线交差行缺失: ' + JSON.stringify(btns()));
-  click('交差：疏通港道（+120铜币，港道恢复通航）');
+  if (!has('交差：疏通港道（+120铜币）')) throw new Error('主线交差行缺失: ' + JSON.stringify(btns()));
+  click('交差：疏通港道（+120铜币）');
   if (!st().p.flags.tideMainReward) throw new Error('主线未结算');
   if (!st().p.owned.some(w => w.name === '潮音利刃')) throw new Error('潮音利刃未入包');
   click('离开'); click('码头');
@@ -2216,8 +2216,8 @@ function huntLibFlag(flag, maxTries = 150) {
 step('0.24领地解放（渡口→克罗姆福德→阿什沃德解放战争）', () => {
   // ① 渡口镇解放任务（周边城镇仍在野外寻踪）
   __runCmd('/渡'); click('告示板');
-  if (!has('解放：渡口镇（寻踪·报酬30铜币）')) throw new Error('渡口镇解放任务缺失: ' + JSON.stringify(btns().slice(0, 8)));
-  click('解放：渡口镇（寻踪·报酬30铜币）');
+  if (!has('解放：渡口镇（报酬30铜币）')) throw new Error('渡口镇解放任务缺失: ' + JSON.stringify(btns().slice(0, 8)));
+  click('解放：渡口镇（报酬30铜币）');
   if (!st().p.flags.god) __runCmd('/god');
   const dcL = st().p.flags.dragonChainDone;
   st().p.flags.dragonChainDone = true;
@@ -2226,8 +2226,8 @@ step('0.24领地解放（渡口→克罗姆福德→阿什沃德解放战争）'
   if (!st().p.flags.libT_ferrytownDone) throw new Error('渡口镇未解放');
   // ② 克罗姆福德解放主线（城内讨取——祸首的老巢就在城里）
   __runCmd('/克'); click('告示板');
-  if (!has('解放主线：克罗姆福德（城内讨取·报酬85铜币）')) throw new Error('克罗姆福德解放主线缺失: ' + JSON.stringify(btns().slice(0, 8)));
-  click('解放主线：克罗姆福德（城内讨取·报酬85铜币）');
+  if (!has('解放主线：克罗姆福德（报酬85铜币）')) throw new Error('克罗姆福德解放主线缺失: ' + JSON.stringify(btns().slice(0, 8)));
+  click('解放主线：克罗姆福德（报酬85铜币）');
   click('告示板');
   if (!has('讨取祸首：克罗姆福德（就在城内·决战）')) throw new Error('城内讨取按钮缺失: ' + JSON.stringify(btns().slice(0, 8)));
   click('讨取祸首：克罗姆福德（就在城内·决战）');
@@ -2236,7 +2236,7 @@ step('0.24领地解放（渡口→克罗姆福德→阿什沃德解放战争）'
   if (!st().p.flags.libC_cromfordDone) throw new Error('克罗姆福德主线未完成');
   // ③ 阿什沃德解放主线（城内讨取）
   __runCmd('/阿'); click('告示板');
-  click('解放主线：阿什沃德（城内讨取·报酬80铜币）');
+  click('解放主线：阿什沃德（报酬80铜币）');
   click('告示板');
   click('讨取祸首：阿什沃德（就在城内·决战）');
   let wgA = 0;
@@ -2262,7 +2262,7 @@ step('0.25传说武器·佛拉格拉克与布里欧纳克', () => {
   if (!st().p.flags.god) __runCmd('/god');
   // ① 佛拉格拉克（坦沃·灰土高地龙）
   __runCmd('/坦'); click('告示板');
-  const fragRow = '传说讨伐：灰土高地龙（西边灰土高地·报酬120铜币+佛拉格拉克）';
+  const fragRow = '传说讨伐：灰土高地龙（报酬120铜币+佛拉格拉克）';
   if (!has(fragRow)) throw new Error('灰土高地龙委托缺失: ' + JSON.stringify(btns().slice(0, 8)));
   click(fragRow);
   huntJob('交差：灰土高地龙（+120铜币）');
@@ -2270,7 +2270,7 @@ step('0.25传说武器·佛拉格拉克与布里欧纳克', () => {
   click('交差：灰土高地龙（+120铜币）');
   // ② 布里欧纳克（沃林·魔化之人）
   __runCmd('/沃'); click('告示板');
-  const briRow = '传说讨伐：魔化之人（西郊旷野·报酬150铜币+布里欧纳克）';
+  const briRow = '传说讨伐：魔化之人（报酬150铜币+布里欧纳克）';
   if (!has(briRow)) throw new Error('魔化之人委托缺失: ' + JSON.stringify(btns().slice(0, 8)));
   click(briRow);
   huntJob('交差：魔化之人（+150铜币）');
@@ -2350,15 +2350,15 @@ step('0.24路网往返与黑棘城', () => {
   const hi = btns().filter(b => b.includes('高危委托') || b.includes('悬赏：'));
   if (hi.length < 24) throw new Error('黑棘城高危委托不足24: ' + hi.length + ' ' + JSON.stringify(btns().slice(0, 6)));
   // 试打一个可重复悬赏（当场寻踪）
-  click('悬赏：黑甲骑劫（寻踪·报酬85铜币）');
+  click('悬赏：黑甲骑劫（报酬85铜币）');
   const dc = st().p.flags.dragonChainDone;
   st().p.flags.dragonChainDone = true;
   huntJob('交差：黑甲骑劫（+85铜币）', 60);
   st().p.flags.dragonChainDone = dc;
   click('交差：黑甲骑劫（+85铜币）');
-  if (!has('悬赏：黑甲骑劫（寻踪·报酬85铜币）')) throw new Error('黑棘悬赏应可重接');
+  if (!has('悬赏：黑甲骑劫（报酬85铜币）')) throw new Error('黑棘悬赏应可重接');
   // 委托完成后应留在游荡（不直接回告示板）
-  click('悬赏：弃誓者（寻踪·报酬80铜币）');
+  click('悬赏：弃誓者（报酬80铜币）');
   __runCmd('/heal'); __runCmd('/god');
   const dcB = st().p.flags.dragonChainDone;
   st().p.flags.dragonChainDone = true;
@@ -2384,12 +2384,12 @@ step('0.24路网往返与黑棘城', () => {
   st().p.flags.dragonChainDone = dcB;
   huntJob('交差：弃誓者（+80铜币）', 60);
   click('交差：弃誓者（+80铜币）');
-  if (!has('悬赏：弃誓者（寻踪·报酬80铜币）')) throw new Error('弃誓者悬赏未恢复');
+  if (!has('悬赏：弃誓者（报酬80铜币）')) throw new Error('弃誓者悬赏未恢复');
   click('离开');
   if (!has('出城') || !has('告示板')) throw new Error('黑棘城告示板离开未回黑棘城: ' + JSON.stringify(btns()));
   // 黑棘城主：接单文案无undefined，寻踪击杀（一次性的最终高危）
   click('告示板');
-  click('高危委托：黑棘城主（寻踪·报酬240铜币）');
+  click('高危委托：黑棘城主（报酬240铜币）');
   if (logHas('undefined')) { const bad = logEl.children.map(c => c._text).filter(t => t.includes('undefined')).slice(-6); throw new Error('黑棘城主委托文案出现undefined: ' + JSON.stringify(bad)); }
   __runCmd('/god');
   const dc2 = st().p.flags.dragonChainDone;
@@ -2490,6 +2490,11 @@ step('0.25巫师店（法杖定制+诅咒/赐福法杖+新法术书）', () => {
   buyOne('买：法术书·心智鞭笞（55铜币，营地研习后学会心智鞭笞）');
   buyOne('买：法术书·星陨术（90铜币，营地研习后学会星陨术）');
   if (st().p.inv['法术书·秘法飞弹'] !== 1 || st().p.inv['法术书·心智鞭笞'] !== 1 || st().p.inv['法术书·星陨术'] !== 1) throw new Error('法术书未到账: ' + JSON.stringify({ a: st().p.inv['法术书·秘法飞弹'], b: st().p.inv['法术书·心智鞭笞'], c: st().p.inv['法术书·星陨术'] }));
+  // 大伤害法术×12：巫师店刷新
+  const bigSpells = ['陨星天降', '焚世烈焰', '绝对零度', '雷霆万钧', '湮灭射线', '北境冰暴', '死亡一指', '血沸术', '灵魂湮灭', '精神崩解', '灵魂尖啸', '神罚之矛'];
+  bigSpells.forEach(n => { if (!btns().some(b => b.startsWith('买：法术书·' + n + '（'))) throw new Error('大伤害法术书缺失: ' + n + ' / ' + JSON.stringify(btns().filter(b => b.includes('法术书')))); });
+  buyOne('买：法术书·死亡一指（150铜币，营地研习后学会死亡一指）');
+  if (st().p.inv['法术书·死亡一指'] !== 1) throw new Error('死亡一指未到账: ' + st().p.inv['法术书·死亡一指']);
   // 定制优质法杖：诅咒载体木杖身+龙鳞杖头 → 诅咒+30%/赐福-30%/全法术+10%
   buyOne('买：诅咒载体木（120铜币，杖身材料）');
   if (st().p.inv['诅咒载体木'] !== 1) throw new Error('诅咒载体木未到账: ' + st().p.inv['诅咒载体木']);
@@ -2501,17 +2506,23 @@ step('0.25巫师店（法杖定制+诅咒/赐福法杖+新法术书）', () => {
   if (!w.spellPct || w.spellPct.诅咒 !== 1.3 || w.spellPct.neg_赐福 !== 0.7 || w.spellPct.all !== 1.1) throw new Error('定制法杖偏向缺失: ' + JSON.stringify(w.spellPct));
   if (!has('买：诅咒法杖（350铜币，优质法杖：诅咒系法术+30%，赐福系-30%）')) throw new Error('打造后未回巫师店: ' + JSON.stringify(btns()));
   click('离开');
-  console.log('  · 诅咒/赐福法杖+三本新法术书+诅咒载体木定制法杖（诅咒+30%/赐福-30%/全+10%）');
+  // 营地研习死亡一指
+  click('出城'); click('扎营');
+  click('研习法术');
+  click('研习：法术书·死亡一指 → 学会死亡一指');
+  if (!st().p.spells.includes('死亡一指')) throw new Error('死亡一指未学会');
+  click('返回'); click('离开'); click('回城');
+  console.log('  · 诅咒/赐福法杖+三本新法术书+大伤害法术书×12（死亡一指研习通过）+诅咒载体木定制法杖');
 });
 step('0.25收复灰墙要塞（卡尔沃主线→决战→练兵场）', () => {
   st().p.flags.libW_carwo = true;
   __runCmd('/卡');
   if (!has('告示板')) throw new Error('未到卡尔沃: ' + JSON.stringify(btns()));
   click('告示板');
-  click('主线：收复灰墙要塞（北境前哨·夺回我们的地盘）');
+  click('主线：收复灰墙要塞');
   if (!st().p.flags.fortressJob) throw new Error('要塞主线未接取');
   click('告示板');
-  click('出击：灰墙要塞（决战·夺回前哨）');
+  click('出击：灰墙要塞');
   // 换回最强的剑（巫师店定制的法杖伤害低，免得决战拖太久）
   const best = st().p.owned.slice().sort((a, b) => b.atk - a.atk)[0];
   if (best) st().p.weapon = best;
@@ -2607,6 +2618,31 @@ step('0.25熔炼旧武器（锋利精钢继承四分之一）', () => {
   click('离开');
   console.log('  · 旧剑熔成锋利精钢（继承+' + inh + '），回炉锻造后新武器继承攻击生效');
 });
+step('0.25锻造下料×10（一个环节十连下料）', () => {
+  __runCmd('/阿'); __runCmd('/钱 200'); __runCmd('/item 铁料 20'); __runCmd('/item 木 2'); __runCmd('/item 陨铁 10');
+  click('铁匠铺');
+  click(btns().find(b => b.startsWith('定制武器（铁匠 Lv.')));
+  click('剑（铁料×3）');
+  const m10 = btns().find(b => b.startsWith('陨铁×10（'));
+  if (!m10) throw new Error('武器×10下料行缺失: ' + JSON.stringify(btns()));
+  const mB = st().p.inv.陨铁;
+  click(m10);
+  click(btns().find(b => b.startsWith('木（普通木材')));
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
+  if (st().p.inv.陨铁 !== mB - 10) throw new Error('×10未消耗10份陨铁: ' + st().p.inv.陨铁 + ' 期望 ' + (mB - 10));
+  const w = st().p.weapon;
+  if (!w.fx || !w.fx.includes('精准')) throw new Error('陨铁×10词条缺失: ' + JSON.stringify(w.fx));
+  if ((w.atk || 0) < 25) throw new Error('陨铁×10攻击叠加不足: ' + w.atk);
+  // 护甲辅料×10（铁料×10入列，20件上限内）
+  click('定制护甲（头/胸/腿/披风）');
+  click('胸（铁料×4）');
+  const a10 = btns().find(b => b.startsWith('铁料×10（'));
+  if (!a10) throw new Error('护甲×10下料行缺失: ' + JSON.stringify(btns()));
+  click(a10);
+  if (!logHas('已选辅料 10/20')) throw new Error('护甲×10未入列: ' + JSON.stringify(btns()));
+  click('返回'); click('返回'); click('离开');
+  console.log('  · 一个环节×10下料：10块陨铁剑身（攻击×4.05+精准）一次成型+护甲辅料×10入列');
+});
 step('0.25安普提斯（黑棘城十委托→荒野三败劝降）', () => {
   const f = st().p.flags;
   f.ampthisUnlocked = false; f.ampthisJoined = false; f.ampthisDefeats = 0; f.ampthisReviveAt = 0; f.ampthisPending = false; f.ampthisJobs = 0;
@@ -2668,7 +2704,7 @@ step('0.25轩辕十四单挑（白水镇告示板）', () => {
   const gold0 = st().p.gold;
   __runCmd('/白水');
   click('告示板');
-  click('支线：与轩辕十四单挑（白水河畔·他等你·报酬150铜币）');
+  click('支线：与轩辕十四单挑（报酬150铜币）');
   if (!f.regulusDuelJob) throw new Error('单挑未接取');
   click('出城');
   click('在郊野游荡');
@@ -2688,7 +2724,7 @@ step('0.25轩辕十四单挑（白水镇告示板）', () => {
   if (!logHas('终焉一击')) throw new Error('单挑终焉一击机制缺失');
   click('告示板');
   const rAtk1 = st().p.regulus.atk, rDef1 = st().p.regulus.def; // 单挑经验可能让他升级，以交差前为准
-  click('交差：与轩辕十四单挑（+150铜币，他认了你）');
+  click('交差：与轩辕十四单挑（+150铜币）');
   if (st().p.gold !== gold0 + 150) throw new Error('单挑报酬未到账: ' + st().p.gold);
   if (st().p.regulus.atk !== rAtk1 + 15 || st().p.regulus.def !== rDef1 + 5) throw new Error('轩辕十四未强化: ' + st().p.regulus.atk + '/' + st().p.regulus.def);
   if (!f.regulusDuelReward) throw new Error('单挑未结算');
@@ -2733,7 +2769,6 @@ step('0.25妖僧·拉斯普提（十名骑士解锁→酒馆打听→荒野游�
   if (st().p.inv['拉斯普提的碎甲片'] < 1 || st().p.inv['疯狂核心'] < 1 || st().p.inv['拉斯普提的毒血'] < 1) throw new Error('拉斯普提掉落缺失: ' + JSON.stringify({ a: st().p.inv['拉斯普提的碎甲片'], b: st().p.inv['疯狂核心'], c: st().p.inv['拉斯普提的毒血'] }));
   if (f.lasputiReviveAt <= Date.now()) throw new Error('复活计时未设置');
   if (f.lasputiLv < 60 || f.lasputiLv > 65) throw new Error('复活等级浮动异常: ' + f.lasputiLv);
-  if (!logHas('奥提斯的手')) throw new Error('奥提斯压制文案缺失');
   if (!logHas('越打越疯')) throw new Error('越打越疯机制缺失');
   click('回城');
   // ④ 召唤指令：/安普（入队后提示）与 /妖僧（直接开打）

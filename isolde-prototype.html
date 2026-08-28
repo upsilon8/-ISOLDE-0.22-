@@ -222,7 +222,7 @@ function migrate(s){
   if(p.flags.ampelosMet===undefined)p.flags.ampelosMet=false;
   if(p.flags.dragonMet===undefined)p.flags.dragonMet=false;
   if(p.lastTown===undefined)p.lastTown='ashwold';
-  for(const k of ['铁料','蛙皮','蛙油膏','覆金属龙皮','烟幕弹','苦蜜蜡','苦蜜酒','骨器','灰肉','疫骨','麦饼','龙鳞','精炼熔断钢铁','管理者材料','军阀密令','法术书·火舌','法术书·霜刃','法术书·雷击','法术书·霜雾','法术书·北风之怒','法术书·石拳','法术书·冰锥术','法术书·荆棘缠绕','法术书·治愈环流','法术书·灼热射线','法术书·生命虹吸','法术书·灼热新星','法术书·疾风刃','法术书·碎石雨','法术书·净光术','法术书·深眠咒','法术书·御土之盾','法术书·增幅术','法术书·恐惧术','法术书·虚弱诅咒','法术书·迟缓诅咒','法术书·破甲诅咒','法术书·疫病诅咒','法术书·背运诅咒','法术书·幻影术','法术书·安抚幻觉','法术书·失志诅咒','法术书·秘法飞弹','法术书·心智鞭笞','法术书·星陨术','木','竹','骨','橡木','白蜡木','紫杉木','赐福木','诅咒载体木','陨铁','龙钢','古战场铁','血术硬化钢','鲸骨','罂粟','海鱼','大鱼','烤鱼','兽皮','野猪肉','绷带','干粮','保养油','旧铁片','猪王皮','胡椒','烤肉','旧银币','巨魔牙','魔化兽皮','蛇蛋','净水袋','草药','陈年果酒','巨魔粗制饰品','磨石','肉桂','丁香','藏红花','血盐','血水结晶','女妖之泪','黑鳄皮','巨魔皮','碎布条','火把','止血膏','醒神草','盐渍肉','猛火油','皮革帽','铁头盔','锁子甲兜帽','板甲头盔','皮背心','锁子甲胸甲','板甲胸甲','皮革护腿','锁子甲护腿','板甲护腿','布披风','皮革披风','游侠短弓','骑士剑','熊皮','蛛丝','骨头','蛇皮','暗影之尘','送葬骨灰','水渍石','摆锤','弃誓之剑','空甲胄壳','虱壳','虱母壳','除虱粉','灰衣甲片','灰衣队长徽记','灰土结晶','妖僧残页','拉斯普提的碎甲片','疯狂核心','拉斯普提的毒血','疯子的蜡烛']){
+  for(const k of ['铁料','蛙皮','蛙油膏','覆金属龙皮','烟幕弹','苦蜜蜡','苦蜜酒','骨器','灰肉','疫骨','麦饼','龙鳞','精炼熔断钢铁','管理者材料','军阀密令','法术书·火舌','法术书·霜刃','法术书·雷击','法术书·霜雾','法术书·北风之怒','法术书·石拳','法术书·冰锥术','法术书·荆棘缠绕','法术书·治愈环流','法术书·灼热射线','法术书·生命虹吸','法术书·灼热新星','法术书·疾风刃','法术书·碎石雨','法术书·净光术','法术书·深眠咒','法术书·御土之盾','法术书·增幅术','法术书·恐惧术','法术书·虚弱诅咒','法术书·迟缓诅咒','法术书·破甲诅咒','法术书·疫病诅咒','法术书·背运诅咒','法术书·幻影术','法术书·安抚幻觉','法术书·失志诅咒','法术书·秘法飞弹','法术书·心智鞭笞','法术书·星陨术','法术书·陨星天降','法术书·焚世烈焰','法术书·绝对零度','法术书·雷霆万钧','法术书·湮灭射线','法术书·北境冰暴','法术书·死亡一指','法术书·血沸术','法术书·灵魂湮灭','法术书·精神崩解','法术书·灵魂尖啸','法术书·神罚之矛','木','竹','骨','橡木','白蜡木','紫杉木','赐福木','诅咒载体木','陨铁','龙钢','古战场铁','血术硬化钢','鲸骨','罂粟','海鱼','大鱼','烤鱼','兽皮','野猪肉','绷带','干粮','保养油','旧铁片','猪王皮','胡椒','烤肉','旧银币','巨魔牙','魔化兽皮','蛇蛋','净水袋','草药','陈年果酒','巨魔粗制饰品','磨石','肉桂','丁香','藏红花','血盐','血水结晶','女妖之泪','黑鳄皮','巨魔皮','碎布条','火把','止血膏','醒神草','盐渍肉','猛火油','皮革帽','铁头盔','锁子甲兜帽','板甲头盔','皮背心','锁子甲胸甲','板甲胸甲','皮革护腿','锁子甲护腿','板甲护腿','布披风','皮革披风','游侠短弓','骑士剑','熊皮','蛛丝','骨头','蛇皮','暗影之尘','送葬骨灰','水渍石','摆锤','弃誓之剑','空甲胄壳','虱壳','虱母壳','除虱粉','灰衣甲片','灰衣队长徽记','灰土结晶','妖僧残页','拉斯普提的碎甲片','疯狂核心','拉斯普提的毒血','疯子的蜡烛']){
     if(p.inv[k]===undefined)p.inv[k]=0;
   }
   for(const k of ['wellJob','wellDone','wellReward','grainJob','grainDone','grainPay','frogJob','frogDone','frogsLeft','tideJob','tideDone','squadJob','squadDone','mineJob','mineDone','crowJob','crowDone','crowsLeft','crowFirst','beggarJob','beggarDone','diggerJob','diggerDone','diggerReward','flagJob','flagDone','flagReward','potFrogJob','potFrogDone','potFrogsLeft','hunterJob2','hunter2Done','hunter2Reward','queenJob','queenDone','queenReward','mudJob','mudDone','mudReward','scavJob','scavDone','ratJob','ratDone','ratsLeft','boneJob','boneDone','boneReward','taxJob','taxDone','taxReward','commanderJob','commanderDone','commanderReward','riverJob','riverStage','riverDone','riverReward','campJob2','campStage','camp2Done','camp2Reward','lostJob','lostStage','lostDone','lostReward','heavyJob','heavyDone','heavyReward','hagJob2','hag2Done','hag2Reward','nestJob','nestDone','nestReward','fliesJob','fliesDone','fliesLeft','riteJob','riteDone','riteReward','robberJob4','robber4Done','robber4Reward','honeyJob4','honey4Done','honey4Reward','relicJob4','relic4Done','relic4Reward','militiaJob4','militia4Done','militia4Reward','churchSit','patrolJob','patrolDone','patrolReward','saltCarJob','saltCarDone','saltCarReward','altarJob','altarDone','altarReward','legionJob','legionDone','legionReward','deaconJob','deaconDone','deaconReward','beastJob','beastDone','beastsLeft','haulerJob','haulerDone','haulerReward','craftJob','craftDone','craftReward','plagueRelicJob5','plagueRelic5Done','plagueRelic5Reward','plagueKnightJob','plagueKnightDone','plagueKnightReward','ferryJob','ferryDone','ferryReward','clearJob','clearDone','clearsLeft','escrowActive','escrowDone','escrowPay','wolfJob','wolfDone','wolfReward','duelJob','duelDone','duelReward','captainJob','captainDone','captainReward','fishJob','fishDone','fishNets','pirateJob','pirateDone','pirateReward','saltGhostJob','saltGhostDone','saltGhostReward','seaWolfJob','seaWolfDone','seaWolfReward','lairJob','lairStage','lairDone','lairReward','lighthouseJob','lighthouseDone','lighthouseReward','lairUnlocked','lairBest','armguardGot','dragonChain','dragonChainDone','bloodEyeJob','bloodEyeDone','bloodEyeReward','giantToadJob','giantToadDone','giantToadReward','overseerJob','overseerDone','overseerReward','facelessJob','facelessDone','facelessReward','bonePlagueJob','bonePlagueDone','bonePlagueReward','banditKingJob','banditKingDone','banditKingReward','sirenJob','sirenDone','sirenReward','leoEyeJob','leoEyeDone','leoEyeReward','regulus1','regulus2','regulus3','regulus4','regulus5','leoBeastJob','leoBeastDone','leoBeastReward','lionSwordJob','lionSwordPage','lionSwordRec','lionSwordHint','lionSwordDone','leoStarJob','starFrag1','starFrag2','starFrag3','starDone','leoKingJob','leoKingDone','leoKingReward','twoLionsReady','twoLionsMet','twoLionsDone','regulusGot','lionTrialJoined','legF1','legF2','legF3','legF4','legF5','legF6','legF7','saltGolemJob','saltGolemDone','saltGolemReward','frogMomJob','frogMomDone','frogMomReward','liceKingJob','liceKingDone','liceKingReward','cryptGuardJob','cryptGuardDone','cryptGuardReward','boneDragonJob','boneDragonDone','boneDragonReward','drownSoulJob','drownSoulDone','drownSoulReward','mudCrawlerJob','mudCrawlerDone','mudCrawlerReward','plagueWeaverJob','plagueWeaverDone','plagueWeaverReward','coffinSaintJob','coffinSaintDone','coffinSaintReward','ferrymanJob','ferrymanDone','ferrymanReward','redKnightJob','redKnightDone','tideKnightJob','tideKnightDone','greyKnight2Job','greyKnight2Done','rotKnightJob','rotKnightDone','shoreKnightJob','shoreKnightDone','ironKnightJob','ironKnightDone','hailKnightJob','hailKnightDone','mineGolemJob','mineGolemDone','mineGolemReward','thunderbirdJob','thunderbirdDone','thunderbirdReward','legF8','legF9','legF10','landelVisited','carwoVisited','tideMainJob','tideMainDone','tideMainReward','bountyAJob','bountyADone','bountyBJob','bountyBDone','bountyCJob','bountyCDone','bountyDJob','bountyDDone']){
@@ -340,7 +340,7 @@ function importSave(){
 function newGame(){
   const g={ p:{
     hp:110,maxHp:110, mp:50,maxMp:50, sta:100,maxSta:100, atk:12, def:0, gold:0,
-    inv:{兽皮:0,野猪肉:0,绷带:0,干粮:0,保养油:0,旧铁片:0,猪王皮:0,胡椒:0,烤肉:0,旧银币:0,巨魔牙:0,魔化兽皮:0,蛇蛋:0,净水袋:0,草药:0,陈年果酒:0,巨魔粗制饰品:0,磨石:0,肉桂:0,丁香:0,藏红花:0,血盐:0,血水结晶:0,女妖之泪:0,黑鳄皮:0,巨魔皮:0,碎布条:0,火把:0,止血膏:0,醒神草:0,盐渍肉:0,猛火油:0,烟幕弹:0,苦蜜蜡:0,苦蜜酒:0,骨器:0,灰肉:0,疫骨:0,麦饼:0,龙鳞:0,精炼熔断钢铁:0,管理者材料:0,军阀密令:0,法术书·火舌:0,法术书·霜刃:0,法术书·雷击:0,法术书·霜雾:0,法术书·北风之怒:0,法术书·石拳:0,法术书·冰锥术:0,法术书·荆棘缠绕:0,法术书·治愈环流:0,法术书·灼热射线:0,法术书·生命虹吸:0,法术书·灼热新星:0,法术书·疾风刃:0,法术书·碎石雨:0,法术书·净光术:0,法术书·深眠咒:0,法术书·御土之盾:0,法术书·增幅术:0,法术书·恐惧术:0,法术书·虚弱诅咒:0,法术书·迟缓诅咒:0,法术书·破甲诅咒:0,法术书·疫病诅咒:0,法术书·背运诅咒:0,法术书·幻影术:0,法术书·安抚幻觉:0,法术书·失志诅咒:0,法术书·秘法飞弹:0,法术书·心智鞭笞:0,法术书·星陨术:0,木:0,竹:0,骨:0,橡木:0,白蜡木:0,紫杉木:0,赐福木:0,诅咒载体木:0,陨铁:0,龙钢:0,古战场铁:0,血术硬化钢:0,鲸骨:0,罂粟:0,海鱼:0,大鱼:0,烤鱼:0,皮革帽:0,铁头盔:0,锁子甲兜帽:0,板甲头盔:0,皮背心:0,锁子甲胸甲:0,板甲胸甲:0,皮革护腿:0,锁子甲护腿:0,板甲护腿:0,布披风:0,皮革披风:0,游侠短弓:0,骑士剑:0,铁料:0,蛙皮:0,蛙油膏:0,熊皮:0,蛛丝:0,骨头:0,蛇皮:0,暗影之尘:0,送葬骨灰:0,水渍石:0,摆锤:0,弃誓之剑:0,空甲胄壳:0,虱壳:0,虱母壳:0,除虱粉:0,灰衣甲片:0,灰衣队长徽记:0,灰土结晶:0,覆金属龙皮:0,妖僧残页:0,拉斯普提的碎甲片:0,疯狂核心:0,拉斯普提的毒血:0,疯子的蜡烛:0},
+    inv:{兽皮:0,野猪肉:0,绷带:0,干粮:0,保养油:0,旧铁片:0,猪王皮:0,胡椒:0,烤肉:0,旧银币:0,巨魔牙:0,魔化兽皮:0,蛇蛋:0,净水袋:0,草药:0,陈年果酒:0,巨魔粗制饰品:0,磨石:0,肉桂:0,丁香:0,藏红花:0,血盐:0,血水结晶:0,女妖之泪:0,黑鳄皮:0,巨魔皮:0,碎布条:0,火把:0,止血膏:0,醒神草:0,盐渍肉:0,猛火油:0,烟幕弹:0,苦蜜蜡:0,苦蜜酒:0,骨器:0,灰肉:0,疫骨:0,麦饼:0,龙鳞:0,精炼熔断钢铁:0,管理者材料:0,军阀密令:0,法术书·火舌:0,法术书·霜刃:0,法术书·雷击:0,法术书·霜雾:0,法术书·北风之怒:0,法术书·石拳:0,法术书·冰锥术:0,法术书·荆棘缠绕:0,法术书·治愈环流:0,法术书·灼热射线:0,法术书·生命虹吸:0,法术书·灼热新星:0,法术书·疾风刃:0,法术书·碎石雨:0,法术书·净光术:0,法术书·深眠咒:0,法术书·御土之盾:0,法术书·增幅术:0,法术书·恐惧术:0,法术书·虚弱诅咒:0,法术书·迟缓诅咒:0,法术书·破甲诅咒:0,法术书·疫病诅咒:0,法术书·背运诅咒:0,法术书·幻影术:0,法术书·安抚幻觉:0,法术书·失志诅咒:0,法术书·秘法飞弹:0,法术书·心智鞭笞:0,法术书·星陨术:0,法术书·陨星天降:0,法术书·焚世烈焰:0,法术书·绝对零度:0,法术书·雷霆万钧:0,法术书·湮灭射线:0,法术书·北境冰暴:0,法术书·死亡一指:0,法术书·血沸术:0,法术书·灵魂湮灭:0,法术书·精神崩解:0,法术书·灵魂尖啸:0,法术书·神罚之矛:0,木:0,竹:0,骨:0,橡木:0,白蜡木:0,紫杉木:0,赐福木:0,诅咒载体木:0,陨铁:0,龙钢:0,古战场铁:0,血术硬化钢:0,鲸骨:0,罂粟:0,海鱼:0,大鱼:0,烤鱼:0,皮革帽:0,铁头盔:0,锁子甲兜帽:0,板甲头盔:0,皮背心:0,锁子甲胸甲:0,板甲胸甲:0,皮革护腿:0,锁子甲护腿:0,板甲护腿:0,布披风:0,皮革披风:0,游侠短弓:0,骑士剑:0,铁料:0,蛙皮:0,蛙油膏:0,熊皮:0,蛛丝:0,骨头:0,蛇皮:0,暗影之尘:0,送葬骨灰:0,水渍石:0,摆锤:0,弃誓之剑:0,空甲胄壳:0,虱壳:0,虱母壳:0,除虱粉:0,灰衣甲片:0,灰衣队长徽记:0,灰土结晶:0,覆金属龙皮:0,妖僧残页:0,拉斯普提的碎甲片:0,疯狂核心:0,拉斯普提的毒血:0,疯子的蜡烛:0},
     spells:['飞石','治愈微光'],
     memSpells:['飞石','治愈微光'],
     weapon:{name:'木剑',atk:3,type:'剑'}, owned:[{name:'木剑',atk:3,type:'剑'}], gear:{头:null,胸:null,腿:null,披风:null}, armorBag:[], campFrom:null, knight:null, companion:null, accs:[], accBag:[], accBonus:{hp:0,mp:0,sta:0}, pow:0, fort:0, coat:0, buffSys:{攻:{v:0,n:0},防:{v:0,n:0},速:{v:0,n:0}}, craftXP:{锻造:0,烹饪:0,炼金:0}, wprof:{}, stance:'攻势', armguard:null, lairFloor:1, mercs:[], regulus:null, lionSword:null, leader:'主角', control:null, bestiary:{}, kills:0,
@@ -626,7 +626,10 @@ function forgePartMenu(cat,baseMat,chosen,idx,back){
     const locked=(d.ch2&&!(state.p.flags&&state.p.flags.ch2));
     if(locked)o.push([m+'（'+d.desc+'）·第二章',()=>{ print('这是第二章才有的材料——北方的路还长','bad'); forgePartMenu(cat,baseMat,chosen,idx,back); }]);
     else if(have-used<=0)o.push([m+'（'+d.desc+'）·缺',()=>{ print(m+'不够','bad'); forgePartMenu(cat,baseMat,chosen,idx,back); }]);
-    else o.push([m+'（'+d.desc+'）·'+have,()=>forgePartMenu(cat,baseMat,chosen.concat([m]),idx+1,back)]);
+    else {
+      o.push([m+'（'+d.desc+'）·'+have,()=>forgePartMenu(cat,baseMat,chosen.concat([m]),idx+1,back)]);
+      if(have-used>=10)o.push([m+'×10（'+d.desc+'）·'+have,()=>forgePartMenu(cat,baseMat,chosen.concat(Array(10).fill(m)),idx+1,back)]);
+    }
   }
   const steelN=(state.p.sharpSteel||[]).length;
   if(steelN){
@@ -634,6 +637,7 @@ function forgePartMenu(cat,baseMat,chosen,idx,back){
     if(steelN-usedSteel>0){
       const top=Math.max.apply(null,state.p.sharpSteel);
       o.push(['锋利精钢（继承攻击+'+top+'）·'+steelN,()=>forgePartMenu(cat,baseMat,chosen.concat(['锋利精钢']),idx+1,back)]);
+      if(steelN-usedSteel>=10)o.push(['锋利精钢×10（继承攻击+'+top+'）·'+steelN,()=>forgePartMenu(cat,baseMat,chosen.concat(Array(10).fill('锋利精钢')),idx+1,back)]);
     }
   }
   o.push(['返回',()=>back()]);
@@ -732,6 +736,18 @@ function gotoWizardShop(){
   o.push(['买：法术书·秘法飞弹（45铜币，营地研习后学会秘法飞弹）',()=>buyG('法术书·秘法飞弹',45,gotoWizardShop)]);
   o.push(['买：法术书·心智鞭笞（55铜币，营地研习后学会心智鞭笞）',()=>buyG('法术书·心智鞭笞',55,gotoWizardShop)]);
   o.push(['买：法术书·星陨术（90铜币，营地研习后学会星陨术）',()=>buyG('法术书·星陨术',90,gotoWizardShop)]);
+  o.push(['买：法术书·陨星天降（110铜币，营地研习后学会陨星天降）',()=>buyG('法术书·陨星天降',110,gotoWizardShop)]);
+  o.push(['买：法术书·焚世烈焰（105铜币，营地研习后学会焚世烈焰）',()=>buyG('法术书·焚世烈焰',105,gotoWizardShop)]);
+  o.push(['买：法术书·绝对零度（115铜币，营地研习后学会绝对零度）',()=>buyG('法术书·绝对零度',115,gotoWizardShop)]);
+  o.push(['买：法术书·雷霆万钧（120铜币，营地研习后学会雷霆万钧）',()=>buyG('法术书·雷霆万钧',120,gotoWizardShop)]);
+  o.push(['买：法术书·湮灭射线（130铜币，营地研习后学会湮灭射线）',()=>buyG('法术书·湮灭射线',130,gotoWizardShop)]);
+  o.push(['买：法术书·北境冰暴（110铜币，营地研习后学会北境冰暴）',()=>buyG('法术书·北境冰暴',110,gotoWizardShop)]);
+  o.push(['买：法术书·死亡一指（150铜币，营地研习后学会死亡一指）',()=>buyG('法术书·死亡一指',150,gotoWizardShop)]);
+  o.push(['买：法术书·血沸术（115铜币，营地研习后学会血沸术）',()=>buyG('法术书·血沸术',115,gotoWizardShop)]);
+  o.push(['买：法术书·灵魂湮灭（125铜币，营地研习后学会灵魂湮灭）',()=>buyG('法术书·灵魂湮灭',125,gotoWizardShop)]);
+  o.push(['买：法术书·精神崩解（110铜币，营地研习后学会精神崩解）',()=>buyG('法术书·精神崩解',110,gotoWizardShop)]);
+  o.push(['买：法术书·灵魂尖啸（100铜币，营地研习后学会灵魂尖啸）',()=>buyG('法术书·灵魂尖啸',100,gotoWizardShop)]);
+  o.push(['买：法术书·神罚之矛（125铜币，营地研习后学会神罚之矛）',()=>buyG('法术书·神罚之矛',125,gotoWizardShop)]);
   o.push(['打听（免费）',()=>{ print('"优质法杖的杖身决定学派的偏向——赐福木给赐福，诅咒木给诅咒，混着用会互相抵消"','dim'); gotoWizardShop(); }]);
   o.push(['离开',gotoBlackThorn]);
   scene('巫师店','黑棘城的巫师店藏在巷子深处，货架上摆着几根杖，柜台后的人不抬头：要打杖，先挑木头',o);
@@ -777,6 +793,8 @@ function forgeArmorMatMenu(slot,chosen){
     const remaining=have-used;
     const full=chosen.length>=20;
     o.push([k+'（'+desc+'）'+(k==='铁料'?'':(' ×'+remaining)), (full||remaining<=0)?()=>{ print(full?'辅料已满（20件）':'材料不够','bad'); forgeArmorMatMenu(slot,chosen); } : ()=>forgeArmorMatMenu(slot,chosen.concat([k]))]);
+    const batch=Math.min(10,20-chosen.length);
+    if(!full&&remaining>=batch&&batch>0)o.push([k+'×'+batch+'（'+desc+'）'+(k==='铁料'?'':(' ×'+remaining)),()=>forgeArmorMatMenu(slot,chosen.concat(Array(batch).fill(k)))]);
   }
   if(chosen.length) o.push(['撤销上一个（'+chosen[chosen.length-1]+'）',()=>forgeArmorMatMenu(slot,chosen.slice(0,-1))]);
   o.push(['开炉打造（辅料×'+chosen.length+'，加工费'+(5+lv*3)+'铜币）',()=>doForgeArmor(slot,chosen)]);
@@ -1125,7 +1143,20 @@ const SPELL_DEFS={
  背运诅咒:{name:'背运诅咒',cost:14,desc:'霉运缠身：攻击-2、防御-2，掉落率+30%',atkDown:2,defDown:2,luck:true},
  幻影术:{name:'幻影术',cost:12,desc:'幻影让它挥空——目标下回合无法出手',illusion:true},
  安抚幻觉:{name:'安抚幻觉',cost:14,desc:'幻觉抚平伤痛：清除流血与硬直，+15生命',soothe:true},
- 失志诅咒:{name:'失志诅咒',cost:22,desc:'从内到外都弱下去：本场攻击-3、防御-3',atkDown:3,defDown:3}
+ 失志诅咒:{name:'失志诅咒',cost:22,desc:'从内到外都弱下去：本场攻击-3、防御-3',atkDown:3,defDown:3},
+ /* ---------- 大伤害法术×12（0.25·黑棘城巫师店售卖） ---------- */
+ 陨星天降:{name:'陨星天降',cost:40,desc:'群攻：天外陨星坠地，砸向整排敌人',dmg:30,scale:1.6,aoe:true},
+ 焚世烈焰:{name:'焚世烈焰',cost:36,desc:'群攻：火海吞没整排敌人，惧火者×2',dmg:26,scale:1.5,aoe:true,fire:true,bleed:1},
+ 绝对零度:{name:'绝对零度',cost:38,desc:'极寒冻结，命中30%冻住目标',dmg:44,scale:2.2,stunChance:0.3},
+ 雷霆万钧:{name:'雷霆万钧',cost:40,desc:'万雷轰顶，命中必硬直',dmg:42,scale:2.4,stun:true},
+ 湮灭射线:{name:'湮灭射线',cost:44,desc:'一束抹除一切的射线',dmg:54,scale:2.6},
+ 北境冰暴:{name:'北境冰暴',cost:38,desc:'群攻：北境的风雪席卷整排敌人',dmg:28,scale:1.5,aoe:true,stunChance:0.15},
+ 死亡一指:{name:'死亡一指',cost:50,desc:'指向即死——单体最强诅咒',dmg:62,scale:2.6},
+ 血沸术:{name:'血沸术',cost:40,desc:'血液沸腾，流血不止',dmg:40,scale:2.0,bleed:3},
+ 灵魂湮灭:{name:'灵魂湮灭',cost:44,desc:'湮灭灵魂的诅咒',dmg:48,scale:2.2},
+ 精神崩解:{name:'精神崩解',cost:38,desc:'崩解心神，命中35%震住目标',dmg:38,scale:1.9,stunChance:0.35},
+ 灵魂尖啸:{name:'灵魂尖啸',cost:36,desc:'群攻：灵魂层面的尖啸掠过整排敌人',dmg:24,scale:1.3,aoe:true},
+ 神罚之矛:{name:'神罚之矛',cost:42,desc:'赐福之光凝成战矛，贯穿目标',dmg:48,scale:2.4}
 };
 const SPELL_BOOKS=[
  {item:'法术书·火舌',spell:'火舌'},{item:'法术书·霜刃',spell:'霜刃'},
@@ -1144,10 +1175,16 @@ const SPELL_BOOKS=[
  {item:'法术书·幻影术',spell:'幻影术'},{item:'法术书·安抚幻觉',spell:'安抚幻觉'},
  {item:'法术书·失志诅咒',spell:'失志诅咒'},
  {item:'法术书·秘法飞弹',spell:'秘法飞弹'},{item:'法术书·心智鞭笞',spell:'心智鞭笞'},
- {item:'法术书·星陨术',spell:'星陨术'}
+ {item:'法术书·星陨术',spell:'星陨术'},
+ {item:'法术书·陨星天降',spell:'陨星天降'},{item:'法术书·焚世烈焰',spell:'焚世烈焰'},
+ {item:'法术书·绝对零度',spell:'绝对零度'},{item:'法术书·雷霆万钧',spell:'雷霆万钧'},
+ {item:'法术书·湮灭射线',spell:'湮灭射线'},{item:'法术书·北境冰暴',spell:'北境冰暴'},
+ {item:'法术书·死亡一指',spell:'死亡一指'},{item:'法术书·血沸术',spell:'血沸术'},
+ {item:'法术书·灵魂湮灭',spell:'灵魂湮灭'},{item:'法术书·精神崩解',spell:'精神崩解'},
+ {item:'法术书·灵魂尖啸',spell:'灵魂尖啸'},{item:'法术书·神罚之矛',spell:'神罚之矛'}
 ];
 /* 法术学派（法杖杖身材质决定学派偏向） */
-const SPELL_SCHOOL={飞石:'元素',火舌:'元素',霜刃:'元素',雷击:'元素',霜雾:'元素',石拳:'元素',冰锥术:'元素',灼热射线:'元素',灼热新星:'元素',碎石雨:'元素',疾风刃:'元素',北风之怒:'元素',秘法飞弹:'元素',星陨术:'元素',荆棘缠绕:'元素',治愈微光:'防御',治愈环流:'防御',净光术:'防御',御土之盾:'防御',增幅术:'赐福',安抚幻觉:'精神',恐惧术:'精神',深眠咒:'精神',幻影术:'精神',心智鞭笞:'精神',虚弱诅咒:'诅咒',迟缓诅咒:'诅咒',破甲诅咒:'诅咒',疫病诅咒:'诅咒',背运诅咒:'诅咒',失志诅咒:'诅咒',生命虹吸:'诅咒'};
+const SPELL_SCHOOL={飞石:'元素',火舌:'元素',霜刃:'元素',雷击:'元素',霜雾:'元素',石拳:'元素',冰锥术:'元素',灼热射线:'元素',灼热新星:'元素',碎石雨:'元素',疾风刃:'元素',北风之怒:'元素',秘法飞弹:'元素',星陨术:'元素',荆棘缠绕:'元素',陨星天降:'元素',焚世烈焰:'元素',绝对零度:'元素',雷霆万钧:'元素',湮灭射线:'元素',北境冰暴:'元素',死亡一指:'诅咒',血沸术:'诅咒',灵魂湮灭:'诅咒',精神崩解:'精神',灵魂尖啸:'精神',神罚之矛:'赐福',治愈微光:'防御',治愈环流:'防御',净光术:'防御',御土之盾:'防御',增幅术:'赐福',安抚幻觉:'精神',恐惧术:'精神',深眠咒:'精神',幻影术:'精神',心智鞭笞:'精神',虚弱诅咒:'诅咒',迟缓诅咒:'诅咒',破甲诅咒:'诅咒',疫病诅咒:'诅咒',背运诅咒:'诅咒',失志诅咒:'诅咒',生命虹吸:'诅咒'};
 /* ---------- 轩辕十四的法术池（0.25）：六个与狮子/星辰有关的强化身体型法术 ---------- */
 const REGULUS_SPELLS=['狮心鼓动','星辉甲胄','狮王之力','猎星之眼','星坠步','狮吼'];
 const REGULUS_SPELL_DEFS={
@@ -1347,7 +1384,6 @@ function gainXp(n){
     state.p.maxMp=s.maxMp+ab.mp; state.p.mp=Math.min(state.p.maxMp,state.p.mp+Math.max(0,mpGain));
     state.p.maxSta=s.maxSta+ab.sta; state.p.sta=Math.min(state.p.maxSta,state.p.sta+Math.max(0,staGain));
     state.p.atk=s.atk;
-    print('你还没死经验这种东西，攒着攒着就变成了活命的本事','hint');
     print('等级提升至 '+state.p.level+'！生命上限+'+hpGain+'（同时回复'+Math.max(0,hpGain)+'生命）· 法术上限+'+mpGain+' · 体力上限+'+staGain+' · 攻击伤害+'+atkGain,'ok');
     if(state.p.level===15||state.p.level===30||state.p.level===50||state.p.level===70)print('你在刀口上滚了这么多年，出手比从前更狠——攻击额外+1','hint');
     if(state.p.level===120)print('120级——你摸到了凡人的天花板，往后每一级都沉甸甸的，也是最猛的','hint');
@@ -4383,7 +4419,7 @@ function gotoBoard(){
     if(f.leoEyeTown==='ashwold'){
       if(!f.leoEyeJob&&!f.leoEyeDone) o.push(['支线：狮子之瞳（找回失物·寻踪）',acceptLeoEye]);
       if(f.leoEyeJob&&!f.leoEyeDone) o.push(['寻踪：狮子之瞳（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
-      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币，宝石归你）',collectLeoEye]);
+      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币）',collectLeoEye]);
     } else o.push(['？？？：狮子之瞳的委托不在本城（听说在'+LEO_TOWN_CN[f.leoEyeTown]+'）',()=>{},true]);
   }
   if(f.dragonMet && f.dragonChain===0 && !f.dragonChainDone) o.push(['支线：龙之低语·其一（鳞痕向北）',()=>{ print('你接下这单——龙的踪迹不会自己消失','dim'); gotoRoad(); }]);
@@ -4405,7 +4441,7 @@ function gotoBoard(){
   if(!f.eggJob&&!f.eggDone) o.push(['接：偷蛋——沼泽巨蛇的蛋（报酬12铜币）',acceptEgg]);
   if(f.eggJob&&!f.eggDone) o.push(['寻踪：蛇窝（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.eggDone) o.push(['交差：偷蛋（+12铜币）',collectEgg]);
-  if(!f.kingJob&&!f.kingDone) o.push(['接：猪王讨伐（报酬15铜币+旧铁片·仅一次）',acceptKing]);
+  if(!f.kingJob&&!f.kingDone) o.push(['接：猪王讨伐（报酬15铜币+旧铁片）',acceptKing]);
   if(f.kingJob&&!f.kingDone) o.push(['猪王讨伐：它就在南边农田',gotoFarm]);
   if(f.kingDone&&!f.kingReward) o.push(['交差：猪王讨伐（+15铜币+旧铁片）',collectKing]);
   if(f.kingDone){
@@ -4420,12 +4456,12 @@ function gotoBoard(){
   if(f.beggarJob&&!f.beggarDone) o.push(['疯乞丐：西街巷口',gotoBeggar]);
   if(f.beggarDone) o.push(['交差：教训疯乞丐（+8铜币）',collectBeggar]);
   if(f.jobCount>=3){
-    if(!f.diggerJob&&!f.diggerDone&&!f.diggerReward) o.push(['BOSS委托：掘墓人（乱葬岗·报酬18铜币+送葬骨灰）',acceptDigger]);
+    if(!f.diggerJob&&!f.diggerDone&&!f.diggerReward) o.push(['BOSS委托：掘墓人（报酬18铜币+送葬骨灰）',acceptDigger]);
     if(f.diggerJob&&!f.diggerDone) o.push(['寻踪：掘墓人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.diggerDone&&!f.diggerReward) o.push(['交差：掘墓人（+18铜币+送葬骨灰×2）',collectDigger]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=10){
-    if(!f.flagJob&&!f.flagDone&&!f.flagReward) o.push(['BOSS委托：教团苦修者（废弃教堂·报酬40铜币+血盐×3）',acceptFlag]);
+    if(!f.flagJob&&!f.flagDone&&!f.flagReward) o.push(['BOSS委托：教团苦修者（报酬40铜币+血盐×3）',acceptFlag]);
     if(f.flagJob&&!f.flagDone) o.push(['寻踪：教团苦修者（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.flagDone&&!f.flagReward) o.push(['交差：教团苦修者（+40铜币+血盐×3）',collectFlag]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
@@ -4435,57 +4471,57 @@ function gotoBoard(){
     if(f.riverDone&&!f.riverReward) o.push(['交差：河滩失踪案（+22铜币+旧银币）',collectRiver]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=12){
-    if(!f.heavyJob&&!f.heavyDone&&!f.heavyReward) o.push(['高阶委托：重甲骑士（东边桥头·报酬35铜币）',acceptHeavy]);
+    if(!f.heavyJob&&!f.heavyDone&&!f.heavyReward) o.push(['高阶委托：重甲骑士（报酬35铜币）',acceptHeavy]);
     if(f.heavyJob&&!f.heavyDone) o.push(['寻踪：重甲骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.heavyDone&&!f.heavyReward) o.push(['交差：重甲骑士（+35铜币）',collectHeavy]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/12）',()=>{},true]);
   if(f.jobCount>=14){
-    if(!f.saltCarJob&&!f.saltCarDone&&!f.saltCarReward) o.push(['高危委托：血盐商队（西边商路·报酬45铜币+血盐×4）',acceptSaltCar]);
+    if(!f.saltCarJob&&!f.saltCarDone&&!f.saltCarReward) o.push(['高危委托：血盐商队（报酬45铜币+血盐×4）',acceptSaltCar]);
     if(f.saltCarJob&&!f.saltCarDone) o.push(['寻踪：血盐商队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.saltCarDone&&!f.saltCarReward) o.push(['交差：血盐商队（+45铜币+血盐×4）',collectSaltCar]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   if(f.jobCount>=16){
-    if(!f.patrolJob&&!f.patrolDone&&!f.patrolReward) o.push(['高危委托：骑士巡逻队（成建制·报酬55铜币+骑士剑）',acceptPatrol]);
+    if(!f.patrolJob&&!f.patrolDone&&!f.patrolReward) o.push(['高危委托：骑士巡逻队（报酬55铜币+骑士剑）',acceptPatrol]);
     if(f.patrolJob&&!f.patrolDone) o.push(['寻踪：骑士巡逻队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.patrolDone&&!f.patrolReward) o.push(['交差：骑士巡逻队（+55铜币+骑士剑）',collectPatrol]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/16）',()=>{},true]);
   if(f.jobCount>=18){
-    if(!f.bloodEyeJob&&!f.bloodEyeDone&&!f.bloodEyeReward) o.push(['极危委托：血池之眼（河滩上游·报酬60铜币+血水结晶×3）',acceptBloodEye]);
+    if(!f.bloodEyeJob&&!f.bloodEyeDone&&!f.bloodEyeReward) o.push(['极危委托：血池之眼（报酬60铜币+血水结晶×3）',acceptBloodEye]);
     if(f.bloodEyeJob&&!f.bloodEyeDone) o.push(['寻踪：血池之眼（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.bloodEyeDone&&!f.bloodEyeReward) o.push(['交差：血池之眼（+60铜币+血水结晶×3）',collectBloodEye]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/18）',()=>{},true]);
   if(f.jobCount>=2){
-    if(!f.gatorJob&&!f.gatorDone&&!f.gatorReward) o.push(['BOSS委托：吞骨鳄（渡口河湾·报酬15铜币）',acceptGator]);
+    if(!f.gatorJob&&!f.gatorDone&&!f.gatorReward) o.push(['BOSS委托：吞骨鳄（报酬15铜币）',acceptGator]);
     if(f.gatorJob&&!f.gatorDone) o.push(['寻踪：吞骨鳄（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.gatorDone&&!f.gatorReward) o.push(['交差：吞骨鳄（+15铜币）',collectGator]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/2）',()=>{},true]);
   if(f.jobCount>=4){
-    if(!f.twinsJob&&!f.twinsDone&&!f.twinsReward) o.push(['BOSS委托：断桥双魔（石桥·报酬20铜币）',acceptTwins]);
+    if(!f.twinsJob&&!f.twinsDone&&!f.twinsReward) o.push(['BOSS委托：断桥双魔（报酬20铜币）',acceptTwins]);
     if(f.twinsJob&&!f.twinsDone) o.push(['寻踪：断桥双魔（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.twinsDone&&!f.twinsReward) o.push(['交差：断桥双魔（+20铜币+巨魔皮×3）',collectTwins]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/4）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.cellarJob&&!f.cellarDone&&!f.cellarReward) o.push(['BOSS委托：酒窖母（酒庄地窖·报酬12铜币+果酒×2）',acceptCellar]);
+    if(!f.cellarJob&&!f.cellarDone&&!f.cellarReward) o.push(['BOSS委托：酒窖母（报酬12铜币+果酒×2）',acceptCellar]);
     if(f.cellarJob&&!f.cellarDone) o.push(['寻踪：酒窖母（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.cellarDone&&!f.cellarReward) o.push(['交差：酒窖母（+12铜币+陈年果酒×2）',collectCellar]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=8){
-    if(!f.bellJob&&!f.bellDone&&!f.bellReward) o.push(['BOSS委托：铜铃女（夜间道路·报酬：铜铃+10铜币）',acceptBell]);
+    if(!f.bellJob&&!f.bellDone&&!f.bellReward) o.push(['BOSS委托：铜铃女（报酬：铜铃+10铜币）',acceptBell]);
     if(f.bellJob&&!f.bellDone) o.push(['寻踪：铜铃女（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.bellDone&&!f.bellReward) o.push(['交差：铜铃女（铜铃+碎布条×3+10铜币）',collectBell]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/8）',()=>{},true]);
   if(f.jobCount>=20){
-    if(!f.saltGolemJob&&!f.saltGolemDone&&!f.saltGolemReward) o.push(['支线BOSS：血盐巨像（赤河源头·寻踪·报酬120铜币）',acceptSaltGolem]);
+    if(!f.saltGolemJob&&!f.saltGolemDone&&!f.saltGolemReward) o.push(['支线BOSS：血盐巨像（报酬120铜币）',acceptSaltGolem]);
     if(f.saltGolemJob&&!f.saltGolemDone) o.push(['寻踪：血盐巨像（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.saltGolemDone&&!f.saltGolemReward) o.push(['交差：血盐巨像（+120铜币）',collectSaltGolem]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/20）',()=>{},true]);
   if(f.jobCount>=22){
-    if(!f.drownSoulJob&&!f.drownSoulDone&&!f.drownSoulReward) o.push(['支线BOSS：赤河溺魂（赤河岸边·寻踪·报酬90铜币）',acceptDrownSoul]);
+    if(!f.drownSoulJob&&!f.drownSoulDone&&!f.drownSoulReward) o.push(['支线BOSS：赤河溺魂（报酬90铜币）',acceptDrownSoul]);
     if(f.drownSoulJob&&!f.drownSoulDone) o.push(['寻踪：赤河溺魂（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.drownSoulDone&&!f.drownSoulReward) o.push(['交差：赤河溺魂（+90铜币）',collectDrownSoul]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/22）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.redKnightJob&&!f.redKnightDone) o.push(['悬赏：赤河骑士（寻踪·可重复·报酬45铜币）',acceptRedKnight]);
+    if(!f.redKnightJob&&!f.redKnightDone) o.push(['悬赏：赤河骑士（报酬45铜币）',acceptRedKnight]);
     if(f.redKnightJob&&!f.redKnightDone) o.push(['寻踪：赤河骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.redKnightDone) o.push(['交差：赤河骑士（+45铜币）',collectRedKnight]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
@@ -5478,18 +5514,18 @@ function gotoBoard8(){
     if(f.leoEyeTown==='landel'){
       if(!f.leoEyeJob&&!f.leoEyeDone) o.push(['支线：狮子之瞳（找回失物·寻踪）',acceptLeoEye]);
       if(f.leoEyeJob&&!f.leoEyeDone) o.push(['寻踪：狮子之瞳（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
-      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币，宝石归你）',collectLeoEye]);
+      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币）',collectLeoEye]);
     } else o.push(['？？？：狮子之瞳的委托不在本城（听说在'+LEO_TOWN_CN[f.leoEyeTown]+'）',()=>{},true]);
   }
   o.push(['交：收集铁料×4（报酬12铜币）',()=>deliverJob('铁料',4,12,gotoBoard8)]);
   o.push(['交：收集疮药膏×2（报酬10铜币）',()=>deliverJob('疮药膏',2,10,gotoBoard8)]);
   if(f.jobCount>=6){
-    if(!f.ironKnightJob&&!f.ironKnightDone) o.push(['悬赏：铁壳骑士（寻踪·可重复·报酬60铜币）',acceptIronKnight]);
+    if(!f.ironKnightJob&&!f.ironKnightDone) o.push(['悬赏：铁壳骑士（报酬60铜币）',acceptIronKnight]);
     if(f.ironKnightJob&&!f.ironKnightDone) o.push(['寻踪：铁壳骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.ironKnightDone) o.push(['交差：铁壳骑士（+60铜币）',collectIronKnight]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=24){
-    if(!f.mineGolemJob&&!f.mineGolemDone&&!f.mineGolemReward) o.push(['支线BOSS：矿脉巨像（废弃矿脉·寻踪·报酬150铜币）',acceptMineGolem]);
+    if(!f.mineGolemJob&&!f.mineGolemDone&&!f.mineGolemReward) o.push(['支线BOSS：矿脉巨像（报酬150铜币）',acceptMineGolem]);
     if(f.mineGolemJob&&!f.mineGolemDone) o.push(['寻踪：矿脉巨像（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.mineGolemDone&&!f.mineGolemReward) o.push(['交差：矿脉巨像（+150铜币）',collectMineGolem]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/24）',()=>{},true]);
@@ -5501,26 +5537,26 @@ function gotoBoard9(){
   addLibCityRows(o,'carwo');
   leoEyeEnsure();
   if(f.libW_carwo){
-    if(f.fortressTaken) o.push(['主线：灰墙要塞（已收复——现在是我们的地盘）',()=>{},true]);
-    else if(!f.fortressJob) o.push(['主线：收复灰墙要塞（北境前哨·夺回我们的地盘）',acceptFortress]);
-    else o.push(['出击：灰墙要塞（决战·夺回前哨）',gotoFortressFight]);
+    if(f.fortressTaken) o.push(['主线：灰墙要塞（已收复）',()=>{},true]);
+    else if(!f.fortressJob) o.push(['主线：收复灰墙要塞',acceptFortress]);
+    else o.push(['出击：灰墙要塞',gotoFortressFight]);
   }
   if(state.p.level>=30 && !f.regulus1){
     if(f.leoEyeTown==='carwo'){
       if(!f.leoEyeJob&&!f.leoEyeDone) o.push(['支线：狮子之瞳（找回失物·寻踪）',acceptLeoEye]);
       if(f.leoEyeJob&&!f.leoEyeDone) o.push(['寻踪：狮子之瞳（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
-      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币，宝石归你）',collectLeoEye]);
+      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币）',collectLeoEye]);
     } else o.push(['？？？：狮子之瞳的委托不在本城（听说在'+LEO_TOWN_CN[f.leoEyeTown]+'）',()=>{},true]);
   }
   o.push(['交：收集雹铁×2（报酬16铜币）',()=>deliverJob('雹铁',2,16,gotoBoard9)]);
   o.push(['交：收集兽皮×5（报酬12铜币）',()=>deliverJob('兽皮',5,12,gotoBoard9)]);
   if(f.jobCount>=6){
-    if(!f.hailKnightJob&&!f.hailKnightDone) o.push(['悬赏：雹铁骑士（寻踪·可重复·报酬62铜币）',acceptHailKnight]);
+    if(!f.hailKnightJob&&!f.hailKnightDone) o.push(['悬赏：雹铁骑士（报酬62铜币）',acceptHailKnight]);
     if(f.hailKnightJob&&!f.hailKnightDone) o.push(['寻踪：雹铁骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.hailKnightDone) o.push(['交差：雹铁骑士（+62铜币）',collectHailKnight]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=24){
-    if(!f.thunderbirdJob&&!f.thunderbirdDone&&!f.thunderbirdReward) o.push(['支线BOSS：雷崖雷鸟（海崖·寻踪·报酬160铜币）',acceptThunderbird]);
+    if(!f.thunderbirdJob&&!f.thunderbirdDone&&!f.thunderbirdReward) o.push(['支线BOSS：雷崖雷鸟（报酬160铜币）',acceptThunderbird]);
     if(f.thunderbirdJob&&!f.thunderbirdDone) o.push(['寻踪：雷崖雷鸟（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.thunderbirdDone&&!f.thunderbirdReward) o.push(['交差：雷崖雷鸟（+160铜币）',collectThunderbird]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/24）',()=>{},true]);
@@ -6524,17 +6560,17 @@ function gotoNewBoard(key){
   addLibTownRow(o,key);
   if(key==='silvershield')addLibTownRow(o,'fortress');
   if(key==='tideport'){
-    if(!f.tideMainJob&&!f.tideMainDone&&!f.tideMainReward) o.push(['主线：疏通港道（寻踪·海盗与海妖·报酬120铜币）',acceptTideMain]);
+    if(!f.tideMainJob&&!f.tideMainDone&&!f.tideMainReward) o.push(['主线：疏通港道（报酬120铜币）',acceptTideMain]);
     if(f.tideMainJob&&!f.tideMainDone) o.push(['港道（主线进行中）',gotoTideChannel]);
-    if(f.tideMainDone&&!f.tideMainReward) o.push(['交差：疏通港道（+120铜币，港道恢复通航）',collectTideMain]);
+    if(f.tideMainDone&&!f.tideMainReward) o.push(['交差：疏通港道（+120铜币）',collectTideMain]);
     if(f.tideMainReward) o.push(['主线：疏通港道（已完成·码头可坐船）',()=>{},true]);
   }
   if(key==='whitewater'){
     if(f.regulusGot&&!f.regulusDuelReward){
-      if(!f.regulusDuelJob&&!f.regulusDuelDone) o.push(['支线：与轩辕十四单挑（白水河畔·他等你·报酬150铜币）',acceptRegulusDuel]);
+      if(!f.regulusDuelJob&&!f.regulusDuelDone) o.push(['支线：与轩辕十四单挑（报酬150铜币）',acceptRegulusDuel]);
       if(f.regulusDuelJob&&!f.regulusDuelDone) o.push(['寻踪：与轩辕十四单挑（去城外游荡）',()=>{ print('他说过：白水河畔见——只带剑','dim'); }]);
-      if(f.regulusDuelDone) o.push(['交差：与轩辕十四单挑（+150铜币，他认了你）',collectRegulusDuel]);
-    } else if(f.regulusGot&&f.regulusDuelReward) o.push(['支线：与轩辕十四单挑（已完成——他称你为可敬的对手）',()=>{},true]);
+      if(f.regulusDuelDone) o.push(['交差：与轩辕十四单挑（+150铜币）',collectRegulusDuel]);
+    } else if(f.regulusGot&&f.regulusDuelReward) o.push(['支线：与轩辕十四单挑（已完成）',()=>{},true]);
   }
   d.deliver.forEach(dv=>o.push(['交：收集'+dv[0]+'×'+dv[1]+'（报酬'+dv[2]+'铜币）',()=>deliverJob(dv[0],dv[1],dv[2],()=>gotoNewBoard(key))]));
   o.push(['交：收集火绒×4（报酬8铜币）',()=>deliverJob('火绒',4,8,()=>gotoNewBoard(key))]);
@@ -6778,7 +6814,7 @@ function addBountyRows(o,key){
   const f=state.p.flags;
   BOUNTIES.forEach((b,i)=>{
     const K='bounty'+String.fromCharCode(65+i);
-    if(!f[K+'Job']&&!f[K+'Done']) o.push(['悬赏：'+b[0]+'（报酬'+b[7]+'铜币·当场开打）',()=>acceptBounty(i,key)]);
+    if(!f[K+'Job']&&!f[K+'Done']) o.push(['悬赏：'+b[0]+'（报酬'+b[7]+'铜币）',()=>acceptBounty(i,key)]);
     else if(f[K+'Done']) o.push(['交差：'+b[0]+'（+'+b[7]+'铜币）',()=>collectBounty(i,key)]);
   });
 }
@@ -6902,14 +6938,14 @@ function addLibTownRow(o,key){
   if(!t)return;
   if(f['libT_'+key+'Done']){ o.push(['解放：'+t.cn+'（已收复）',()=>{},true]); }
   else if(f['libT_'+key]){ o.push(['寻踪：解放·'+t.cn+'（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]); }
-  else o.push(['解放：'+t.cn+'（寻踪·报酬'+t.gold+'铜币）',()=>acceptLibTown(key)]);
+  else o.push(['解放：'+t.cn+'（报酬'+t.gold+'铜币）',()=>acceptLibTown(key)]);
 }
 function addLibCityRows(o,key){
   const f=state.p.flags; const c=libCity(key);
   if(!c)return;
   if(f['libW_'+key]){ o.push(['解放战争：'+c.cn+'（已解放）',()=>{},true]); return; }
   if(f['libC_'+key]&&!f['libC_'+key+'Done']){ o.push(['讨取祸首：'+c.cn+'（就在城内·决战）',()=>gotoLibCity(key)]); }
-  else if(!f['libC_'+key+'Done']){ o.push(['解放主线：'+c.cn+'（城内讨取·报酬'+c.gold+'铜币）',()=>acceptLibCity(key)]); }
+  else if(!f['libC_'+key+'Done']){ o.push(['解放主线：'+c.cn+'（报酬'+c.gold+'铜币）',()=>acceptLibCity(key)]); }
   if(f['libC_'+key+'Done']){
     const miss=c.needs.filter(n=>!(f['libT_'+n+'Done']||(libCity(n)&&f['libC_'+n+'Done'])));
     if(!miss.length)o.push(['⚔ 解放战争：'+c.cn+'（城内决战）',()=>gotoLibWar(key)]);
@@ -7005,7 +7041,7 @@ function gotoBlackThornBoard(){
   const f=state.p.flags; const o=[];
   HIGH_JOBS.forEach((hj,i)=>{
     if(f['highReward'+i]){ o.push([(hj[3]?'悬赏':'高危委托')+'：'+hj[0]+'（已完成）',()=>{},true]); return; }
-    if(!f['highJob'+i]&&!f['highDone'+i]) o.push([(hj[3]?'悬赏':'高危委托')+'：'+hj[0]+'（寻踪·报酬'+hj[2]+'铜币）',()=>acceptHighJob(i,'blackthorn')]);
+    if(!f['highJob'+i]&&!f['highDone'+i]) o.push([(hj[3]?'悬赏':'高危委托')+'：'+hj[0]+'（报酬'+hj[2]+'铜币）',()=>acceptHighJob(i,'blackthorn')]);
     else if(f['highJob'+i]&&!f['highDone'+i]) o.push(['寻踪：'+hj[0]+'（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     else if(f['highDone'+i]) o.push(['交差：'+hj[0]+'（+'+hj[2]+'铜币）',()=>collectHighJob(i)]);
   });
@@ -7015,7 +7051,7 @@ function gotoBlackThornBoard(){
     if(doneN>=10){ f.ampthisUnlocked=true; f.ampthisPending=true; print('城里的委托做够了十件——荒野里的雾起了变化，有什么在等你','hint'); }
     else o.push(['？？？：做完10件高危委托，荒野会记住你（当前 '+doneN+'/10）',()=>{},true]);
   } else if(!f.ampthisJoined){
-    o.push(['传说：雾里的笑——她还在城外游荡（击败她三次，再问她跟不跟你走）',()=>{ print('去城外游荡——雾最浓的时候，她会来','dim'); }]);
+    o.push(['传说：雾里的笑——她还在城外游荡',()=>{ print('去城外游荡——雾最浓的时候，她会来','dim'); }]);
   }
   o.push(['离开',backToTown]);
   scene('告示板','黑棘城的告示板钉满了高危委托——这里是刀口上讨生活的地方，24张委托，张张要命',o);
@@ -7254,7 +7290,6 @@ function lasputiWin(){
   addItem('妖僧残页',2); addItem('拉斯普提的碎甲片',1); addItem('疯狂核心',1); addItem('拉斯普提的毒血',1);
   print('他倒下去——笑得更大声了（妖僧残页×2·碎甲片·疯狂核心·毒血）','ok');
   if(!f.lasputiCandle){ f.lasputiCandle=true; addItem('疯子的蜡烛',1); print('他怀里滚出一根灰白的蜡烛——人皮的，这是通往格里莫的路','hint'); }
-  print('奥提斯的手从虚空里按下来——他的等级被压回'+f.lasputiLv+'（480秒后复活，越打越强）','dim');
   if(lasputiResume)lasputiResume(); else backToTown();
 }
 function lasputiTurn(def){
@@ -7776,7 +7811,7 @@ function gotoBoard2(){
     if(f.leoEyeTown==='cromford'){
       if(!f.leoEyeJob&&!f.leoEyeDone) o.push(['支线：狮子之瞳（找回失物·寻踪）',acceptLeoEye]);
       if(f.leoEyeJob&&!f.leoEyeDone) o.push(['寻踪：狮子之瞳（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
-      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币，宝石归你）',collectLeoEye]);
+      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币）',collectLeoEye]);
     } else o.push(['？？？：狮子之瞳的委托不在本城（听说在'+LEO_TOWN_CN[f.leoEyeTown]+'）',()=>{},true]);
   }
   if(f.dragonChain===1 && !f.dragonChainDone) o.push(['支线：龙之低语·其二（泥沼龙影）',()=>{ print('鳞痕指向北边的大泽','dim'); gotoRoad2(); }]);
@@ -7785,25 +7820,25 @@ function gotoBoard2(){
   if(!f.grainJob&&!f.grainDone) o.push(['接：护送磨坊粮食（大路8/小路12铜币）',()=>{ f.grainJob=true; print('磨坊主的粮食要赶在潮季前运出去','dim'); gotoRoad2(); }]);
   if(f.grainJob&&!f.grainDone) o.push(['粮食护送：粮车在北边路口',grainRoute]);
   if(f.grainDone) o.push(['交差：护送磨坊粮食（+'+(f.grainPay||0)+'铜币）',collectGrain]);
-  if(!f.frogJob&&!f.frogDone) o.push(['接：清蛙潮（沼蛙×3，报酬8铜币）',()=>{ f.frogJob=true; f.frogsLeft=3; print('蛙潮要漫进镇子了','dim'); gotoRoad2(); }]);
+  if(!f.frogJob&&!f.frogDone) o.push(['接：清蛙潮（报酬8铜币）',()=>{ f.frogJob=true; f.frogsLeft=3; print('蛙潮要漫进镇子了','dim'); gotoRoad2(); }]);
   if(f.frogJob&&!f.frogDone) o.push(['清蛙潮：还剩 '+f.frogsLeft+' 只',gotoFrogField]);
   if(f.frogDone) o.push(['交差：清蛙潮（+8铜币）',collectFrog]);
-  if(!f.potFrogJob&&!f.potFrogDone) o.push(['接：抓蛙供灶（沼蛙×3，报酬9铜币）',()=>{ f.potFrogJob=true; f.potFrogsLeft=3; print('酒馆后厨要新鲜的沼蛙','dim'); gotoRoad2(); }]);
+  if(!f.potFrogJob&&!f.potFrogDone) o.push(['接：抓蛙供灶（报酬9铜币）',()=>{ f.potFrogJob=true; f.potFrogsLeft=3; print('酒馆后厨要新鲜的沼蛙','dim'); gotoRoad2(); }]);
   if(f.potFrogJob&&!f.potFrogDone) o.push(['抓蛙供灶：还剩 '+f.potFrogsLeft+' 只',gotoPotFrog]);
   if(f.potFrogDone) o.push(['交差：抓蛙供灶（+9铜币）',collectPotFrog]);
-  if(!f.hunterJob2&&!f.hunter2Done&&!f.hunter2Reward) o.push(['接：猎人头颅（沼泽猎人·报酬12铜币）',()=>{ f.hunterJob2=true; print('一个沼泽猎人袭了商路','dim'); gotoRoad2(); }]);
+  if(!f.hunterJob2&&!f.hunter2Done&&!f.hunter2Reward) o.push(['接：猎人头颅（报酬12铜币）',()=>{ f.hunterJob2=true; print('一个沼泽猎人袭了商路','dim'); gotoRoad2(); }]);
   if(f.hunterJob2&&!f.hunter2Done) o.push(['寻踪：沼泽猎人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.hunter2Done&&!f.hunter2Reward) o.push(['交差：猎人头颅（+12铜币+蛙皮×2）',collectHunter2]);
   if(!f.scavJob&&!f.scavDone) o.push(['接：沼泽拾荒（报酬看运气）',acceptScav]);
   if(f.scavJob&&!f.scavDone) o.push(['拾荒：北边浅滩',gotoScav]);
   if(f.scavDone) o.push(['交差：沼泽拾荒（+5铜币）',collectScav]);
   if(f.jobCount>=3){
-    if(!f.queenJob&&!f.queenDone&&!f.queenReward) o.push(['BOSS委托：蛙后（南边大泽·报酬25铜币+蛙油膏×2）',acceptQueen]);
+    if(!f.queenJob&&!f.queenDone&&!f.queenReward) o.push(['BOSS委托：蛙后（报酬25铜币+蛙油膏×2）',acceptQueen]);
     if(f.queenJob&&!f.queenDone) o.push(['寻踪：蛙后（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.queenDone&&!f.queenReward) o.push(['交差：蛙后（+25铜币+蛙油膏×2）',collectQueen]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=5){
-    if(!f.mudJob&&!f.mudDone&&!f.mudReward) o.push(['BOSS委托：磨坊怪声（泥浆巨像·报酬30铜币+水渍石×2）',acceptMud]);
+    if(!f.mudJob&&!f.mudDone&&!f.mudReward) o.push(['BOSS委托：磨坊怪声（报酬30铜币+水渍石×2）',acceptMud]);
     if(f.mudJob&&!f.mudDone) o.push(['寻踪：泥浆巨像（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.mudDone&&!f.mudReward) o.push(['交差：磨坊怪声（+30铜币+水渍石×2）',collectMud]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/5）',()=>{},true]);
@@ -7813,32 +7848,32 @@ function gotoBoard2(){
     if(f.camp2Done&&!f.camp2Reward) o.push(['交差：蛙皮野人营地（+20铜币+蛙皮×3）',collectCamp2]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=12){
-    if(!f.hagJob2&&!f.hag2Done&&!f.hag2Reward) o.push(['高阶委托：沼泽妖婆（雾沼·报酬30铜币+草药×2）',acceptHag2]);
+    if(!f.hagJob2&&!f.hag2Done&&!f.hag2Reward) o.push(['高阶委托：沼泽妖婆（报酬30铜币+草药×2）',acceptHag2]);
     if(f.hagJob2&&!f.hag2Done) o.push(['寻踪：沼泽妖婆（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.hag2Done&&!f.hag2Reward) o.push(['交差：沼泽妖婆（+30铜币+草药×2）',collectHag2]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/12）',()=>{},true]);
   if(f.jobCount>=14){
-    if(!f.altarJob&&!f.altarDone&&!f.altarReward) o.push(['高危委托：沼潮祭坛（深沼·报酬48铜币+水渍石×3）',acceptAltar]);
+    if(!f.altarJob&&!f.altarDone&&!f.altarReward) o.push(['高危委托：沼潮祭坛（报酬48铜币+水渍石×3）',acceptAltar]);
     if(f.altarJob&&!f.altarDone) o.push(['寻踪：沼潮祭坛（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.altarDone&&!f.altarReward) o.push(['交差：沼潮祭坛（+48铜币+水渍石×3）',collectAltar]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   if(f.jobCount>=16){
-    if(!f.giantToadJob&&!f.giantToadDone&&!f.giantToadReward) o.push(['极危委托：沼底巨蟾（大泽最深处·报酬45铜币+蛙油膏×3）',acceptGiantToad]);
+    if(!f.giantToadJob&&!f.giantToadDone&&!f.giantToadReward) o.push(['极危委托：沼底巨蟾（报酬45铜币+蛙油膏×3）',acceptGiantToad]);
     if(f.giantToadJob&&!f.giantToadDone) o.push(['寻踪：沼底巨蟾（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.giantToadDone&&!f.giantToadReward) o.push(['交差：沼底巨蟾（+45铜币+蛙油膏×3）',collectGiantToad]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/16）',()=>{},true]);
   if(f.jobCount>=20){
-    if(!f.frogMomJob&&!f.frogMomDone&&!f.frogMomReward) o.push(['支线BOSS：蛙母（大泽中心·寻踪·报酬110铜币）',acceptFrogMom]);
+    if(!f.frogMomJob&&!f.frogMomDone&&!f.frogMomReward) o.push(['支线BOSS：蛙母（报酬110铜币）',acceptFrogMom]);
     if(f.frogMomJob&&!f.frogMomDone) o.push(['寻踪：蛙母（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.frogMomDone&&!f.frogMomReward) o.push(['交差：蛙母（+110铜币）',collectFrogMom]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/20）',()=>{},true]);
   if(f.jobCount>=22){
-    if(!f.mudCrawlerJob&&!f.mudCrawlerDone&&!f.mudCrawlerReward) o.push(['支线BOSS：沼泽蠕动者（泥沼深处·寻踪·报酬95铜币）',acceptMudCrawler]);
+    if(!f.mudCrawlerJob&&!f.mudCrawlerDone&&!f.mudCrawlerReward) o.push(['支线BOSS：沼泽蠕动者（报酬95铜币）',acceptMudCrawler]);
     if(f.mudCrawlerJob&&!f.mudCrawlerDone) o.push(['寻踪：沼泽蠕动者（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.mudCrawlerDone&&!f.mudCrawlerReward) o.push(['交差：沼泽蠕动者（+95铜币）',collectMudCrawler]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/22）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.tideKnightJob&&!f.tideKnightDone) o.push(['悬赏：潮岸骑士（寻踪·可重复·报酬48铜币）',acceptTideKnight]);
+    if(!f.tideKnightJob&&!f.tideKnightDone) o.push(['悬赏：潮岸骑士（报酬48铜币）',acceptTideKnight]);
     if(f.tideKnightJob&&!f.tideKnightDone) o.push(['寻踪：潮岸骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.tideKnightDone) o.push(['交差：潮岸骑士（+48铜币）',collectTideKnight]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
@@ -8076,29 +8111,29 @@ function gotoBoard3(){
   const f=state.p.flags; const o=[];
   addLibCityRows(o,'tanwo');
   leoEyeEnsure();
-  if(!f.fragJob&&!f.fragDone&&!f.fragReward) o.push(['传说讨伐：灰土高地龙（西边灰土高地·报酬120铜币+佛拉格拉克）',acceptFrag]);
+  if(!f.fragJob&&!f.fragDone&&!f.fragReward) o.push(['传说讨伐：灰土高地龙（报酬120铜币+佛拉格拉克）',acceptFrag]);
   if(f.fragJob&&!f.fragDone) o.push(['寻踪：灰土高地龙（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.fragDone&&!f.fragReward) o.push(['交差：灰土高地龙（+120铜币）',collectFrag]);
   if(state.p.level>=30 && !f.regulus1){
     if(f.leoEyeTown==='tanwo'){
       if(!f.leoEyeJob&&!f.leoEyeDone) o.push(['支线：狮子之瞳（找回失物·寻踪）',acceptLeoEye]);
       if(f.leoEyeJob&&!f.leoEyeDone) o.push(['寻踪：狮子之瞳（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
-      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币，宝石归你）',collectLeoEye]);
+      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币）',collectLeoEye]);
     } else o.push(['？？？：狮子之瞳的委托不在本城（听说在'+LEO_TOWN_CN[f.leoEyeTown]+'）',()=>{},true]);
   }
   if(f.dragonChain===2 && !f.dragonChainDone) o.push(['支线：龙之低语·其三（旱地龙背）',()=>{ print('鳞痕进了旱地','dim'); gotoRoad3(); }]);
   o.push(['交：收集灰土结晶×2（报酬14铜币）',()=>deliverJob('灰土结晶',2,14,gotoBoard3)]);
   o.push(['交：收集虱壳×5（报酬10铜币）',()=>deliverJob('虱壳',5,10,gotoBoard3)]);
-  if(!f.tideJob&&!f.tideDone) o.push(['接：清虱潮（三波怪物潮，报酬15铜币）',()=>{ f.tideJob=true; print('虱潮要吞了东边的荒地','dim'); gotoRoad3(); }]);
+  if(!f.tideJob&&!f.tideDone) o.push(['接：清虱潮（报酬15铜币）',()=>{ f.tideJob=true; print('虱潮要吞了东边的荒地','dim'); gotoRoad3(); }]);
   if(f.tideJob&&!f.tideDone) o.push(['清虱潮：东边荒地',gotoTide]);
   if(f.tideDone) o.push(['交差：清虱潮（+15铜币）',collectTide]);
-  if(!f.squadJob&&!f.squadDone) o.push(['接：灰衣骑士小队（成建制，报酬25铜币）',()=>{ f.squadJob=true; print('一支灰衣骑士小队盘踞在北边路口他们有队形，有口令，有队长','dim'); gotoRoad3(); }]);
+  if(!f.squadJob&&!f.squadDone) o.push(['接：灰衣骑士小队（报酬25铜币）',()=>{ f.squadJob=true; print('一支灰衣骑士小队盘踞在北边路口他们有队形，有口令，有队长','dim'); gotoRoad3(); }]);
   if(f.squadJob&&!f.squadDone) o.push(['寻踪：灰衣骑士小队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.squadDone) o.push(['交差：灰衣骑士小队（+25铜币）',collectSquad]);
   if(!f.mineJob&&!f.mineDone) o.push(['接：驱赶矿洞流民（报酬10铜币）',()=>{ f.mineJob=true; print('矿洞流民在镇外扎了营','dim'); gotoRoad3(); }]);
   if(f.mineJob&&!f.mineDone) o.push(['矿洞流民营地：南边矿口',gotoMine]);
   if(f.mineDone) o.push(['交差：驱赶矿洞流民（+10铜币）',collectMine]);
-  if(!f.ratJob&&!f.ratDone) o.push(['接：灭鼠（鼠群×3，报酬7铜币）',()=>{ f.ratJob=true; f.ratsLeft=3; print('粮仓被老鼠祸害了','dim'); gotoRoad3(); }]);
+  if(!f.ratJob&&!f.ratDone) o.push(['接：灭鼠（报酬7铜币）',()=>{ f.ratJob=true; f.ratsLeft=3; print('粮仓被老鼠祸害了','dim'); gotoRoad3(); }]);
   if(f.ratJob&&!f.ratDone) o.push(['灭鼠：还剩 '+f.ratsLeft+' 群',gotoRats]);
   if(f.ratDone) o.push(['交差：灭鼠（+7铜币）',collectRats]);
   if(!f.boneJob&&!f.boneDone&&!f.boneReward) o.push(['接：贩骨人（报酬14铜币+骨头×2）',acceptBone]);
@@ -8118,32 +8153,32 @@ function gotoBoard3(){
     if(f.lostDone&&!f.lostReward) o.push(['交差：失踪矿工（+24铜币+铁料×2）',collectLost]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=12){
-    if(!f.nestJob&&!f.nestDone&&!f.nestReward) o.push(['高阶委托：虱母巢穴（东边旱谷·报酬28铜币）',acceptNest]);
+    if(!f.nestJob&&!f.nestDone&&!f.nestReward) o.push(['高阶委托：虱母巢穴（报酬28铜币）',acceptNest]);
     if(f.nestJob&&!f.nestDone) o.push(['寻踪：虱母巢穴（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.nestDone&&!f.nestReward) o.push(['交差：虱母巢穴（+28铜币）',collectNest]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/12）',()=>{},true]);
   if(f.jobCount>=16){
-    if(!f.legionJob&&!f.legionDone&&!f.legionReward) o.push(['高危委托：灰衣征税总队（北边税卡·报酬60铜币+灰衣队长徽记×2）',acceptLegion]);
+    if(!f.legionJob&&!f.legionDone&&!f.legionReward) o.push(['高危委托：灰衣征税总队（报酬60铜币+灰衣队长徽记×2）',acceptLegion]);
     if(f.legionJob&&!f.legionDone) o.push(['寻踪：灰衣征税总队（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.legionDone&&!f.legionReward) o.push(['交差：灰衣征税总队（+60铜币+灰衣队长徽记×2）',collectLegion]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/16）',()=>{},true]);
   if(f.jobCount>=18){
-    if(!f.overseerJob&&!f.overseerDone&&!f.overseerReward) o.push(['极危委托：灰衣督军（北边税关·报酬65铜币+灰衣甲片×4）',acceptOverseer]);
+    if(!f.overseerJob&&!f.overseerDone&&!f.overseerReward) o.push(['极危委托：灰衣督军（报酬65铜币+灰衣甲片×4）',acceptOverseer]);
     if(f.overseerJob&&!f.overseerDone) o.push(['寻踪：灰衣督军（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.overseerDone&&!f.overseerReward) o.push(['交差：灰衣督军（+65铜币+灰衣甲片×4）',collectOverseer]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/18）',()=>{},true]);
   if(f.jobCount>=20){
-    if(!f.liceKingJob&&!f.liceKingDone&&!f.liceKingReward) o.push(['支线BOSS：虱王（旱谷深处·寻踪·报酬110铜币）',acceptLiceKing]);
+    if(!f.liceKingJob&&!f.liceKingDone&&!f.liceKingReward) o.push(['支线BOSS：虱王（报酬110铜币）',acceptLiceKing]);
     if(f.liceKingJob&&!f.liceKingDone) o.push(['寻踪：虱王（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.liceKingDone&&!f.liceKingReward) o.push(['交差：虱王（+110铜币）',collectLiceKing]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/20）',()=>{},true]);
   if(f.jobCount>=22){
-    if(!f.plagueWeaverJob&&!f.plagueWeaverDone&&!f.plagueWeaverReward) o.push(['支线BOSS：疫病编织者（荒地·寻踪·报酬100铜币）',acceptPlagueWeaver]);
+    if(!f.plagueWeaverJob&&!f.plagueWeaverDone&&!f.plagueWeaverReward) o.push(['支线BOSS：疫病编织者（报酬100铜币）',acceptPlagueWeaver]);
     if(f.plagueWeaverJob&&!f.plagueWeaverDone) o.push(['寻踪：疫病编织者（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.plagueWeaverDone&&!f.plagueWeaverReward) o.push(['交差：疫病编织者（+100铜币）',collectPlagueWeaver]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/22）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.greyKnight2Job&&!f.greyKnight2Done) o.push(['悬赏：灰甲骑士（寻踪·可重复·报酬50铜币）',acceptGreyKnight2]);
+    if(!f.greyKnight2Job&&!f.greyKnight2Done) o.push(['悬赏：灰甲骑士（报酬50铜币）',acceptGreyKnight2]);
     if(f.greyKnight2Job&&!f.greyKnight2Done) o.push(['寻踪：灰甲骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.greyKnight2Done) o.push(['交差：灰甲骑士（+50铜币）',collectGreyKnight2]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
@@ -8531,7 +8566,7 @@ function gotoBoard4(){
     if(f.leoEyeTown==='lienfiel'){
       if(!f.leoEyeJob&&!f.leoEyeDone) o.push(['支线：狮子之瞳（找回失物·寻踪）',acceptLeoEye]);
       if(f.leoEyeJob&&!f.leoEyeDone) o.push(['寻踪：狮子之瞳（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
-      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币，宝石归你）',collectLeoEye]);
+      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币）',collectLeoEye]);
     } else o.push(['？？？：狮子之瞳的委托不在本城（听说在'+LEO_TOWN_CN[f.leoEyeTown]+'）',()=>{},true]);
   }
   if(f.regulus3 && !f.regulus4){
@@ -8542,52 +8577,52 @@ function gotoBoard4(){
   if(f.dragonChain===3 && !f.dragonChainDone) o.push(['支线：龙之低语·其四（骨息）',()=>{ print('鳞痕进了古墓地','dim'); gotoRoad4(); }]);
   o.push(['交：收集送葬骨灰×3（报酬15铜币）',()=>deliverJob('送葬骨灰',3,15,gotoBoard4)]);
   o.push(['交：收集苦蜜蜡×4（报酬12铜币）',()=>deliverJob('苦蜜蜡',4,12,gotoBoard4)]);
-  if(!f.fliesJob&&!f.fliesDone) o.push(['接：驱蝇（蝇群×3，报酬7铜币）',()=>{ f.fliesJob=true; f.fliesLeft=3; print('晒场快被蝇群占了','dim'); gotoRoad4(); }]);
+  if(!f.fliesJob&&!f.fliesDone) o.push(['接：驱蝇（报酬7铜币）',()=>{ f.fliesJob=true; f.fliesLeft=3; print('晒场快被蝇群占了','dim'); gotoRoad4(); }]);
   if(f.fliesJob&&!f.fliesDone) o.push(['驱蝇：还剩 '+f.fliesLeft+' 群',gotoFlies]);
   if(f.fliesDone) o.push(['交差：驱蝇（+7铜币）',collectFlies]);
-  if(!f.riteJob&&!f.riteDone&&!f.riteReward) o.push(['接：安魂仪式（护灵柩入土，报酬12铜币+安魂十字）',()=>{ f.riteJob=true; print('镇西的老鞋匠死了神父要给他办安魂仪式','dim'); gotoChurch(); }]);
+  if(!f.riteJob&&!f.riteDone&&!f.riteReward) o.push(['接：安魂仪式（报酬12铜币+安魂十字）',()=>{ f.riteJob=true; print('镇西的老鞋匠死了神父要给他办安魂仪式','dim'); gotoChurch(); }]);
   if(f.riteJob&&!f.riteDone) o.push(['安魂仪式：灵柩停在教堂后',gotoRite]);
   if(f.riteDone&&!f.riteReward) o.push(['交差：安魂仪式（+12铜币+安魂十字）',collectRite]);
-  if(!f.honeyJob4&&!f.honey4Done&&!f.honey4Reward) o.push(['接：苦蜜猎人（蜜草坡·报酬14铜币+苦蜜蜡）',()=>{ f.honeyJob4=true; print('蜜草坡的苦蜜猎人劫了采蜜人','dim'); gotoRoad4(); }]);
+  if(!f.honeyJob4&&!f.honey4Done&&!f.honey4Reward) o.push(['接：苦蜜猎人（报酬14铜币+苦蜜蜡）',()=>{ f.honeyJob4=true; print('蜜草坡的苦蜜猎人劫了采蜜人','dim'); gotoRoad4(); }]);
   if(f.honeyJob4&&!f.honey4Done) o.push(['寻踪：苦蜜猎人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.honey4Done&&!f.honey4Reward) o.push(['交差：苦蜜猎人（+14铜币+苦蜜蜡×2）',collectHoney4]);
   if(f.jobCount>=3){
-    if(!f.robberJob4&&!f.robber4Done&&!f.robber4Reward) o.push(['BOSS委托：墓贼（古墓地·报酬20铜币+苦蜜蜡×2）',acceptRobber4]);
+    if(!f.robberJob4&&!f.robber4Done&&!f.robber4Reward) o.push(['BOSS委托：墓贼（报酬20铜币+苦蜜蜡×2）',acceptRobber4]);
     if(f.robberJob4&&!f.robber4Done) o.push(['寻踪：墓贼（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.robber4Done&&!f.robber4Reward) o.push(['交差：墓贼（+20铜币+苦蜜蜡×2）',collectRobber4]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.relicJob4&&!f.relic4Done&&!f.relic4Reward) o.push(['BOSS委托：蝇群遗族（北边腐田·报酬28铜币+苦蜜蜡×3）',acceptRelic4]);
+    if(!f.relicJob4&&!f.relic4Done&&!f.relic4Reward) o.push(['BOSS委托：蝇群遗族（报酬28铜币+苦蜜蜡×3）',acceptRelic4]);
     if(f.relicJob4&&!f.relic4Done) o.push(['寻踪：蝇群遗族（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.relic4Done&&!f.relic4Reward) o.push(['交差：蝇群遗族（+28铜币+苦蜜蜡×3）',collectRelic4]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=10){
-    if(!f.militiaJob4&&!f.militia4Done&&!f.militia4Reward) o.push(['BOSS委托：教堂民兵（成建制·报酬40铜币+苦蜜酒×2）',acceptMilitia4]);
+    if(!f.militiaJob4&&!f.militia4Done&&!f.militia4Reward) o.push(['BOSS委托：教堂民兵（报酬40铜币+苦蜜酒×2）',acceptMilitia4]);
     if(f.militiaJob4&&!f.militia4Done) o.push(['寻踪：教堂民兵（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.militia4Done&&!f.militia4Reward) o.push(['交差：教堂民兵（+40铜币+苦蜜酒×2）',collectMilitia4]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
   if(f.jobCount>=14){
-    if(!f.deaconJob&&!f.deaconDone&&!f.deaconReward) o.push(['高危委托：教堂大执事（圣坛·报酬55铜币+苦蜜蜡×3）',acceptDeacon]);
+    if(!f.deaconJob&&!f.deaconDone&&!f.deaconReward) o.push(['高危委托：教堂大执事（报酬55铜币+苦蜜蜡×3）',acceptDeacon]);
     if(f.deaconJob&&!f.deaconDone) o.push(['寻踪：教堂大执事（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.deaconDone&&!f.deaconReward) o.push(['交差：教堂大执事（+55铜币+苦蜜蜡×3）',collectDeacon]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   if(f.jobCount>=16){
-    if(!f.facelessJob&&!f.facelessDone&&!f.facelessReward) o.push(['极危委托：无面神父（教堂后门·报酬50铜币+送葬骨灰×3）',acceptFaceless]);
+    if(!f.facelessJob&&!f.facelessDone&&!f.facelessReward) o.push(['极危委托：无面神父（报酬50铜币+送葬骨灰×3）',acceptFaceless]);
     if(f.facelessJob&&!f.facelessDone) o.push(['寻踪：无面神父（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.facelessDone&&!f.facelessReward) o.push(['交差：无面神父（+50铜币+送葬骨灰×3）',collectFaceless]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/16）',()=>{},true]);
   if(f.jobCount>=20){
-    if(!f.cryptGuardJob&&!f.cryptGuardDone&&!f.cryptGuardReward) o.push(['支线BOSS：墓窟守卫（墓窟入口·寻踪·报酬120铜币）',acceptCryptGuard]);
+    if(!f.cryptGuardJob&&!f.cryptGuardDone&&!f.cryptGuardReward) o.push(['支线BOSS：墓窟守卫（报酬120铜币）',acceptCryptGuard]);
     if(f.cryptGuardJob&&!f.cryptGuardDone) o.push(['寻踪：墓窟守卫（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.cryptGuardDone&&!f.cryptGuardReward) o.push(['交差：墓窟守卫（+120铜币）',collectCryptGuard]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/20）',()=>{},true]);
   if(f.jobCount>=22){
-    if(!f.coffinSaintJob&&!f.coffinSaintDone&&!f.coffinSaintReward) o.push(['支线BOSS：棺中圣女（墓窟深处·寻踪·报酬110铜币）',acceptCoffinSaint]);
+    if(!f.coffinSaintJob&&!f.coffinSaintDone&&!f.coffinSaintReward) o.push(['支线BOSS：棺中圣女（报酬110铜币）',acceptCoffinSaint]);
     if(f.coffinSaintJob&&!f.coffinSaintDone) o.push(['寻踪：棺中圣女（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.coffinSaintDone&&!f.coffinSaintReward) o.push(['交差：棺中圣女（+110铜币）',collectCoffinSaint]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/22）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.rotKnightJob&&!f.rotKnightDone) o.push(['悬赏：腐甲骑士（寻踪·可重复·报酬52铜币）',acceptRotKnight]);
+    if(!f.rotKnightJob&&!f.rotKnightDone) o.push(['悬赏：腐甲骑士（报酬52铜币）',acceptRotKnight]);
     if(f.rotKnightJob&&!f.rotKnightDone) o.push(['寻踪：腐甲骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.rotKnightDone) o.push(['交差：腐甲骑士（+52铜币）',collectRotKnight]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
@@ -8850,14 +8885,14 @@ function gotoBoard5(){
   const f=state.p.flags; const o=[];
   addLibCityRows(o,'warrin');
   leoEyeEnsure();
-  if(!f.briJob&&!f.briDone&&!f.briReward) o.push(['传说讨伐：魔化之人（西郊旷野·报酬150铜币+布里欧纳克）',acceptBrionac]);
+  if(!f.briJob&&!f.briDone&&!f.briReward) o.push(['传说讨伐：魔化之人（报酬150铜币+布里欧纳克）',acceptBrionac]);
   if(f.briJob&&!f.briDone) o.push(['寻踪：魔化之人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.briDone&&!f.briReward) o.push(['交差：魔化之人（+150铜币）',collectBrionac]);
   if(state.p.level>=30 && !f.regulus1){
     if(f.leoEyeTown==='warrin'){
       if(!f.leoEyeJob&&!f.leoEyeDone) o.push(['支线：狮子之瞳（找回失物·寻踪）',acceptLeoEye]);
       if(f.leoEyeJob&&!f.leoEyeDone) o.push(['寻踪：狮子之瞳（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
-      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币，宝石归你）',collectLeoEye]);
+      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币）',collectLeoEye]);
     } else o.push(['？？？：狮子之瞳的委托不在本城（听说在'+LEO_TOWN_CN[f.leoEyeTown]+'）',()=>{},true]);
   }
   if(f.regulus1 && !f.regulus2){
@@ -8868,49 +8903,49 @@ function gotoBoard5(){
   if(f.dragonChain===4 && !f.dragonChainDone) o.push(['支线：龙之低语·其五（渡河）',()=>{ print('鳞痕到了渡口','dim'); gotoRoad5(); }]);
   o.push(['交：收集铁料×3（报酬9铜币）',()=>deliverJob('铁料',3,9,gotoBoard5)]);
   o.push(['交：收集骨器×4（报酬12铜币）',()=>deliverJob('骨器',4,12,gotoBoard5)]);
-  if(!f.beastJob&&!f.beastDone) o.push(['接：赶牲口（灰肉牲口×3，报酬8铜币）',()=>{ f.beastJob=true; f.beastsLeft=3; print('河边草场的牲口疯了，见人就撞','dim'); gotoRoad5(); }]);
+  if(!f.beastJob&&!f.beastDone) o.push(['接：赶牲口（报酬8铜币）',()=>{ f.beastJob=true; f.beastsLeft=3; print('河边草场的牲口疯了，见人就撞','dim'); gotoRoad5(); }]);
   if(f.beastJob&&!f.beastDone) o.push(['赶牲口：还剩 '+f.beastsLeft+' 头',gotoBeast]);
   if(f.beastDone) o.push(['交差：赶牲口（+8铜币）',collectBeast]);
-  if(!f.haulerJob&&!f.haulerDone&&!f.haulerReward) o.push(['接：纤夫帮（西码头·报酬14铜币+骨器×2）',()=>{ f.haulerJob=true; print('纤夫帮占了西码头，不交份子钱不让上船','dim'); gotoRoad5(); }]);
+  if(!f.haulerJob&&!f.haulerDone&&!f.haulerReward) o.push(['接：纤夫帮（报酬14铜币+骨器×2）',()=>{ f.haulerJob=true; print('纤夫帮占了西码头，不交份子钱不让上船','dim'); gotoRoad5(); }]);
   if(f.haulerJob&&!f.haulerDone) o.push(['寻踪：纤夫帮（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.haulerDone&&!f.haulerReward) o.push(['交差：纤夫帮（+14铜币+骨器×2）',collectHauler]);
   if(f.jobCount>=3){
-    if(!f.craftJob&&!f.craftDone&&!f.craftReward) o.push(['BOSS委托：骨匠帮（北边骨场·报酬30铜币+疫骨×2）',acceptCraft]);
+    if(!f.craftJob&&!f.craftDone&&!f.craftReward) o.push(['BOSS委托：骨匠帮（报酬30铜币+疫骨×2）',acceptCraft]);
     if(f.craftJob&&!f.craftDone) o.push(['寻踪：骨匠帮（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.craftDone&&!f.craftReward) o.push(['交差：骨匠帮（+30铜币+疫骨×2）',collectCraft]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.plagueRelicJob5&&!f.plagueRelic5Done&&!f.plagueRelic5Reward) o.push(['BOSS委托：疫岸遗族（渡口南岸·报酬35铜币+骨器×3）',acceptPlagueRelic5]);
+    if(!f.plagueRelicJob5&&!f.plagueRelic5Done&&!f.plagueRelic5Reward) o.push(['BOSS委托：疫岸遗族（报酬35铜币+骨器×3）',acceptPlagueRelic5]);
     if(f.plagueRelicJob5&&!f.plagueRelic5Done) o.push(['寻踪：疫岸遗族（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.plagueRelic5Done&&!f.plagueRelic5Reward) o.push(['交差：疫岸遗族（+35铜币+骨器×3）',collectPlagueRelic5]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=10){
-    if(!f.plagueKnightJob&&!f.plagueKnightDone&&!f.plagueKnightReward) o.push(['高阶委托：疫岸野骑士（渡口北岸·报酬48铜币+疫骨×3）',acceptPlagueKnight5]);
+    if(!f.plagueKnightJob&&!f.plagueKnightDone&&!f.plagueKnightReward) o.push(['高阶委托：疫岸野骑士（报酬48铜币+疫骨×3）',acceptPlagueKnight5]);
     if(f.plagueKnightJob&&!f.plagueKnightDone) o.push(['寻踪：疫岸野骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.plagueKnightDone&&!f.plagueKnightReward) o.push(['交差：疫岸野骑士（+48铜币+疫骨×3）',collectPlagueKnight5]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
   if(f.jobCount>=14){
-    if(!f.ferryJob&&!f.ferryDone&&!f.ferryReward) o.push(['高危委托：渡口怪事（老渡口·报酬65铜币+骨器×4）',acceptFerry]);
+    if(!f.ferryJob&&!f.ferryDone&&!f.ferryReward) o.push(['高危委托：渡口怪事（报酬65铜币+骨器×4）',acceptFerry]);
     if(f.ferryJob&&!f.ferryDone) o.push(['寻踪：渡口怪事（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.ferryDone&&!f.ferryReward) o.push(['交差：渡口怪事（+65铜币+骨器×4）',collectFerry]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   if(f.jobCount>=16){
-    if(!f.bonePlagueJob&&!f.bonePlagueDone&&!f.bonePlagueReward) o.push(['极危委托：骨瘟术士（疫雾深处·报酬55铜币+疫骨×5）',acceptBonePlague]);
+    if(!f.bonePlagueJob&&!f.bonePlagueDone&&!f.bonePlagueReward) o.push(['极危委托：骨瘟术士（报酬55铜币+疫骨×5）',acceptBonePlague]);
     if(f.bonePlagueJob&&!f.bonePlagueDone) o.push(['寻踪：骨瘟术士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.bonePlagueDone&&!f.bonePlagueReward) o.push(['交差：骨瘟术士（+55铜币+疫骨×5）',collectBonePlague]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/16）',()=>{},true]);
   if(f.jobCount>=20){
-    if(!f.boneDragonJob&&!f.boneDragonDone&&!f.boneDragonReward) o.push(['支线BOSS：渡河骨龙（渡口骨堆·寻踪·报酬140铜币）',acceptBoneDragon]);
+    if(!f.boneDragonJob&&!f.boneDragonDone&&!f.boneDragonReward) o.push(['支线BOSS：渡河骨龙（报酬140铜币）',acceptBoneDragon]);
     if(f.boneDragonJob&&!f.boneDragonDone) o.push(['寻踪：渡河骨龙（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.boneDragonDone&&!f.boneDragonReward) o.push(['交差：渡河骨龙（+140铜币）',collectBoneDragon]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/20）',()=>{},true]);
   if(f.jobCount>=22){
-    if(!f.ferrymanJob&&!f.ferrymanDone&&!f.ferrymanReward) o.push(['支线BOSS：渡河摆渡人（老渡口·寻踪·报酬105铜币）',acceptFerryman]);
+    if(!f.ferrymanJob&&!f.ferrymanDone&&!f.ferrymanReward) o.push(['支线BOSS：渡河摆渡人（报酬105铜币）',acceptFerryman]);
     if(f.ferrymanJob&&!f.ferrymanDone) o.push(['寻踪：渡河摆渡人（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.ferrymanDone&&!f.ferrymanReward) o.push(['交差：渡河摆渡人（+105铜币）',collectFerryman]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/22）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.shoreKnightJob&&!f.shoreKnightDone) o.push(['悬赏：疫岸骑士（寻踪·可重复·报酬55铜币）',acceptShoreKnight]);
+    if(!f.shoreKnightJob&&!f.shoreKnightDone) o.push(['悬赏：疫岸骑士（报酬55铜币）',acceptShoreKnight]);
     if(f.shoreKnightJob&&!f.shoreKnightDone) o.push(['寻踪：疫岸骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.shoreKnightDone) o.push(['交差：疫岸骑士（+55铜币）',collectShoreKnight]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
@@ -9194,7 +9229,7 @@ function gotoBoard6(){
     if(f.leoEyeTown==='whitestone'){
       if(!f.leoEyeJob&&!f.leoEyeDone) o.push(['支线：狮子之瞳（找回失物·寻踪）',acceptLeoEye]);
       if(f.leoEyeJob&&!f.leoEyeDone) o.push(['寻踪：狮子之瞳（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
-      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币，宝石归你）',collectLeoEye]);
+      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币）',collectLeoEye]);
     } else o.push(['？？？：狮子之瞳的委托不在本城（听说在'+LEO_TOWN_CN[f.leoEyeTown]+'）',()=>{},true]);
   }
   if(f.regulus2 && !f.regulus3){
@@ -9209,29 +9244,29 @@ function gotoBoard6(){
   }
   o.push(['交：收集兽皮×4（报酬10铜币）',()=>deliverJob('兽皮',4,10,gotoBoard6)]);
   o.push(['交：收集麦饼×3（报酬9铜币）',()=>deliverJob('麦饼',3,9,gotoBoard6)]);
-  if(!f.clearJob&&!f.clearDone) o.push(['接：商路清障（山贼×3，报酬9铜币）',()=>{ f.clearJob=true; f.clearsLeft=3; print('西边山道又闹山贼，商队绕着走','dim'); gotoRoad6(); }]);
+  if(!f.clearJob&&!f.clearDone) o.push(['接：商路清障（报酬9铜币）',()=>{ f.clearJob=true; f.clearsLeft=3; print('西边山道又闹山贼，商队绕着走','dim'); gotoRoad6(); }]);
   if(f.clearJob&&!f.clearDone) o.push(['商路清障：还剩 '+f.clearsLeft+' 伙',gotoClear]);
   if(f.clearDone) o.push(['交差：商路清障（+9铜币）',collectClear]);
   if(!f.escrowActive&&!f.escrowDone) o.push(['接：护送税银（大路8/小路12铜币）',()=>{ f.escrowActive=true; print('税银车要往北送，路上不太平','dim'); gotoRoad6(); }]);
   if(f.escrowActive&&!f.escrowDone) o.push(['税银护送：税车在镇口',escrowRoute]);
   if(f.escrowDone) o.push(['交差：护送税银（+'+(f.escrowPay||0)+'铜币）',collectEscrow]);
   if(f.jobCount>=3){
-    if(!f.wolfJob&&!f.wolfDone&&!f.wolfReward) o.push(['BOSS委托：野狼王（北边野林·报酬20铜币+兽皮×3）',acceptWolf]);
+    if(!f.wolfJob&&!f.wolfDone&&!f.wolfReward) o.push(['BOSS委托：野狼王（报酬20铜币+兽皮×3）',acceptWolf]);
     if(f.wolfJob&&!f.wolfDone) o.push(['寻踪：野狼王（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.wolfDone&&!f.wolfReward) o.push(['交差：野狼王（+20铜币+兽皮×3）',collectWolf]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.duelJob&&!f.duelDone&&!f.duelReward) o.push(['高阶委托：巡防骑士比武（校场·报酬25铜币+骑士剑）',acceptDuel]);
+    if(!f.duelJob&&!f.duelDone&&!f.duelReward) o.push(['高阶委托：巡防骑士比武（报酬25铜币+骑士剑）',acceptDuel]);
     if(f.duelJob&&!f.duelDone) o.push(['寻踪：巡防骑士比武（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.duelDone&&!f.duelReward) o.push(['交差：巡防骑士比武（+25铜币+骑士剑）',collectDuel]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=10){
-    if(!f.captainJob&&!f.captainDone&&!f.captainReward) o.push(['高危委托：巡防队长（镇外大路·报酬55铜币+骑士剑×2）',acceptCaptain6]);
+    if(!f.captainJob&&!f.captainDone&&!f.captainReward) o.push(['高危委托：巡防队长（报酬55铜币+骑士剑×2）',acceptCaptain6]);
     if(f.captainJob&&!f.captainDone) o.push(['寻踪：巡防队长（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.captainDone&&!f.captainReward) o.push(['交差：巡防队长（+55铜币+骑士剑×2）',collectCaptain6]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
   if(f.jobCount>=14){
-    if(!f.banditKingJob&&!f.banditKingDone&&!f.banditKingReward) o.push(['极危委托：山贼王（西边山道·报酬40铜币+烟幕弹×2）',acceptBanditKing]);
+    if(!f.banditKingJob&&!f.banditKingDone&&!f.banditKingReward) o.push(['极危委托：山贼王（报酬40铜币+烟幕弹×2）',acceptBanditKing]);
     if(f.banditKingJob&&!f.banditKingDone) o.push(['寻踪：山贼王（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.banditKingDone&&!f.banditKingReward) o.push(['交差：山贼王（+40铜币+烟幕弹×2）',collectBanditKing]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
@@ -9461,41 +9496,41 @@ function gotoBoard7(){
     if(f.leoEyeTown==='windcap'){
       if(!f.leoEyeJob&&!f.leoEyeDone) o.push(['支线：狮子之瞳（找回失物·寻踪）',acceptLeoEye]);
       if(f.leoEyeJob&&!f.leoEyeDone) o.push(['寻踪：狮子之瞳（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
-      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币，宝石归你）',collectLeoEye]);
+      if(f.leoEyeDone&&!f.leoEyeReward) o.push(['交差：狮子之瞳（+80铜币）',collectLeoEye]);
     } else o.push(['？？？：狮子之瞳的委托不在本城（听说在'+LEO_TOWN_CN[f.leoEyeTown]+'）',()=>{},true]);
   }
   if(f.dragonChain===5 && !f.dragonChainDone) o.push(['支线：龙之低语·终章（鲸泉）',()=>{ print('最后的鳞痕指向海崖洞窟','dim'); gotoRoad7(); }]);
   o.push(['交：收集水渍石×3（报酬15铜币）',()=>deliverJob('水渍石',3,15,gotoBoard7)]);
   o.push(['交：收集海鱼×5（报酬10铜币）',()=>deliverJob('海鱼',5,10,gotoBoard7)]);
-  if(!f.fishJob&&!f.fishDone) o.push(['接：出海捕鱼（三网，渔获归你，报酬5铜币）',()=>{ f.fishJob=true; f.fishNets=3; print('船主在码头上招手，船已经准备好了','dim'); gotoRoad7(); }]);
+  if(!f.fishJob&&!f.fishDone) o.push(['接：出海捕鱼（报酬5铜币）',()=>{ f.fishJob=true; f.fishNets=3; print('船主在码头上招手，船已经准备好了','dim'); gotoRoad7(); }]);
   if(f.fishJob&&!f.fishDone) o.push(['出海捕鱼：还剩 '+f.fishNets+' 网',gotoFish]);
   if(f.fishDone) o.push(['交差：出海捕鱼（+5铜币）',collectFish]);
-  if(!f.pirateJob&&!f.pirateDone&&!f.pirateReward) o.push(['接：驱赶海盗（南码头·报酬18铜币+海鱼×2）',()=>{ f.pirateJob=true; print('一伙海盗占了南码头，见船就抢','dim'); gotoRoad7(); }]);
+  if(!f.pirateJob&&!f.pirateDone&&!f.pirateReward) o.push(['接：驱赶海盗（报酬18铜币+海鱼×2）',()=>{ f.pirateJob=true; print('一伙海盗占了南码头，见船就抢','dim'); gotoRoad7(); }]);
   if(f.pirateJob&&!f.pirateDone) o.push(['寻踪：海盗（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.pirateDone&&!f.pirateReward) o.push(['交差：驱赶海盗（+18铜币+海鱼×2）',collectPirate]);
   if(f.jobCount>=3){
-    if(!f.saltGhostJob&&!f.saltGhostDone&&!f.saltGhostReward) o.push(['BOSS委托：盐鬼（盐田·报酬28铜币+水渍石×2）',acceptSaltGhost]);
+    if(!f.saltGhostJob&&!f.saltGhostDone&&!f.saltGhostReward) o.push(['BOSS委托：盐鬼（报酬28铜币+水渍石×2）',acceptSaltGhost]);
     if(f.saltGhostJob&&!f.saltGhostDone) o.push(['寻踪：盐鬼（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.saltGhostDone&&!f.saltGhostReward) o.push(['交差：盐鬼（+28铜币+水渍石×2）',collectSaltGhost]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/3）',()=>{},true]);
   if(f.jobCount>=6){
-    if(!f.seaWolfJob&&!f.seaWolfDone&&!f.seaWolfReward) o.push(['高阶委托：海狼群（北滩·报酬30铜币+兽皮×3）',acceptSeaWolf]);
+    if(!f.seaWolfJob&&!f.seaWolfDone&&!f.seaWolfReward) o.push(['高阶委托：海狼群（报酬30铜币+兽皮×3）',acceptSeaWolf]);
     if(f.seaWolfJob&&!f.seaWolfDone) o.push(['寻踪：海狼群（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.seaWolfDone&&!f.seaWolfReward) o.push(['交差：海狼群（+30铜币+兽皮×3）',collectSeaWolf]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/6）',()=>{},true]);
   if(f.jobCount>=10){
-    if(!f.lairJob&&!f.lairDone&&!f.lairReward) o.push(['地城委托：探索龙巢穴（海崖洞窟·报酬50铜币+龙鳞×2）',acceptLair]);
+    if(!f.lairJob&&!f.lairDone&&!f.lairReward) o.push(['地城委托：探索龙巢穴（报酬50铜币+龙鳞×2）',acceptLair]);
     if(f.lairJob&&!f.lairDone) o.push(['寻踪：龙巢穴（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.lairDone&&!f.lairReward) o.push(['交差：探索龙巢穴（+50铜币+龙鳞×2）',collectLair]);
     if(f.lairUnlocked||f.lairReward||f.lairDone) o.push(['龙巢深处：无限下潜（肉鸽·最高第'+f.lairBest+'层）',gotoLairEndless]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/10）',()=>{},true]);
   if(f.jobCount>=14){
-    if(!f.lighthouseJob&&!f.lighthouseDone&&!f.lighthouseReward) o.push(['高危委托：灯塔怪光（东角灯塔·报酬70铜币+精炼熔断钢铁）',acceptLighthouseJob]);
+    if(!f.lighthouseJob&&!f.lighthouseDone&&!f.lighthouseReward) o.push(['高危委托：灯塔怪光（报酬70铜币+精炼熔断钢铁）',acceptLighthouseJob]);
     if(f.lighthouseJob&&!f.lighthouseDone) o.push(['寻踪：灯塔怪光（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.lighthouseDone&&!f.lighthouseReward) o.push(['交差：灯塔怪光（+70铜币+精炼熔断钢铁）',collectLighthouseJob]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/14）',()=>{},true]);
   if(f.jobCount>=18){
-    if(!f.sirenJob&&!f.sirenDone&&!f.sirenReward) o.push(['极危委托：深潜海妖（北滩·报酬70铜币+大鱼×3）',acceptSiren]);
+    if(!f.sirenJob&&!f.sirenDone&&!f.sirenReward) o.push(['极危委托：深潜海妖（报酬70铜币+大鱼×3）',acceptSiren]);
     if(f.sirenJob&&!f.sirenDone) o.push(['寻踪：深潜海妖（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     if(f.sirenDone&&!f.sirenReward) o.push(['交差：深潜海妖（+70铜币+大鱼×3）',collectSiren]);
   } else o.push(['？？？——完成更多活计后解锁（当前'+f.jobCount+'/18）',()=>{},true]);
