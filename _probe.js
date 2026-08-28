@@ -1,46 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>伊索尔德 / ISOLDE（第一章·南境）</title>
-<style>
-  :root{ --bg:#050805; --fg:#b8e8c0; --dim:#6f9a78; --amber:#e0b96a; --red:#ff6b5e; --ok:#8ee89a; }
-  *{ box-sizing:border-box; }
-  html,body{ margin:0; padding:0; height:100%; background:var(--bg); color:var(--fg);
-    font-family:"Sarasa Mono SC","Consolas","Courier New","Noto Sans Mono CJK SC",monospace;
-    font-size:15px; line-height:1.55; }
-  #app{ display:flex; flex-direction:column; height:100%; max-width:880px; margin:0 auto; padding:8px 14px; }
-  #status{ border:1px solid #1d3a22; padding:6px 10px; color:var(--amber); font-size:13px; white-space:pre-wrap; }
-  #log{ flex:1; overflow-y:auto; padding:10px 2px; scrollbar-width:thin; }
-  #log .line{ margin:2px 0; white-space:pre-wrap; word-break:break-word; }
-  #log .h{ color:var(--amber); font-weight:bold; }
-  #log .enemy{ color:var(--red); }
-  #log .hit{ color:var(--ok); }
-  #log .bad{ color:var(--red); }
-  #log .def{ color:#7ec8e3; }
-  #log .hint{ color:var(--amber); }
-  #log .hl{ color:#ffd97a; font-weight:bold; background:#33260f; padding:0 2px; }
-  #log .dim{ color:var(--dim); }
-  #actions{ padding:8px 0; border-top:1px dashed #1d3a22; display:flex; flex-wrap:wrap; gap:6px; }
-  button{ background:#0c1a0e; color:var(--fg); border:1px solid #2a5c33; padding:6px 12px;
-    cursor:pointer; font:inherit; font-size:14px; }
-  button:hover{ background:#14301a; border-color:#4b9a5c; color:#fff; }
-  button:disabled{ opacity:.4; cursor:default; }
-  #inputrow{ display:flex; padding:6px 0 2px; color:var(--ok); }
-  #cmd{ flex:1; background:transparent; border:none; outline:none; color:var(--fg); font:inherit; font-size:15px; }
-  .title{ text-align:center; margin:18vh 0 0; }
-  .title pre{ font-size:13px; color:var(--amber); }
-</style>
-</head>
-<body>
-<div id="app">
-  <div id="status">—</div>
-  <div id="log"></div>
-  <div id="actions"></div>
-  <div id="inputrow">&gt; <input id="cmd" autocomplete="off" spellcheck="false" placeholder="帮助 / 看 / 状态 / 背包"></div>
-</div>
-<script>
+
 "use strict";
 const $=s=>document.querySelector(s);
 const log=$('#log'), act=$('#actions'), cmd=$('#cmd'), statusEl=$('#status');
@@ -196,7 +154,6 @@ function migrate(s){
   if(p.leader===undefined)p.leader='主角';
   if(p.control===undefined)p.control=null; // 战斗外切换的操控角色（null=主角）
   if(p.stance===undefined)p.stance='攻势'; // 架势（重武器/剑的攻防架势）
-  if(!STANCE_FX[p.stance])p.stance='攻势'; // 旧档的非法架势归位
   if(p.stance==='攻')p.stance='攻势';
   if(p.wprof===undefined)p.wprof={}; // 武器熟练度（按类型累计使用次数）
   if(p.bestiary===undefined)p.bestiary={}; // 敌人图鉴
@@ -222,7 +179,7 @@ function migrate(s){
   if(p.flags.ampelosMet===undefined)p.flags.ampelosMet=false;
   if(p.flags.dragonMet===undefined)p.flags.dragonMet=false;
   if(p.lastTown===undefined)p.lastTown='ashwold';
-  for(const k of ['铁料','蛙皮','蛙油膏','覆金属龙皮','烟幕弹','苦蜜蜡','苦蜜酒','骨器','灰肉','疫骨','麦饼','龙鳞','精炼熔断钢铁','管理者材料','军阀密令','法术书·火舌','法术书·霜刃','法术书·雷击','法术书·霜雾','法术书·北风之怒','法术书·石拳','法术书·冰锥术','法术书·荆棘缠绕','法术书·治愈环流','法术书·灼热射线','法术书·生命虹吸','法术书·灼热新星','法术书·疾风刃','法术书·碎石雨','法术书·净光术','法术书·深眠咒','法术书·御土之盾','法术书·增幅术','法术书·恐惧术','法术书·虚弱诅咒','法术书·迟缓诅咒','法术书·破甲诅咒','法术书·疫病诅咒','法术书·背运诅咒','法术书·幻影术','法术书·安抚幻觉','法术书·失志诅咒','法术书·秘法飞弹','法术书·心智鞭笞','法术书·星陨术','木','竹','骨','橡木','白蜡木','紫杉木','赐福木','诅咒载体木','陨铁','龙钢','古战场铁','血术硬化钢','鲸骨','罂粟','海鱼','大鱼','烤鱼','兽皮','野猪肉','绷带','干粮','保养油','旧铁片','猪王皮','胡椒','烤肉','旧银币','巨魔牙','魔化兽皮','蛇蛋','净水袋','草药','陈年果酒','巨魔粗制饰品','磨石','肉桂','丁香','藏红花','血盐','血水结晶','女妖之泪','黑鳄皮','巨魔皮','碎布条','火把','止血膏','醒神草','盐渍肉','猛火油','皮革帽','铁头盔','锁子甲兜帽','板甲头盔','皮背心','锁子甲胸甲','板甲胸甲','皮革护腿','锁子甲护腿','板甲护腿','布披风','皮革披风','游侠短弓','骑士剑','熊皮','蛛丝','骨头','蛇皮','暗影之尘','送葬骨灰','水渍石','摆锤','弃誓之剑','空甲胄壳','虱壳','虱母壳','除虱粉','灰衣甲片','灰衣队长徽记','灰土结晶','妖僧残页','拉斯普提的碎甲片','疯狂核心','拉斯普提的毒血','疯子的蜡烛']){
+  for(const k of ['铁料','蛙皮','蛙油膏','覆金属龙皮','烟幕弹','苦蜜蜡','苦蜜酒','骨器','灰肉','疫骨','麦饼','龙鳞','精炼熔断钢铁','管理者材料','军阀密令','法术书·火舌','法术书·霜刃','法术书·雷击','法术书·霜雾','法术书·北风之怒','法术书·石拳','法术书·冰锥术','法术书·荆棘缠绕','法术书·治愈环流','法术书·灼热射线','法术书·生命虹吸','法术书·灼热新星','法术书·疾风刃','法术书·碎石雨','法术书·净光术','法术书·深眠咒','法术书·御土之盾','法术书·增幅术','法术书·恐惧术','法术书·虚弱诅咒','法术书·迟缓诅咒','法术书·破甲诅咒','法术书·疫病诅咒','法术书·背运诅咒','法术书·幻影术','法术书·安抚幻觉','法术书·失志诅咒','法术书·秘法飞弹','法术书·心智鞭笞','法术书·星陨术','木','竹','骨','橡木','白蜡木','紫杉木','赐福木','诅咒载体木','陨铁','龙钢','古战场铁','血术硬化钢','鲸骨','罂粟','海鱼','大鱼','烤鱼','兽皮','野猪肉','绷带','干粮','保养油','旧铁片','猪王皮','胡椒','烤肉','旧银币','巨魔牙','魔化兽皮','蛇蛋','净水袋','草药','陈年果酒','巨魔粗制饰品','磨石','肉桂','丁香','藏红花','血盐','血水结晶','女妖之泪','黑鳄皮','巨魔皮','碎布条','火把','止血膏','醒神草','盐渍肉','猛火油','皮革帽','铁头盔','锁子甲兜帽','板甲头盔','皮背心','锁子甲胸甲','板甲胸甲','皮革护腿','锁子甲护腿','板甲护腿','布披风','皮革披风','游侠短弓','骑士剑','熊皮','蛛丝','骨头','蛇皮','暗影之尘','送葬骨灰','水渍石','摆锤','弃誓之剑','空甲胄壳','虱壳','虱母壳','除虱粉','灰衣甲片','灰衣队长徽记','灰土结晶']){
     if(p.inv[k]===undefined)p.inv[k]=0;
   }
   for(const k of ['wellJob','wellDone','wellReward','grainJob','grainDone','grainPay','frogJob','frogDone','frogsLeft','tideJob','tideDone','squadJob','squadDone','mineJob','mineDone','crowJob','crowDone','crowsLeft','crowFirst','beggarJob','beggarDone','diggerJob','diggerDone','diggerReward','flagJob','flagDone','flagReward','potFrogJob','potFrogDone','potFrogsLeft','hunterJob2','hunter2Done','hunter2Reward','queenJob','queenDone','queenReward','mudJob','mudDone','mudReward','scavJob','scavDone','ratJob','ratDone','ratsLeft','boneJob','boneDone','boneReward','taxJob','taxDone','taxReward','commanderJob','commanderDone','commanderReward','riverJob','riverStage','riverDone','riverReward','campJob2','campStage','camp2Done','camp2Reward','lostJob','lostStage','lostDone','lostReward','heavyJob','heavyDone','heavyReward','hagJob2','hag2Done','hag2Reward','nestJob','nestDone','nestReward','fliesJob','fliesDone','fliesLeft','riteJob','riteDone','riteReward','robberJob4','robber4Done','robber4Reward','honeyJob4','honey4Done','honey4Reward','relicJob4','relic4Done','relic4Reward','militiaJob4','militia4Done','militia4Reward','churchSit','patrolJob','patrolDone','patrolReward','saltCarJob','saltCarDone','saltCarReward','altarJob','altarDone','altarReward','legionJob','legionDone','legionReward','deaconJob','deaconDone','deaconReward','beastJob','beastDone','beastsLeft','haulerJob','haulerDone','haulerReward','craftJob','craftDone','craftReward','plagueRelicJob5','plagueRelic5Done','plagueRelic5Reward','plagueKnightJob','plagueKnightDone','plagueKnightReward','ferryJob','ferryDone','ferryReward','clearJob','clearDone','clearsLeft','escrowActive','escrowDone','escrowPay','wolfJob','wolfDone','wolfReward','duelJob','duelDone','duelReward','captainJob','captainDone','captainReward','fishJob','fishDone','fishNets','pirateJob','pirateDone','pirateReward','saltGhostJob','saltGhostDone','saltGhostReward','seaWolfJob','seaWolfDone','seaWolfReward','lairJob','lairStage','lairDone','lairReward','lighthouseJob','lighthouseDone','lighthouseReward','lairUnlocked','lairBest','armguardGot','dragonChain','dragonChainDone','bloodEyeJob','bloodEyeDone','bloodEyeReward','giantToadJob','giantToadDone','giantToadReward','overseerJob','overseerDone','overseerReward','facelessJob','facelessDone','facelessReward','bonePlagueJob','bonePlagueDone','bonePlagueReward','banditKingJob','banditKingDone','banditKingReward','sirenJob','sirenDone','sirenReward','leoEyeJob','leoEyeDone','leoEyeReward','regulus1','regulus2','regulus3','regulus4','regulus5','leoBeastJob','leoBeastDone','leoBeastReward','lionSwordJob','lionSwordPage','lionSwordRec','lionSwordHint','lionSwordDone','leoStarJob','starFrag1','starFrag2','starFrag3','starDone','leoKingJob','leoKingDone','leoKingReward','twoLionsReady','twoLionsMet','twoLionsDone','regulusGot','lionTrialJoined','legF1','legF2','legF3','legF4','legF5','legF6','legF7','saltGolemJob','saltGolemDone','saltGolemReward','frogMomJob','frogMomDone','frogMomReward','liceKingJob','liceKingDone','liceKingReward','cryptGuardJob','cryptGuardDone','cryptGuardReward','boneDragonJob','boneDragonDone','boneDragonReward','drownSoulJob','drownSoulDone','drownSoulReward','mudCrawlerJob','mudCrawlerDone','mudCrawlerReward','plagueWeaverJob','plagueWeaverDone','plagueWeaverReward','coffinSaintJob','coffinSaintDone','coffinSaintReward','ferrymanJob','ferrymanDone','ferrymanReward','redKnightJob','redKnightDone','tideKnightJob','tideKnightDone','greyKnight2Job','greyKnight2Done','rotKnightJob','rotKnightDone','shoreKnightJob','shoreKnightDone','ironKnightJob','ironKnightDone','hailKnightJob','hailKnightDone','mineGolemJob','mineGolemDone','mineGolemReward','thunderbirdJob','thunderbirdDone','thunderbirdReward','legF8','legF9','legF10','landelVisited','carwoVisited','tideMainJob','tideMainDone','tideMainReward','bountyAJob','bountyADone','bountyBJob','bountyBDone','bountyCJob','bountyCDone','bountyDJob','bountyDDone']){
@@ -237,27 +194,6 @@ function migrate(s){
   for(const k of ['fragJob','fragDone','fragReward','briJob','briDone','briReward']){ if(p.flags[k]===undefined)p.flags[k]=false; }
   if(p.flags.fortressTaken===undefined)p.flags.fortressTaken=false;
   if(p.flags.fortressJob===undefined)p.flags.fortressJob=false;
-  if(p.sharpSteel===undefined)p.sharpSteel=[]; // 锋利精钢（每块带继承攻击值）
-  if(p.ampthis===undefined)p.ampthis=null; // 安普提斯
-  if(p.flags.ampthisUnlocked===undefined)p.flags.ampthisUnlocked=false;
-  if(p.flags.ampthisJoined===undefined)p.flags.ampthisJoined=false;
-  if(p.flags.ampthisDefeats===undefined)p.flags.ampthisDefeats=0;
-  if(p.flags.ampthisReviveAt===undefined)p.flags.ampthisReviveAt=0;
-  if(p.flags.ampthisPending===undefined)p.flags.ampthisPending=false;
-  if(p.flags.ampthisJobs===undefined)p.flags.ampthisJobs=0;
-  if(p.flags.regulusDuelJob===undefined)p.flags.regulusDuelJob=false;
-  if(p.flags.regulusDuelDone===undefined)p.flags.regulusDuelDone=false;
-  if(p.flags.regulusDuelReward===undefined)p.flags.regulusDuelReward=false;
-  if(p.flags.knightKills===undefined)p.flags.knightKills=0;
-  if(p.flags.lasputiUnlocked===undefined)p.flags.lasputiUnlocked=false;
-  if(p.flags.lasputiLv===undefined)p.flags.lasputiLv=60;
-  if(p.flags.lasputiReviveAt===undefined)p.flags.lasputiReviveAt=0;
-  if(p.flags.lasputiPending===undefined)p.flags.lasputiPending=false;
-  if(p.flags.lasputiDefeats===undefined)p.flags.lasputiDefeats=0;
-  if(p.flags.lasputiCandle===undefined)p.flags.lasputiCandle=false;
-  if(p.crown===undefined)p.crown=0;
-  if(p.curseLas===undefined)p.curseLas=0;
-  if(p.lasTaunt===undefined)p.lasTaunt=0;
   if(p.spells===undefined)p.spells=['飞石','治愈微光'];
   if(p.memSpells===undefined)p.memSpells=(p.spells||[]).slice(0,3); // 法术记忆槽
   const WMAP={木剑:{atk:3,type:'剑'},破铁剑:{atk:8,type:'剑'},生锈匕首:{atk:5,type:'匕首'},环头剑:{atk:8,type:'剑'},黄刀:{atk:8,mod:'硬直',type:'剑'},云剑:{atk:16,type:'剑'},小锤:{atk:6,type:'锤'},大马士革刀:{atk:50,type:'剑'}};
@@ -340,12 +276,12 @@ function importSave(){
 function newGame(){
   const g={ p:{
     hp:110,maxHp:110, mp:50,maxMp:50, sta:100,maxSta:100, atk:12, def:0, gold:0,
-    inv:{兽皮:0,野猪肉:0,绷带:0,干粮:0,保养油:0,旧铁片:0,猪王皮:0,胡椒:0,烤肉:0,旧银币:0,巨魔牙:0,魔化兽皮:0,蛇蛋:0,净水袋:0,草药:0,陈年果酒:0,巨魔粗制饰品:0,磨石:0,肉桂:0,丁香:0,藏红花:0,血盐:0,血水结晶:0,女妖之泪:0,黑鳄皮:0,巨魔皮:0,碎布条:0,火把:0,止血膏:0,醒神草:0,盐渍肉:0,猛火油:0,烟幕弹:0,苦蜜蜡:0,苦蜜酒:0,骨器:0,灰肉:0,疫骨:0,麦饼:0,龙鳞:0,精炼熔断钢铁:0,管理者材料:0,军阀密令:0,法术书·火舌:0,法术书·霜刃:0,法术书·雷击:0,法术书·霜雾:0,法术书·北风之怒:0,法术书·石拳:0,法术书·冰锥术:0,法术书·荆棘缠绕:0,法术书·治愈环流:0,法术书·灼热射线:0,法术书·生命虹吸:0,法术书·灼热新星:0,法术书·疾风刃:0,法术书·碎石雨:0,法术书·净光术:0,法术书·深眠咒:0,法术书·御土之盾:0,法术书·增幅术:0,法术书·恐惧术:0,法术书·虚弱诅咒:0,法术书·迟缓诅咒:0,法术书·破甲诅咒:0,法术书·疫病诅咒:0,法术书·背运诅咒:0,法术书·幻影术:0,法术书·安抚幻觉:0,法术书·失志诅咒:0,法术书·秘法飞弹:0,法术书·心智鞭笞:0,法术书·星陨术:0,木:0,竹:0,骨:0,橡木:0,白蜡木:0,紫杉木:0,赐福木:0,诅咒载体木:0,陨铁:0,龙钢:0,古战场铁:0,血术硬化钢:0,鲸骨:0,罂粟:0,海鱼:0,大鱼:0,烤鱼:0,皮革帽:0,铁头盔:0,锁子甲兜帽:0,板甲头盔:0,皮背心:0,锁子甲胸甲:0,板甲胸甲:0,皮革护腿:0,锁子甲护腿:0,板甲护腿:0,布披风:0,皮革披风:0,游侠短弓:0,骑士剑:0,铁料:0,蛙皮:0,蛙油膏:0,熊皮:0,蛛丝:0,骨头:0,蛇皮:0,暗影之尘:0,送葬骨灰:0,水渍石:0,摆锤:0,弃誓之剑:0,空甲胄壳:0,虱壳:0,虱母壳:0,除虱粉:0,灰衣甲片:0,灰衣队长徽记:0,灰土结晶:0,覆金属龙皮:0,妖僧残页:0,拉斯普提的碎甲片:0,疯狂核心:0,拉斯普提的毒血:0,疯子的蜡烛:0},
+    inv:{兽皮:0,野猪肉:0,绷带:0,干粮:0,保养油:0,旧铁片:0,猪王皮:0,胡椒:0,烤肉:0,旧银币:0,巨魔牙:0,魔化兽皮:0,蛇蛋:0,净水袋:0,草药:0,陈年果酒:0,巨魔粗制饰品:0,磨石:0,肉桂:0,丁香:0,藏红花:0,血盐:0,血水结晶:0,女妖之泪:0,黑鳄皮:0,巨魔皮:0,碎布条:0,火把:0,止血膏:0,醒神草:0,盐渍肉:0,猛火油:0,烟幕弹:0,苦蜜蜡:0,苦蜜酒:0,骨器:0,灰肉:0,疫骨:0,麦饼:0,龙鳞:0,精炼熔断钢铁:0,管理者材料:0,军阀密令:0,法术书·火舌:0,法术书·霜刃:0,法术书·雷击:0,法术书·霜雾:0,法术书·北风之怒:0,法术书·石拳:0,法术书·冰锥术:0,法术书·荆棘缠绕:0,法术书·治愈环流:0,法术书·灼热射线:0,法术书·生命虹吸:0,法术书·灼热新星:0,法术书·疾风刃:0,法术书·碎石雨:0,法术书·净光术:0,法术书·深眠咒:0,法术书·御土之盾:0,法术书·增幅术:0,法术书·恐惧术:0,法术书·虚弱诅咒:0,法术书·迟缓诅咒:0,法术书·破甲诅咒:0,法术书·疫病诅咒:0,法术书·背运诅咒:0,法术书·幻影术:0,法术书·安抚幻觉:0,法术书·失志诅咒:0,法术书·秘法飞弹:0,法术书·心智鞭笞:0,法术书·星陨术:0,木:0,竹:0,骨:0,橡木:0,白蜡木:0,紫杉木:0,赐福木:0,诅咒载体木:0,陨铁:0,龙钢:0,古战场铁:0,血术硬化钢:0,鲸骨:0,罂粟:0,海鱼:0,大鱼:0,烤鱼:0,皮革帽:0,铁头盔:0,锁子甲兜帽:0,板甲头盔:0,皮背心:0,锁子甲胸甲:0,板甲胸甲:0,皮革护腿:0,锁子甲护腿:0,板甲护腿:0,布披风:0,皮革披风:0,游侠短弓:0,骑士剑:0,铁料:0,蛙皮:0,蛙油膏:0,熊皮:0,蛛丝:0,骨头:0,蛇皮:0,暗影之尘:0,送葬骨灰:0,水渍石:0,摆锤:0,弃誓之剑:0,空甲胄壳:0,虱壳:0,虱母壳:0,除虱粉:0,灰衣甲片:0,灰衣队长徽记:0,灰土结晶:0,覆金属龙皮:0},
     spells:['飞石','治愈微光'],
     memSpells:['飞石','治愈微光'],
     weapon:{name:'木剑',atk:3,type:'剑'}, owned:[{name:'木剑',atk:3,type:'剑'}], gear:{头:null,胸:null,腿:null,披风:null}, armorBag:[], campFrom:null, knight:null, companion:null, accs:[], accBag:[], accBonus:{hp:0,mp:0,sta:0}, pow:0, fort:0, coat:0, buffSys:{攻:{v:0,n:0},防:{v:0,n:0},速:{v:0,n:0}}, craftXP:{锻造:0,烹饪:0,炼金:0}, wprof:{}, stance:'攻势', armguard:null, lairFloor:1, mercs:[], regulus:null, lionSword:null, leader:'主角', control:null, bestiary:{}, kills:0,
     buff:{流血:0,硬直:0,保养:0,磨石:0},
-    days:0, level:1, xp:0, shop:{}, forge:{count:0}, journey:null, scene:'ashwold', sharpSteel:[], ampthis:null,
+    days:0, level:1, xp:0, shop:{}, forge:{count:0}, journey:null, scene:'ashwold',
     flags:{dog:false,boarJob:false,boarsLeft:0,boarDone:false,boarFirst:false,kingJob:false,kingDone:false,kingReward:false,rumorIdx:0,everCamped:false,sliceEnd:false,trollJob:false,trollDone:false,trollReward:false,trollFirst:false,eggJob:false,eggDone:false,eggFirst:false,escortActive:false,escortDone:false,escortPay:0,escortFirst:false,hitJob:false,hitDone:false,hitFirst:false,catJob:false,catDone:false,catFirst:false,通缉:false,lastHunterDay:-1,god:false,jobCount:0,gatorJob:false,gatorDone:false,gatorReward:false,twinsJob:false,twinsDone:false,twinsReward:false,cellarJob:false,cellarDone:false,cellarReward:false,bellJob:false,bellDone:false,bellReward:false,ampelosMet:false,wellJob:false,wellDone:false,wellReward:false,grainJob:false,grainDone:false,grainPay:0,frogJob:false,frogDone:false,frogsLeft:0,tideJob:false,tideDone:false,squadJob:false,squadDone:false,mineJob:false,mineDone:false,dragonMet:false,crowJob:false,crowDone:false,crowsLeft:0,crowFirst:false,beggarJob:false,beggarDone:false,diggerJob:false,diggerDone:false,diggerReward:false,flagJob:false,flagDone:false,flagReward:false,potFrogJob:false,potFrogDone:false,potFrogsLeft:0,hunterJob2:false,hunter2Done:false,hunter2Reward:false,queenJob:false,queenDone:false,queenReward:false,mudJob:false,mudDone:false,mudReward:false,scavJob:false,scavDone:false,ratJob:false,ratDone:false,ratsLeft:0,boneJob:false,boneDone:false,boneReward:false,taxJob:false,taxDone:false,taxReward:false,commanderJob:false,commanderDone:false,commanderReward:false,riverJob:false,riverStage:0,riverDone:false,riverReward:false,campJob2:false,campStage:0,camp2Done:false,camp2Reward:false,lostJob:false,lostStage:0,lostDone:false,lostReward:false,heavyJob:false,heavyDone:false,heavyReward:false,hagJob2:false,hag2Done:false,hag2Reward:false,nestJob:false,nestDone:false,nestReward:false,fliesJob:false,fliesDone:false,fliesLeft:0,riteJob:false,riteDone:false,riteReward:false,robberJob4:false,robber4Done:false,robber4Reward:false,honeyJob4:false,honey4Done:false,honey4Reward:false,relicJob4:false,relic4Done:false,relic4Reward:false,militiaJob4:false,militia4Done:false,militia4Reward:false,churchSit:false,patrolJob:false,patrolDone:false,patrolReward:false,saltCarJob:false,saltCarDone:false,saltCarReward:false,altarJob:false,altarDone:false,altarReward:false,legionJob:false,legionDone:false,legionReward:false,deaconJob:false,deaconDone:false,deaconReward:false,beastJob:false,beastDone:false,beastsLeft:0,haulerJob:false,haulerDone:false,haulerReward:false,craftJob:false,craftDone:false,craftReward:false,plagueRelicJob5:false,plagueRelic5Done:false,plagueRelic5Reward:false,plagueKnightJob:false,plagueKnightDone:false,plagueKnightReward:false,ferryJob:false,ferryDone:false,ferryReward:false,clearJob:false,clearDone:false,clearsLeft:0,escrowActive:false,escrowDone:false,escrowPay:0,wolfJob:false,wolfDone:false,wolfReward:false,duelJob:false,duelDone:false,duelReward:false,captainJob:false,captainDone:false,captainReward:false,fishJob:false,fishDone:false,fishNets:0,pirateJob:false,pirateDone:false,pirateReward:false,saltGhostJob:false,saltGhostDone:false,saltGhostReward:false,seaWolfJob:false,seaWolfDone:false,seaWolfReward:false,lairJob:false,lairStage:0,lairDone:false,lairReward:false,lighthouseJob:false,lighthouseDone:false,lighthouseReward:false,lairUnlocked:false,lairBest:0,armguardGot:false,dragonChain:0,dragonChainDone:false,bloodEyeJob:false,bloodEyeDone:false,bloodEyeReward:false,giantToadJob:false,giantToadDone:false,giantToadReward:false,overseerJob:false,overseerDone:false,overseerReward:false,facelessJob:false,facelessDone:false,facelessReward:false,bonePlagueJob:false,bonePlagueDone:false,bonePlagueReward:false,banditKingJob:false,banditKingDone:false,banditKingReward:false,sirenJob:false,sirenDone:false,sirenReward:false,leoEyeJob:false,leoEyeDone:false,leoEyeReward:false,regulus1:false,regulus2:false,regulus3:false,regulus4:false,regulus5:false,leoBeastJob:false,leoBeastDone:false,leoBeastReward:false,lionSwordJob:false,lionSwordPage:false,lionSwordRec:false,lionSwordHint:false,lionSwordDone:false,leoStarJob:false,starFrag1:false,starFrag2:false,starFrag3:false,starDone:false,leoKingJob:false,leoKingDone:false,leoKingReward:false,twoLionsReady:false,twoLionsMet:false,twoLionsDone:false,regulusGot:false,lionTrialJoined:false,legF1:false,legF2:false,legF3:false,legF4:false,legF5:false,legF6:false,legF7:false,saltGolemJob:false,saltGolemDone:false,saltGolemReward:false,frogMomJob:false,frogMomDone:false,frogMomReward:false,liceKingJob:false,liceKingDone:false,liceKingReward:false,cryptGuardJob:false,cryptGuardDone:false,cryptGuardReward:false,boneDragonJob:false,boneDragonDone:false,boneDragonReward:false,drownSoulJob:false,drownSoulDone:false,drownSoulReward:false,mudCrawlerJob:false,mudCrawlerDone:false,mudCrawlerReward:false,plagueWeaverJob:false,plagueWeaverDone:false,plagueWeaverReward:false,coffinSaintJob:false,coffinSaintDone:false,coffinSaintReward:false,ferrymanJob:false,ferrymanDone:false,ferrymanReward:false,redKnightJob:false,redKnightDone:false,tideKnightJob:false,tideKnightDone:false,greyKnight2Job:false,greyKnight2Done:false,rotKnightJob:false,rotKnightDone:false,shoreKnightJob:false,shoreKnightDone:false,ironKnightJob:false,ironKnightDone:false,hailKnightJob:false,hailKnightDone:false,mineGolemJob:false,mineGolemDone:false,mineGolemReward:false,thunderbirdJob:false,thunderbirdDone:false,thunderbirdReward:false,legF8:false,legF9:false,legF10:false,landelVisited:false,carwoVisited:false,tideMainJob:false,tideMainDone:false,tideMainReward:false,bountyAJob:false,bountyADone:false,bountyBJob:false,bountyBDone:false,bountyCJob:false,bountyCDone:false,bountyDJob:false,bountyDDone:false,leoEyeTown:''}
   }};
   for(let i=0;i<24;i++){ g.p.flags['highJob'+i]=false; g.p.flags['highDone'+i]=false; g.p.flags['highReward'+i]=false; }
@@ -357,10 +293,6 @@ function newGame(){
   g.p.flags.fragJob=false; g.p.flags.fragDone=false; g.p.flags.fragReward=false;
   g.p.flags.briJob=false; g.p.flags.briDone=false; g.p.flags.briReward=false;
   g.p.flags.fortressTaken=false; g.p.flags.fortressJob=false;
-  g.p.flags.ampthisUnlocked=false; g.p.flags.ampthisJoined=false; g.p.flags.ampthisDefeats=0; g.p.flags.ampthisReviveAt=0; g.p.flags.ampthisPending=false; g.p.flags.ampthisJobs=0;
-  g.p.flags.regulusDuelJob=false; g.p.flags.regulusDuelDone=false; g.p.flags.regulusDuelReward=false;
-  g.p.flags.knightKills=0; g.p.flags.lasputiUnlocked=false; g.p.flags.lasputiLv=60; g.p.flags.lasputiReviveAt=0; g.p.flags.lasputiPending=false; g.p.flags.lasputiDefeats=0; g.p.flags.lasputiCandle=false;
-  g.p.crown=0; g.p.curseLas=0; g.p.lasTaunt=0;
   return g;
 }
 /* ---------- 杂货与商店刷新 ---------- */
@@ -381,7 +313,7 @@ const CATALOG={
  '苦蜜酒':{price:6,desc:'+25体力（战斗外）'},
  '蛙油膏':{price:4,desc:'+10生命（战斗外）'},
  '绷带包':{price:12,desc:'3个绷带',give:{绷带:3}},
- '疮药膏':{price:6,desc:'+25生命（战斗外）'}, '雹铁':{price:12,desc:'锻造材料·霜刃'},
+ '疮药膏':{price:6,desc:'+25生命（战斗外）'}, '雹铁':{price:12,desc:'锻造材料·霜刃'}
  '古战场铁':{price:150,desc:'古战场出土的铁——锻造古战场铁剑身'},
  '陨铁':{price:300,desc:'天外陨铁——锻造陨铁剑身'}
 };
@@ -560,35 +492,35 @@ function rollFx(lv){
 /* ---------- 锻造部位选材（12-武器技能系统.md·材质构成）：每武器分部位，特殊材质有特性 ---------- */
 const FORGE_PARTS={
  剑:[['剑身',['铁料','精炼熔断钢铁','陨铁','龙钢','古战场铁','血术硬化钢']],['剑柄',['木','鲸骨','兽皮']],['护手',['铁料','旧银币','龙钢']]],
- 匕首:[['刀身',['铁料','精炼熔断钢铁','陨铁','龙钢','骨','疫骨','血术硬化钢']],['刀柄',['木','鲸骨','兽皮']]],
+ 匕首:[['刀身',['铁料','精炼熔断钢铁','陨铁','龙钢','骨','血术硬化钢']],['刀柄',['木','鲸骨','兽皮']]],
  细剑:[['剑身',['铁料','精炼熔断钢铁','陨铁','龙钢','古战场铁','血术硬化钢']],['剑柄',['木','鲸骨','兽皮']],['护手',['铁料','旧银币','龙钢']]],
  大剑:[['剑身',['铁料','精炼熔断钢铁','陨铁','龙钢','古战场铁','血术硬化钢']],['剑柄',['木','鲸骨','兽皮']],['护手',['铁料','旧银币','龙钢']]],
  重剑:[['剑身',['铁料','精炼熔断钢铁','陨铁','龙钢','古战场铁','血术硬化钢']],['剑柄',['木','鲸骨','兽皮']],['护手',['铁料','旧银币','龙钢']]],
  焰型大剑:[['剑身',['铁料','精炼熔断钢铁','陨铁','龙钢','古战场铁','血术硬化钢']],['剑柄',['木','鲸骨','兽皮']],['护手',['铁料','旧银币','龙钢']]],
- 小锤:[['锤头',['铁料','精炼熔断钢铁','陨铁','龙钢','骨','疫骨','血术硬化钢']],['锤柄',['木','鲸骨','铁料']]],
+ 小锤:[['锤头',['铁料','精炼熔断钢铁','陨铁','龙钢','骨','血术硬化钢']],['锤柄',['木','鲸骨','铁料']]],
  斧:[['斧头',['铁料','精炼熔断钢铁','陨铁','龙钢','古战场铁','血术硬化钢']],['斧柄',['木','鲸骨','铁料']]],
- 重锤:[['锤头',['铁料','精炼熔断钢铁','陨铁','龙钢','骨','疫骨','血术硬化钢']],['锤柄',['木','鲸骨','铁料']]],
- 圆形大锤:[['锤头',['铁料','精炼熔断钢铁','陨铁','龙钢','骨','疫骨','血术硬化钢']],['锤柄',['木','鲸骨','铁料']]],
+ 重锤:[['锤头',['铁料','精炼熔断钢铁','陨铁','龙钢','骨','血术硬化钢']],['锤柄',['木','鲸骨','铁料']]],
+ 圆形大锤:[['锤头',['铁料','精炼熔断钢铁','陨铁','龙钢','骨','血术硬化钢']],['锤柄',['木','鲸骨','铁料']]],
  弓:[['弓臂',['木','白蜡木','鲸骨','龙钢','古战场铁']],['弓弦',['蛛丝','精炼熔断钢铁']]],
  弩:[['弩臂',['木','白蜡木','龙钢','鲸骨']],['弩身',['木','铁料','精炼熔断钢铁','陨铁']]],
  长枪:[['枪杆',['木','竹','鲸骨','龙钢','古战场铁']],['枪头',['铁料','精炼熔断钢铁','陨铁','龙钢','血术硬化钢']]],
  突刺长枪:[['枪杆',['木','竹','鲸骨','龙钢','古战场铁']],['枪头',['铁料','精炼熔断钢铁','陨铁','龙钢','血术硬化钢']]],
  军刀:[['刀身',['铁料','精炼熔断钢铁','陨铁','龙钢','古战场铁']],['刀柄',['木','鲸骨','兽皮']]],
  战戟:[['戟杆',['木','鲸骨','龙钢']],['戟头',['铁料','精炼熔断钢铁','陨铁','龙钢','血术硬化钢']]],
- 骨刃:[['刃',['骨','疫骨','陨铁','龙钢']],['柄',['木','鲸骨','兽皮']]],
+ 骨刃:[['刃',['骨','陨铁','龙钢']],['柄',['木','鲸骨','兽皮']]],
  盾:[['盾面',['木','铁料','精炼熔断钢铁','龙钢','血术硬化钢']],['盾缘',['铁料','旧银币','陨铁','龙钢']]],
- 拳头:[['指虎',['铁料','精炼熔断钢铁','陨铁','龙钢','骨','疫骨']],['缠手布',['碎布条','兽皮','血术硬化钢']]],
+ 拳头:[['指虎',['铁料','精炼熔断钢铁','陨铁','龙钢','骨']],['缠手布',['碎布条','兽皮','血术硬化钢']]],
  法杖:[['杖身',['橡木','白蜡木','紫杉木','赐福木','诅咒载体木','鲸骨']],['杖头',['发光石粉','魔力结晶','血盐','龙鳞']]]
 };
 const FORGE_MAT_DEF={
  铁料:{desc:'基础铁（无特殊）'},
- 精炼熔断钢铁:{atkPct:0.2,minQ:'史诗',desc:'精钢：攻击+20%，保底史诗'},
+ 精炼熔断钢铁:{atkPct:0.05,minQ:'优良',desc:'钢：攻击+5%，保底优良'},
  陨铁:{atkPct:0.15,fx:['精准'],desc:'陨铁：攻击+15%，精准'},
  龙钢:{atkPct:0.2,fx:['锋利'],desc:'龙钢：攻击+20%，锋利'},
  古战场铁:{atkPct:0.1,fx:['噬魂'],desc:'古战场铁：攻击+10%，噬魂'},
  血术硬化钢:{atkPct:0.1,fx:['血腥'],ch2:true,desc:'血术硬化钢：第二章才有的材料'},
  鲸骨:{fx:['鲸骨'],desc:'鲸骨：耐力消耗-20%'},
- 木:{desc:'普通木材'}, 竹:{desc:'竹材'}, 兽皮:{desc:'皮革包裹'}, 骨:{fx:['泪蚀'],desc:'骨：泪蚀'}, 疫骨:{atkPct:0.06,fx:['血腥'],desc:'疫骨：攻击+6%，必出血腥'},
+ 木:{desc:'普通木材'}, 竹:{desc:'竹材'}, 兽皮:{desc:'皮革包裹'}, 骨:{fx:['泪蚀'],desc:'骨：泪蚀'},
  旧银币:{atkPct:0.05,desc:'银辉：攻击+5%'},
  橡木:{staff:['防御',1.15],desc:'橡木杖身：防御系法术+15%'},
  白蜡木:{staff:['元素',1.15],desc:'白蜡木杖身：元素系法术+15%'},
@@ -628,14 +560,6 @@ function forgePartMenu(cat,baseMat,chosen,idx,back){
     else if(have-used<=0)o.push([m+'（'+d.desc+'）·缺',()=>{ print(m+'不够','bad'); forgePartMenu(cat,baseMat,chosen,idx,back); }]);
     else o.push([m+'（'+d.desc+'）·'+have,()=>forgePartMenu(cat,baseMat,chosen.concat([m]),idx+1,back)]);
   }
-  const steelN=(state.p.sharpSteel||[]).length;
-  if(steelN){
-    const usedSteel=chosen.filter(x=>x==='锋利精钢').length;
-    if(steelN-usedSteel>0){
-      const top=Math.max.apply(null,state.p.sharpSteel);
-      o.push(['锋利精钢（继承攻击+'+top+'）·'+steelN,()=>forgePartMenu(cat,baseMat,chosen.concat(['锋利精钢']),idx+1,back)]);
-    }
-  }
   o.push(['返回',()=>back()]);
   choices(o); statusLine();
 }
@@ -646,18 +570,12 @@ function doForge2(cat,baseMat,chosen,back){
   if(state.p.inv.铁料<baseMat){ print('铁料不够（需'+baseMat+'块）','bad'); forgeMenu(); return; }
   const counts={};
   chosen.forEach(k=>{ counts[k]=(counts[k]||0)+1; });
-  let inheritAtk=0;
   for(const k of Object.keys(counts)){
-    if(k==='锋利精钢'){ if((state.p.sharpSteel||[]).length<counts[k]){ print('锋利精钢不够','bad'); forgeMenu(); return; } continue; }
     if((state.p.inv[k]||0)<counts[k]){ print('没有足够的'+k+'','bad'); forgeMenu(); return; }
   }
   if(state.p.gold<fee){ print('加工费'+fee+'铜币，钱不够','bad'); forgeMenu(); return; }
   state.p.inv.铁料-=baseMat;
-  for(const k of Object.keys(counts)){ if(k==='锋利精钢')continue; state.p.inv[k]-=counts[k]; }
-  if(counts['锋利精钢']){
-    state.p.sharpSteel.sort((a,b)=>b-a);
-    inheritAtk=state.p.sharpSteel.splice(0,counts['锋利精钢']).reduce((a,b)=>a+b,0);
-  }
+  for(const k of Object.keys(counts))state.p.inv[k]-=counts[k];
   state.p.gold-=fee;
   state.p.forge.count++;
   gainCraftXP('锻造',5);
@@ -689,34 +607,11 @@ function doForge2(cat,baseMat,chosen,back){
   if(Object.keys(staff).length)w.spellPct=staff;
   const cbLv=craftLevel('锻造')-1;
   if(cbLv>0)w.atk=Math.round(w.atk*(1+0.02*cbLv));
-  if(inheritAtk){ w.atk+=inheritAtk; print('锋利精钢里的旧刃魂醒来——继承攻击+'+inheritAtk,'hint'); }
   print('打好了：'+w.name+'（攻击+'+w.atk+(w.fx.length?'，词条：'+w.fx.join('/'):'')+(w.spellPct?'，带杖身偏向':'')+'）','ok');
   state.p.owned.push(w);
   state.p.weapon={...w};
   print('你接过'+w.name+'，掂了掂（木剑还在包袱里——它不扔）','dim');
   back();
-}
-/* ---------- 熔炼旧武器（0.25）：旧剑回炉成锋利精钢，继承原武器四分之一攻击 ---------- */
-function meltWeaponMenu(){
-  clearActs();
-  print('熔炼旧武器 —— 旧剑回炉成锋利精钢，继承原武器四分之一的攻击','h');
-  print('锋利精钢可作为锻造材料投入任何部位：每块给新武器加上继承的攻击','dim');
-  const o=[];
-  (state.p.owned||[]).forEach(w=>{
-    if(!w)return;
-    if(w.name==='木剑')return;
-    if(state.p.weapon&&state.p.weapon.name===w.name)return; // 手上的家伙不熔
-    const inh=Math.max(1,Math.round((w.atk||0)/4));
-    o.push(['熔炼：'+w.name+'（伤害+'+w.atk+' → 锋利精钢·继承攻击+'+inh+'）',()=>{
-      state.p.owned.splice(state.p.owned.indexOf(w),1);
-      state.p.sharpSteel.push(inh);
-      print(w.name+'在炉里化成一滩钢水，凝成一块锋利精钢（继承攻击+'+inh+'）','ok');
-      meltWeaponMenu();
-    }]);
-  });
-  if(!o.length)print('没有可熔的旧武器（木剑不熔，手上的家伙不熔）','dim');
-  o.push(['返回',gotoSmith]);
-  choices(o); statusLine();
 }
 /* ---------- 黑荆城巫师店（0.25）：定制优质法杖、卖诅咒/赐福法杖与更多法术 ---------- */
 function gotoWizardShop(){
@@ -1036,11 +931,6 @@ const STANCE_ADD={
  焰型大剑:{霸体势:{n:'不动斩',mult:1.6,cost:20,bleed:2},狂战势:{n:'撕裂',mult:1.3,cost:15,bleed:3},魔导势:{n:'血咒波',mult:1.2,cost:15,bleed:2}}
 };
 function heavyStanceSet(type){ return HEAVY_STANCES[type]; }
-/* 架势只对重武器或剑的攻防架势生效——默认的攻势不能漏给其他武器 */
-function stanceApplies(){
-  const t=weaponTypeOf(state.p.weapon);
-  return !!heavyStanceSet(t)||state.p.stance==='攻击架势'||state.p.stance==='防御架势';
-}
 function comboChain(){
   const start=weaponTypeOf(state.p.weapon);
   const used=new Set();
@@ -1071,26 +961,13 @@ function playerAtk(){
   if(accFx('atkPct'))a=Math.round(a*(1+accFx('atkPct')));
   if(state.p.armguard)a=Math.round(a*1.25); // 裂纹的臂甲：武器法伤增伤+25%
   if(state.p.flags.tyrfing){ a=Math.round(a*1.25)+8; } // 提尔锋融入体内（天伤道）：伤害+25%，攻击+8
-  const stFx=stanceApplies()?STANCE_FX[state.p.stance]:null;
+  const stFx=STANCE_FX[state.p.stance];
   if(stFx&&stFx.atk)a=Math.round(a*stFx.atk); // 架势修正（重武器架势或剑的攻防架势）
   a=Math.round(a*wprofDmgPct(weaponTypeOf(state.p.weapon))); // 熟练度 Lv4+10% / Lv5+20%
   a+=leaderDmg(); // 领队加成（身先士卒/军心/狮心王座）
-  if(state.p.crown>0)a=Math.round(a*1.3); // DYO「以荣冠加冕无名之身」：荣冠3回合攻击+30%
-  a-=(state.p.curseLas||0); // 拉斯普提的妖僧诅咒（本场攻击-2/层）
-  if(state.p.lasTaunt>0)a=Math.round(a*(1-0.05*state.p.lasTaunt)); // 烦躁：攻击-5%/层
   return a;
 }
 function hitDmg(atk,mult,def){ return Math.max(1,Math.round(atk*mult-def)); }
-/* 单挑·轩辕十四：荣耀之锁——正面近战伤害-35%，每击削他1层剑意 */
-function duelGloryReduce(dmg){
-  const en=ctx&&ctx.en;
-  if(en&&en.name==='轩辕十四·单挑'&&!en.phase2){
-    dmg=Math.round(dmg*0.65);
-    if(!en.gloryNoted){ en.gloryNoted=true; print('荣耀之锁——他不能拒绝正面交锋，只能硬接（你的近战伤害-35%）','hint'); }
-    en.swordWill=Math.max(0,(en.swordWill||0)-1);
-  }
-  return dmg;
-}
 
 /* ---------- 法术系统：消耗法力（MP），法杖增伤，可单体/群攻/治疗/控制 ---------- */
 const SPELL_DEFS={
@@ -1207,7 +1084,6 @@ function castSpell(key,caster){
   let base=0, h=0;
   if(s.heal){
     h=Math.max(1,Math.round(s.heal*0.25)); // 法术效率整体为期望值的四分之一
-    if(who&&who.name==='安普提斯'){ const m=ampthisMult(SPELL_SCHOOL[key]||''); h*=m; print('妖雾翻涌——她的法术比寻常法师强了'+m+'倍','hint'); }
   } else if(who){
     base=allySpellPower(key,who).dmg;
   } else {
@@ -1247,8 +1123,6 @@ function castSpell(key,caster){
         if(spW['neg_'+sc])m*=spW['neg_'+sc];
         if(m!==1)dmg=Math.round(dmg*m);
       }
-      if(e.name==='轩辕十四·单挑'&&!e.phase2){ dmg=Math.round(dmg*1.8); ctx.regulusNoP2=true; if(!e.glorySpell){ e.glorySpell=true; print('法术落在他身上——他不肯转身，但变了脸色（法术×1.8，他不会进入二阶段了）','hint'); } }
-      if(s.fire&&e.name==='妖僧·拉斯普提'&&!e.惧火){ dmg=Math.round(dmg*1.3); print('火焰灼烧妖僧——伤害+30%！','hint'); }
       e.hp-=dmg;
       total+=dmg;
       if(!who)ctx.damagedEnemy=true;
@@ -1387,13 +1261,7 @@ function squadDefBonus(en){
 }
 function enemyDown(){
   if(!ctx||!ctx.en)return false;
-  if(typeof ctx.en.hp!=='number'||!isFinite(ctx.en.hp))ctx.en.hp=0; // 血条异常自修复（曾因战技mult缺失变NaN）
   if(ctx.en.hp>0)return true;
-  if(ctx.en.name==='轩辕十四·单挑'&&ctx.en.unyield>0){
-    ctx.en.hp=1; ctx.en.unyield--;
-    print('不屈！他锁住了最后一口气（还剩'+ctx.en.unyield+'回合）','hint');
-    return true;
-  }
   print(ctx.en.name+' 倒下了','ok');
   if(ctx.defeated)ctx.defeated.push(ctx.en);
   const es=ctx.enemies;
@@ -1425,9 +1293,6 @@ function startCombat(en,opts){
     hr(); print('⚔ '+en.name,'enemy'); print(en.intro,'dim');
   }
   if(opts.twoLions)ctx.lionJoined=!!state.p.flags.lionTrialJoined;
-  // 战斗内状态重置：加冕/拉斯普提诅咒与嘲讽/轩辕十四的兽形与剑意
-  state.p.crown=0; state.p.curseLas=0; state.p.lasTaunt=0;
-  if(state.p.regulus){ const rr=state.p.regulus; rr.lionForm=false; rr.lionRounds=0; rr.lionInvuln=0; rr.swordWill=0; rr.unyield=0; rr.unyieldUsed=false; rr.crownCd=0; }
   // 传奇武器开局自动技：佛拉格拉克（应答之剑）自动先攻 / 布里欧纳克（五光魔枪）自动齐射
   const lw=state.p.weapon;
   if(lw&&lw.fx&&lw.fx.includes('自动')){
@@ -1487,7 +1352,6 @@ function renderCombat(){
   if(ctx.control)print('当前操控：'+ctx.control.name+'（生命 '+ctx.control.hp+'/'+ctx.control.maxHp+' · 法力 '+ctx.control.mp+'/'+ctx.control.maxMp+'）· 由'+ctx.control.name+'主攻，攻击不耗体力，可用其战技与法术','hint');
   if(ctx.cycle===0) print('体力消耗：攻击10 · 连携12 · 战技按武器 · 格挡5 · 闪避10（体力<10时伤害-40%）','dim');
   const o=[];
-  if(!ctx.opts.solo){
   // 队友指挥
   allies().forEach(a=>{
     print(a.name+'：'+a.hp+'/'+a.maxHp+(a.guard?'（防御中）':'')+(ctx.control===a?'（操控中）':''),'dim');
@@ -1499,7 +1363,6 @@ function renderCombat(){
     const cur=roster.indexOf(ctx.control||null);
     const nxt=roster[(cur+1)%roster.length];
     o.push(['切换操控→'+(nxt?nxt.name:'你'),()=>{ ctx.control=nxt; state.p.control=nxt?nxt.name:null; print(nxt?('现在由'+nxt.name+'主攻'):'你亲自出手','dim'); renderCombat(); }]);
-  }
   }
   o.push(['攻击·正面 (×0.8)',()=>playerAct('正面')]);
   o.push(['攻击·侧面 (×1.3)',()=>playerAct('侧面')]);
@@ -1520,7 +1383,7 @@ function renderCombat(){
     const stSet=heavyStanceSet(wt2);
     if(stSet){
       const set=HEAVY_STANCES[wt2];
-      const cur=(state.p.stance&&STANCE_FX[state.p.stance]&&set.includes(state.p.stance))?state.p.stance:set[0];
+      const cur=state.p.stance||set[0];
       const nxt=set[(set.indexOf(cur)+1)%set.length];
       o.push(['架势：'+cur+'（'+STANCE_FX[cur].desc+'）→ 切换',()=>{ state.p.stance=nxt; print('你切换架势——'+nxt+'：'+STANCE_FX[nxt].desc,'dim'); renderCombat(); }]);
     }
@@ -1695,7 +1558,7 @@ function playerAct(kind,idx){
       ctrl.skillCd=2;
       let def=Math.max(0,en.def+squadDefBonus(en)-(en.defDown||0));
       if(sk.pierce)def=Math.round(def*(1-sk.pierce));
-      let d=hitDmg(allyFullAtk(ctrl),sk.mult||1,def); // 保险：mult缺失按1算
+      let d=hitDmg(allyFullAtk(ctrl),sk.mult,def);
       if(en.blocked){ d=Math.max(1,Math.round(d*0.5)); print(en.name+'格挡了！伤害减半','def'); en.blocked=false; }
       en.hp-=d;
       ctx.damagedEnemy=true;
@@ -1728,7 +1591,6 @@ function playerAct(kind,idx){
     print('你旋身横扫——','hint');
     es.forEach(e=>{
       let dmg=hitDmg(playerAtk(),0.6,Math.max(0,e.def+squadDefBonus(e)-(e.defDown||0)));
-      dmg=duelGloryReduce(dmg);
       if(e.physRes){ if(!e.physNoted){ e.physNoted=true; print(e.name+'对物理攻击有抗性（伤害减半）','hint'); } dmg=Math.round(dmg*e.physRes); }
       e.hp-=dmg;
       ctx.damagedEnemy=true;
@@ -1747,7 +1609,6 @@ function playerAct(kind,idx){
       const chainBonus=(state.p.weapon&&state.p.weapon.fx&&state.p.weapon.fx.includes('军令'))?0.2:0.15;
       adds.forEach((a,i)=>{ const d=Math.round(a.d*(1+chainBonus*(i+1))); total+=d; parts.push(a.name+'（'+a.type+'）'); });
       dmg=Math.max(1,Math.round(total-en.def-squadDefBonus(en)-(en.defDown||0)));
-      dmg=duelGloryReduce(dmg);
       en.hp-=dmg;
       ctx.damagedEnemy=true;
       print('连携！'+parts.join(' → '),'hint');
@@ -1785,11 +1646,10 @@ function playerAct(kind,idx){
           print('你架起'+sk.n+'——来犯之敌将遭反击！','hint');
         } else {
           let def=Math.max(0,en.def+squadDefBonus(en)-(en.defDown||0));
-          const stFxS=stanceApplies()?STANCE_FX[state.p.stance]:null;
+          const stFxS=STANCE_FX[state.p.stance];
           if(stFxS&&stFxS.pierce)def=Math.round(def*stFxS.pierce); // 破势：削甲
           if(sk.pierce)def=Math.round(def*(1-sk.pierce));
           dmg=hitDmg(playerAtk(),sk.mult,def);
-          dmg=duelGloryReduce(dmg);
           if(en.blocked){ dmg=Math.max(1,Math.round(dmg*0.5)); print(en.name+'格挡了！你的伤害减半','def'); en.blocked=false; }
           print('战技——'+sk.n+'！','hint');
           if(sk.aoe){
@@ -1818,7 +1678,6 @@ function playerAct(kind,idx){
       let def=Math.max(0,en.def+squadDefBonus(en)-(en.defDown||0));
       if(state.p.weapon&&state.p.weapon.fx&&state.p.weapon.fx.includes('破甲'))def=Math.round(def*0.8);
       dmg=hitDmg(playerAtk(),mult,def);
-      dmg=duelGloryReduce(dmg);
       if(state.p.sta<10){ dmg=Math.max(1,Math.round(dmg*0.6)); print('你累得发飘（体力不足，伤害-40%）','dim'); }
       if(en.physRes){
         if(!en.physNoted){ en.physNoted=true; print('它的身体对物理攻击有抗性（伤害减半）','hint'); }
@@ -1831,7 +1690,6 @@ function playerAct(kind,idx){
       if(vsU&&en.亡灵){ dmg=Math.round(dmg*(1+vsU)); print('亡者克制的饰品发烫——亡者畏惧','hint'); }
       const vsR=accFx('vs骑类');
       if(vsR&&en.骑类){ dmg=Math.round(dmg*(1+vsR)); print('骑士克制的饰品低鸣——骑者受制','hint'); }
-      if(en.name==='轩辕十四·单挑'&&en.finalBlow&&en.hp>0){ dmg=Math.max(dmg,en.hp); print('终焉一击之后，他力竭了——这一剑他躲不开','hint'); }
       if(en.blocked){ dmg=Math.max(1,Math.round(dmg*0.5)); print(en.name+'格挡了！你的伤害减半','def'); en.blocked=false; }
       const hits=Math.max(1,Math.round(accFx('hits')));
       for(let h=0;h<hits;h++){
@@ -1866,7 +1724,7 @@ function playerAct(kind,idx){
   if(ctx!==my) return;
   if(en.hp<=0){ if(!enemyDown())return; }
   lionJoinCheck();
-  if((!ctx.opts.solo&&allies().length) || (ctx.lionJoined&&!ctx.lionFled)) nextAllyTurn(0);
+  if(allies().length || (ctx.lionJoined&&!ctx.lionFled)) nextAllyTurn(0);
   else { enemyTurn(); afterEnemy(); }
 }
 function afterEnemy(){
@@ -1966,7 +1824,6 @@ function allyResolve(){
       } else if(s){
         let dmg=Math.max(1,allySpellPower(a.actSpell,a).dmg-Math.round(en.def/2));
         if(s.fire&&en.惧火){ dmg=Math.round(dmg*2); print('火舌遇惧火者，伤害翻倍！','hint'); }
-        if(en.name==='妖僧·拉斯普提'&&a.name==='安普提斯'){ dmg=Math.round(dmg*1.5); print('「我知道怎么打他」——妖雾缠上旧同事的伤口（×1.5）','hint'); }
         en.hp-=dmg;
         print(a.name+'咏唱'+s.name+'——'+en.name+' −'+dmg,'hit');
         if(s.bleed){ en.bleed=(en.bleed||0)+s.bleed; print('目标血流不止','hit'); }
@@ -1982,7 +1839,7 @@ function allyResolve(){
       if(sk){
         let def=en.def+squadDefBonus(en);
         if(sk.pierce)def=Math.round(def*(1-sk.pierce));
-        let d=hitDmg(allyFullAtk(a),sk.mult||1,def); // 保险：mult缺失按1算，杜绝NaN
+        let d=hitDmg(allyFullAtk(a),sk.mult,def);
         if(en.blocked){ d=Math.max(1,Math.round(d*0.5)); print(en.name+'格挡了！伤害减半','def'); en.blocked=false; }
         en.hp-=d;
         print(a.name+'战技——'+sk.name+'！'+en.name+' −'+d,'hit');
@@ -1994,14 +1851,8 @@ function allyResolve(){
       }
       continue;
     }
-    if(a===state.p.regulus){
-      regulusAllyAct(a,en);
-      if(en.hp<=0){ if(!enemyDown())break; }
-      continue;
-    }
     // 战斗（含被动）
     let d=allyAtk(a)+allyWeaponDmg(a)+(a.w||0)+(a.pow||0)+arm+leadBonus;
-    if(en.name==='妖僧·拉斯普提'&&a.name==='安普提斯'){ d=Math.round(d*1.5); print('「我知道怎么打他」——她直取旧同事的要害（×1.5）','hint'); }
     if((a.traits||[]).includes('强壮'))d+=1;
     if(state.p.leader==='落魄骑士'&&a===state.p.knight)d+=1; // 军心：他自身再+1
     if(a.double){
@@ -2123,8 +1974,7 @@ function enemyTurn(){
   }
   if(!ctx)return;
   // 回合收尾：盟友姿态重置、战技冷却与法力回复（每回合一次）
-  allies().forEach(a=>{ a.act=null; a.guard=false; a.dodge=false; if(a.skillCd>0)a.skillCd--; if(a.unyield>0)a.unyield--; if(a.maxMp&&a.mp<a.maxMp)a.mp=Math.min(a.maxMp,a.mp+2); if(a.regen&&a.hp>0&&a.hp<a.maxHp){ a.hp=Math.min(a.maxHp,a.hp+a.regen); print(a.name+'在星光里缓缓回复 '+a.regen+' 生命','dim'); } });
-  if(state.p.crown>0)state.p.crown--; // DYO荣冠：3回合攻击+30%
+  allies().forEach(a=>{ a.act=null; a.guard=false; a.dodge=false; if(a.skillCd>0)a.skillCd--; if(a.maxMp&&a.mp<a.maxMp)a.mp=Math.min(a.maxMp,a.mp+2); if(a.regen&&a.hp>0&&a.hp<a.maxHp){ a.hp=Math.min(a.maxHp,a.hp+a.regen); print(a.name+'在星光里缓缓回复 '+a.regen+' 生命','dim'); } });
   const rg=accFx('regen');
   if(rg&&state.p.hp>0&&state.p.hp<state.p.maxHp){ state.p.hp=Math.min(state.p.maxHp,state.p.hp+rg); print('饰品温润——回复'+rg+'生命','dim'); }
 }
@@ -2136,7 +1986,7 @@ function enemyTurnOne(){
   ctx.en.atkBoost=boost.b;
   if(boost.notes.length)print('【敌阵协作】'+boost.notes.join(' · '),'hint');
   // 目标选择（回合开始前已预掷，意图行已提示）
-  const liveAllies=ctx.opts.solo?[]:allies().filter(a=>!a.fled);
+  const liveAllies=allies().filter(a=>!a.fled);
   let aim='你';
   if(liveAllies.length && ctx.nextT!==undefined && ctx.nextT<0.4){
     aim=liveAllies[Math.floor(ctx.nextT/0.4*liveAllies.length)].name;
@@ -2332,8 +2182,6 @@ function enemyTurnOne(){
   else if(ctx.en.name==='赤河龙') dragonTurn2(def);
   else if(ctx.en.name==='灰土高地龙') fragDragonTurn(def);
   else if(ctx.en.name==='魔化之人') brionacTurn(def);
-  else if(ctx.en.name==='轩辕十四·单挑') regulusDuelTurn(def);
-  else if(ctx.en.name==='妖僧·拉斯普提') lasputiTurn(def);
   if(ctx.en.bleed&&ctx.en.bleed>0){ ctx.en.hp=Math.max(0,ctx.en.hp-2); print(ctx.en.name+'伤口流血 −2','hit'); if(!ctx.en.不愈)ctx.en.bleed--; }
   if(ctx.en.plague&&ctx.en.plague>0){ ctx.en.hp=Math.max(0,ctx.en.hp-3); print(ctx.en.name+'疫病发作 −3','hit'); ctx.en.plague--; }
   ctx.cycle++;
@@ -2348,7 +2196,6 @@ function allies(){
   if(state.p.knight&&(!state.p.knight.hp||state.p.knight.hp>0))list.push(ensureAllyFields(state.p.knight));
   if(state.p.companion&&(!state.p.companion.hp||state.p.companion.hp>0))list.push(ensureAllyFields(state.p.companion));
   if(state.p.regulus&&(!state.p.regulus.hp||state.p.regulus.hp>0))list.push(ensureAllyFields(state.p.regulus));
-  if(state.p.ampthis&&(!state.p.ampthis.hp||state.p.ampthis.hp>0))list.push(ensureAllyFields(state.p.ampthis));
   return list;
 }
 function findAlly(name){ return allies().find(a=>a.name===name); }
@@ -2383,8 +2230,6 @@ function allyWeaponDmg(a){
 /* 盟友法术与战技：队友也有法力（MP），会咏唱主角已学会的法术，能用自己武器的战技 */
 function ensureAllyFields(a){
   if(!a)return a;
-  if(!isFinite(a.maxHp))a.maxHp=30+(a.lv||1)*2;
-  if(!isFinite(a.hp))a.hp=a.maxHp; // 血条异常自修复
   if(a.maxMp===undefined)a.maxMp=30+(a.lv||1)*2;
   if(a.mp===undefined)a.mp=a.maxMp;
   if(a.skillCd===undefined)a.skillCd=0;
@@ -2401,111 +2246,35 @@ function allyWeaponType(a){
 }
 function allySkill(a){
   const w=WSKILLS[allyWeaponType(a)];
-  if(!w||!w.length)return null;
-  const sk=w.find(s=>s.mult)||w[0]; // 队友不玩架势：挑带伤害的战技（架势切换无mult，曾导致NaN）
-  return {name:sk.n,mult:sk.mult||1,cost:sk.cost};
+  if(!w||!w[0])return null;
+  return {name:w[0].n,mult:w[0].mult,cost:w[0].cost};
 }
 function allyFullAtk(a){ return allyAtk(a)+allyWeaponDmg(a)+(a.w||0)+(a.pow||0)+(state.p.armguard?4:0)+leaderDmg(); }
 function allyHitFx(a,en){
   if(a.stunC&&Math.random()<a.stunC){ en.stunned=true; print('猎星之眼发亮——'+a.name+'的一击震住了目标！','hint'); }
 }
-/* 轩辕十四（0.25强化·角色档案/16-BOSS与传奇单位）：荣耀之锁/剑意蓄势/不屈/二阶段狮子型/猎食本能/DYO加冕 */
-function regulusAllyAct(a,en){
-  a.swordWill=Math.min(5,(a.swordWill||0)+1); // 剑意蓄势：每回合+1层，最多5层
-  let d=allyAtk(a)+allyWeaponDmg(a)+(a.w||0)+(a.pow||0)+(state.p.armguard?4:0)+leaderDmg();
-  let mult=1+0.05*a.swordWill; // 剑意：每层+5%攻击
-  if(a.lionForm)mult*=1.5; // 兽形解禁：攻击+50%
-  if(a.lionForm&&a.hp>0&&a.hp<=a.maxHp*0.15)mult*=1.5; // 末路狂奔：攻击+50%
-  if(a.unyield>0)mult*=1.3; // 不屈：攻击+30%
-  if(en.bleed>0||en.fear||en.stunned)mult*=1.25; // 猎食本能：对流血/恐惧/硬直目标+25%
-  d=Math.max(1,Math.round(d*mult));
-  if(a.lionForm){
-    a.lionRounds=(a.lionRounds||0)+1;
-    if(a.lionRounds%5===0){
-      const roar=Math.max(1,Math.round(en.maxHp*0.15));
-      en.hp-=roar; en.fear=1;
-      print('狮吼！'+en.name+' −'+roar+'（真实伤害·无视护甲），恐惧入骨','hint');
-    }
-    if(a.lionRounds%4===0){
-      print('狂怒连击——三爪齐出！','hint');
-      for(let i=0;i<3;i++){
-        if(en.hp<=0)break;
-        const h=Math.max(1,Math.round(d*0.8));
-        en.hp-=h; en.bleed=(en.bleed||0)+1;
-        print('狂怒连击·第'+(i+1)+'击 −'+h,'hit');
-      }
-    } else {
-      en.hp-=d; en.bleed=(en.bleed||0)+2; // 撕裂爪击：命中附加2层流血
-      print(a.name+'挥爪'+en.name+' −'+d+'（撕裂爪击·流血+2）','hit');
-    }
-    if(a.hp>0&&a.hp<=a.maxHp*0.15){ a.hp=Math.max(1,a.hp-Math.round(a.maxHp*0.08)); print('末路狂奔——他不再守任何规矩（攻击+50%·自损8%生命）','bad'); }
-  } else {
-    const rage=en.hp<en.maxHp*0.5;
-    let d1=d, d2=d;
-    if(rage){ d1=Math.round(d1*1.2); d2=Math.round(d2*1.2); print('暴怒：目标半血以下，伤害+20%','hint'); }
-    en.hp-=d1;
-    print(a.name+'出手了'+en.name+' −'+d1+'（狮心·第一击'+(a.swordWill?'·剑意+'+a.swordWill*5+'%':'')+'）','hit');
-    if(en.hp>0){
-      en.hp-=d2;
-      print('狮心·第二击 −'+d2,'hit');
-      if(en.hp>0 && a.w>0){ en.bleed=(en.bleed||0)+1; print('追猎：狮纹烙进伤口（流血+1）','hit'); }
-    }
-  }
-  // DYO「以荣冠加冕无名之身」：每4回合为玩家加冕（荣冠：3回合攻击+30%）
-  a.crownCd=(a.crownCd||0)+1;
-  if(a.crownCd>=4){ a.crownCd=0; state.p.crown=3; print('「以荣冠加冕无名之身」——他为你加冕：接下来3回合你的攻击+30%','hint'); }
-  if(a.unyield>0)a.unyield--;
-  allyHitFx(a,en);
-}
-/* 安普提斯：法术效率为常规法师的3~5倍，妖术/诅咒/幻觉（精神与诅咒系）六倍 */
-function ampthisMult(sch){ if(sch==='诅咒'||sch==='精神')return 6; return 3+Math.floor(Math.random()*3); }
 function allySpellPower(key,a){
   const s=SPELL_DEFS[key];
   const staff=(a.weapon&&typeof a.weapon==='object'&&a.weapon.type==='法杖')?a.weapon.atk:0;
   const raw=Math.max(1,(s.dmg||0)+Math.round((a.lv||1)*(s.scale||1))+staff);
   const full=state.p.armguard?Math.round(raw*1.25):raw; // 臂甲对全队法伤+25%
-  let dmg=Math.max(1,Math.round(full*0.25));
-  let heal=s.heal?Math.max(1,Math.round(s.heal*0.25)):0;
-  if(a&&a.name==='安普提斯'){
-    const m=ampthisMult(SPELL_SCHOOL[key]||'');
-    dmg*=m; heal*=m;
-    print('妖雾翻涌——'+a.name+'的法术比寻常法师强了'+m+'倍','hint');
-  }
-  return {dmg,heal};
+  return {dmg:Math.max(1,Math.round(full*0.25)),heal:s.heal?Math.max(1,Math.round(s.heal*0.25)):0};
 }
 function mostWounded(){
   return [state.p].concat(allies()).filter(x=>x.maxHp).sort((x,y)=>(x.hp/x.maxHp)-(y.hp/y.maxHp))[0];
 }
 function allyXpNeed(a){ return (a.lv||1)*80; }
 function allyHurt(a,dmg){
-  if(a===state.p.regulus){
-    if(a.lionInvuln>0){ a.lionInvuln=0; print('兽形解禁的金光挡下了这一击——'+a.name+'毫发无伤','hint'); return; }
-    dmg=Math.max(1,Math.round(dmg*0.65));
-    if(!a.gloryNoted){ a.gloryNoted=true; print('荣耀之锁——'+a.name+'正面受击-35%（他不能拒绝正面交锋）','def'); }
-    if(a.swordWill>0)a.swordWill--;
-    if(!a.unyieldUsed&&a.hp>a.maxHp*0.5&&a.hp-dmg<=a.maxHp*0.5){ a.unyield=3; a.unyieldUsed=true; print('不屈——'+a.name+'拄剑不倒（3回合不会倒下，攻击+30%）','hint'); }
-    if(!a.lionForm&&a.hp>0&&a.hp>a.maxHp*0.25&&a.hp-dmg<=a.maxHp*0.25){
-      a.lionForm=true; a.lionRounds=0; a.lionInvuln=1;
-      a.hp=Math.min(a.maxHp,a.hp-dmg+Math.round(a.maxHp*0.3));
-      print('他放下了剑——兽形解禁：一头金鬃狮子立在阵前（攻击+50%·回血30%·下回合无敌）','hint');
-      return;
-    }
-  }
+  if(a===state.p.regulus){ dmg=Math.max(1,Math.round(dmg*0.75)); print('狮鬃如甲——'+a.name+'所受伤害-25%','def'); }
   if(a.fort){ dmg=Math.max(1,dmg-a.fort); } // 星辉甲胄：本场所受伤害-4
   a.hp=Math.max(0,a.hp-dmg);
   print(a.name+'受到 −'+dmg+'（剩余'+a.hp+'）','bad');
   if(a.hp<=0){
-    if(a===state.p.regulus&&a.unyield>0){
-      a.hp=1; a.unyield--;
-      print('不屈！'+a.name+'锁住了最后一口气（还剩'+a.unyield+'回合）','hint');
-      return;
-    }
     if(ctx&&ctx.control===a)ctx.control=null; // 被操控的角色倒下，操控交还主角
     if(state.p.control===a.name)state.p.control=null;
     if(state.p.knight===a)state.p.knight=null;
     else if(state.p.companion===a)state.p.companion=null;
     else if(state.p.regulus===a)state.p.regulus=null;
-    else if(state.p.ampthis===a){ state.p.ampthis=null; const af=state.p.flags; af.ampthisReviveAt=Date.now()+480*1000; af.ampthisPending=true; af.ampthisDefeats=3; print('妖雾散去——她没有死，只是暂时退场（黑棘城荒野还能再遇到她）','bad'); }
     else state.p.mercs=state.p.mercs.filter(m=>m!==a);
     if(state.p.leader===a.name)state.p.leader='主角';
     print(a.name+'重伤倒下，被抬出了战场','bad');
@@ -2525,8 +2294,6 @@ function intentLine(en,r,t){
   if(SHIELD_NAMES[n]){ return aimLine()+'——'+(r>0.72?'它要举盾格挡（你的下一击减半）':'它要出手攻击'); }
   const MAP={
    老龙:r=>r<0.35?'它深吸一口气——龙息要来了':r<0.65?'它弓起尾巴——横扫':'它张开了嘴——撕咬',
-   '轩辕十四·单挑':r=>r<0.35?'他横剑在前——冲锋斩的起手':r<0.7?'他缓缓蓄剑——剑意在涨':'他盯着你的眼睛——正面来',
-   '妖僧·拉斯普提':r=>'他嘴里念叨着碎句，脖子上的血滴答滴答——看不出要干什么',
    赤河龙:r=>r<0.4?'它喉头泛红——赤焰龙息':r<0.7?'它甩动巨尾':'它探颈欲咬',
    泥沼龙:r=>r<0.4?'沼息在它嘴里鼓泡':r<0.7?'它甩尾':'它张嘴要咬',
    旱地龙:r=>r<0.4?'尘沙在它喉间聚集':r<0.7?'它扫起沙暴':'它低头要撞',
@@ -2720,7 +2487,7 @@ function applyEnemyHit(raw,def,extra){
   let dmg=raw;
   const red=accFx('def')+accFx('dmgRed')+(state.p.fort||0)+(state.p.buffSys&&state.p.buffSys.防.v?state.p.buffSys.防.v:0);
   if(red)dmg=Math.max(1,dmg-red); // 饰品/法术/药剂的减伤
-  const stFx2=stanceApplies()?STANCE_FX[state.p.stance]:null;
+  const stFx2=STANCE_FX[state.p.stance];
   if(stFx2&&stFx2.taken)dmg=Math.round(dmg*stFx2.taken); // 架势修正
   if(def==='格挡'){ dmg=Math.ceil(dmg*0.5); print('你格挡！伤害减半','def'); }
   else if(def==='闪避'){
@@ -3984,7 +3751,6 @@ function winCombat(){
   const en=ctx.en, op=ctx.opts;
   if(en.legendLives&&en.legendLives>0){
     en.legendLives--;
-    if(en.name==='妖僧·拉斯普提'){ en.lasFury=(en.lasFury||0)+1; print('越打越疯——他全属性+15%！','bad'); }
     en.hp=en.maxHp;
     en.bleed=0;
     print(en.name+'倒下了——但苍白的甲胄里有什么不肯死','hint');
@@ -4008,7 +3774,6 @@ function winCombat(){
   state.p.kills=(state.p.kills||0)+fallen.length;
   fallen.forEach(e=>{
     if(e.xp){ totalXp+=e.xp; }
-    if(KNIGHT_NAMES[e.name]){ state.p.flags.knightKills=(state.p.flags.knightKills||0)+1; } // 拉斯普提：累计击败10名骑士解锁
     if(e.stolen>0){ state.p.gold+=e.stolen; print('你捡回了被抢走的 '+e.stolen+' 枚铜币','ok'); }
     eliteLootDrop(e.name,e.luckDown);
     const rec=state.p.bestiary[e.name]||(state.p.bestiary[e.name]={n:0,day:state.p.days||0,high:e.high});
@@ -4027,10 +3792,6 @@ function winCombat(){
     print('普通敌人身上没有北边的密令——密令只在高危之敌身上（黑棘城高危委托、各城极危悬赏、解放战争的祸首、传奇骑士）','dim');
   }
   if(totalXp){ const xpB=Math.round(totalXp*(1+accFx('xpPct'))); gainXp(xpB); allyGainXp(xpB); }
-  if((state.p.flags.knightKills||0)>=10&&!state.p.flags.lasputiUnlocked){
-    state.p.flags.lasputiUnlocked=true; state.p.flags.lasputiLv=state.p.flags.lasputiLv||60;
-    print('你击败了第十名骑士——风里传来断断续续的笑声，有什么开始在地图上乱晃了（去黑棘城酒馆打听）','hint');
-  }
   if(op.gold){ const gB=Math.round(op.gold*(1+accFx('goldPct'))); state.p.gold+=gB; print('拾取 '+gB+' 铜币','ok'); }
   if(op.items){ for(const k in op.items){ addItem(k,op.items[k]); print('获得 '+k+' ×'+op.items[k],'ok'); } }
   if(op.note)print(op.note,'dim');
@@ -4227,7 +3988,6 @@ function gotoSmith(){
     gotoSmith();
   }]);
   else o.push(['大师锻造：北归之誓（已完成——大师的手只抬得起一次）',()=>{},true]);
-  o.push(['熔炼旧武器（旧剑回炉成锋利精钢，继承四分之一攻击）',meltWeaponMenu]);
   o.push(['定制武器（铁匠 Lv.'+forgeLevel()+' · '+state.p.forge.count+'/1000）',forgeMenu]);
   o.push(['定制护甲（头/胸/腿/披风）',forgeArmorMenu]);
   o.push(['定制随从装备（骑士/伙伴）',followerForgeMenu]);
@@ -4308,7 +4068,7 @@ function gotoGoods(){
   st.items.forEach(k=>{
     o.push(['新货：'+k+'（'+CATALOG[k].price+'铜币，'+CATALOG[k].desc+'）',()=>{ takeStock('goods',k); buyG(k,CATALOG[k].price); }]);
   });
-  const SELL_LIST=[['兽皮',3],['猪王皮',6],['魔化兽皮',8],['黑鳄皮',8],['巨魔皮',5],['旧银币',6],['巨魔牙',4],['胡椒',8],['血盐',5],['血水结晶',12],['女妖之泪',15],['碎布条',2],['游侠短弓',8],['骑士剑',10],['锁子甲胸甲',28],['板甲胸甲',45],['板甲头盔',30],['锁子甲护腿',18],['板甲护腿',35],['巨魔粗制饰品',3],['蛇蛋',10],['熊皮',5],['蛛丝',3],['骨头',2],['蛇皮',4],['暗影之尘',8],['送葬骨灰',6],['水渍石',5],['摆锤',7],['弃誓之剑',15],['空甲胄壳',12],['虱壳',3],['虱母壳',8],['灰衣甲片',6],['灰衣队长徽记',15],['灰土结晶',10],['覆金属龙皮',15],['苦蜜蜡',6],['蛙皮',4],['蛙油膏',4],['骨器',5],['灰肉',4],['疫骨',10],['龙鳞',40],['妖僧残页',8],['拉斯普提的碎甲片',15],['疯狂核心',20],['拉斯普提的毒血',12],['疯子的蜡烛',80],['管理者材料',80],['海鱼',3],['大鱼',8],['烤鱼',2]];
+  const SELL_LIST=[['兽皮',3],['猪王皮',6],['魔化兽皮',8],['黑鳄皮',8],['巨魔皮',5],['旧银币',6],['巨魔牙',4],['胡椒',8],['血盐',5],['血水结晶',12],['女妖之泪',15],['碎布条',2],['游侠短弓',8],['骑士剑',10],['锁子甲胸甲',28],['板甲胸甲',45],['板甲头盔',30],['锁子甲护腿',18],['板甲护腿',35],['巨魔粗制饰品',3],['蛇蛋',10],['熊皮',5],['蛛丝',3],['骨头',2],['蛇皮',4],['暗影之尘',8],['送葬骨灰',6],['水渍石',5],['摆锤',7],['弃誓之剑',15],['空甲胄壳',12],['虱壳',3],['虱母壳',8],['灰衣甲片',6],['灰衣队长徽记',15],['灰土结晶',10],['覆金属龙皮',15],['苦蜜蜡',6],['蛙皮',4],['蛙油膏',4],['骨器',5],['灰肉',4],['疫骨',10],['龙鳞',40],['管理者材料',80],['海鱼',3],['大鱼',8],['烤鱼',2]];
   let hasSell=false;
   for(const pair of SELL_LIST){
     const k=pair[0], v=pair[1];
@@ -6043,7 +5803,6 @@ function wander(){
   }
   if(twoLionsCheck(()=>scene('野外','你绕开了，继续走',[['继续游荡',wander],['回城',gotoAshwold]]))) return;
   if(state.p.level>=LEG_KNIGHTS[1].lv-10&&!f.legF1&&Math.random()<0.025){ legKnightFight(1,wanderNext); return; }
-  if(lasputiCheck(()=>scene('野外','你绕开了，继续走',[['继续游荡',wander],['回城',gotoAshwold]]))) return;
   if(huntCheck(()=>scene('野外','你绕开了，继续走',[['继续游荡',wander],['回城',gotoAshwold]]))) return;
   if(roll<0.35){ scene('野外','你走了半天只有风和草',[['继续游荡',wander],['回城',gotoAshwold]]); return; }
   if(roll<0.52){
@@ -6529,13 +6288,6 @@ function gotoNewBoard(key){
     if(f.tideMainDone&&!f.tideMainReward) o.push(['交差：疏通港道（+120铜币，港道恢复通航）',collectTideMain]);
     if(f.tideMainReward) o.push(['主线：疏通港道（已完成·码头可坐船）',()=>{},true]);
   }
-  if(key==='whitewater'){
-    if(f.regulusGot&&!f.regulusDuelReward){
-      if(!f.regulusDuelJob&&!f.regulusDuelDone) o.push(['支线：与轩辕十四单挑（白水河畔·他等你·报酬150铜币）',acceptRegulusDuel]);
-      if(f.regulusDuelJob&&!f.regulusDuelDone) o.push(['寻踪：与轩辕十四单挑（去城外游荡）',()=>{ print('他说过：白水河畔见——只带剑','dim'); }]);
-      if(f.regulusDuelDone) o.push(['交差：与轩辕十四单挑（+150铜币，他认了你）',collectRegulusDuel]);
-    } else if(f.regulusGot&&f.regulusDuelReward) o.push(['支线：与轩辕十四单挑（已完成——他称你为可敬的对手）',()=>{},true]);
-  }
   d.deliver.forEach(dv=>o.push(['交：收集'+dv[0]+'×'+dv[1]+'（报酬'+dv[2]+'铜币）',()=>deliverJob(dv[0],dv[1],dv[2],()=>gotoNewBoard(key))]));
   o.push(['交：收集火绒×4（报酬8铜币）',()=>deliverJob('火绒',4,8,()=>gotoNewBoard(key))]);
   o.push(['交：收集骨头×3（报酬9铜币）',()=>deliverJob('骨头',3,9,()=>gotoNewBoard(key))]);
@@ -6560,8 +6312,6 @@ function wanderNew(pool,key){
   const f=state.p.flags;
   const roll=Math.random();
   if(twoLionsCheck(()=>scene('郊野','你绕开了，继续走',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]))) return;
-  if(key==='whitewater'&&regulusDuelCheck(()=>scene('郊野','你绕开了，继续走',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]))) return;
-  if(lasputiCheck(()=>scene('郊野','你绕开了，继续走',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]))) return;
   if(huntCheck(()=>scene('郊野','你绕开了，继续走',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]))) return;
   if(roll<0.34){ scene('郊野','路上只有风和尘土',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]); return; }
   if(pool==='south'){
@@ -6831,10 +6581,9 @@ function gotoHighJob(i){
 function collectHighJob(i){
   const hj=HIGH_JOBS[i]; const f=state.p.flags;
   state.p.gold+=hj[2];
-  if(hj[3]){ f['highDone'+i]=false; f.ampthisJobs=(f.ampthisJobs||0)+1; }
+  if(hj[3]){ f['highDone'+i]=false; }
   else { f['highDone'+i]=false; f['highReward'+i]=true; }
   f.jobCount++;
-  if(blackthornJobsDone()>=10&&!f.ampthisUnlocked){ f.ampthisUnlocked=true; f.ampthisPending=true; print('你为黑棘城办成了十件委托——城头的雾色变了，荒野里有东西醒了过来','hint'); }
   print('黑棘城付了'+hj[2]+'铜币'+(hj[3]?'——这单还会再挂出来':'——这单从此撤下'),'ok');
   gotoNewBoard('blackthorn');
 }
@@ -6996,11 +6745,6 @@ function gotoBrionac(){
    onFlee:()=>{ print('你撤了出来——魔枪的低吼还跟在身后','dim'); gotoRoad5(); }});
 }
 function collectBrionac(){ const f=state.p.flags; state.p.gold+=150; f.briReward=true; f.jobCount++; print('沃林付了150铜币——旷野重新安静了','ok'); huntBoardReturn(); }
-function blackthornJobsDone(){
-  const f=state.p.flags; let n=f.ampthisJobs||0;
-  for(let i=0;i<24;i++){ if(f['highReward'+i])n++; }
-  return n;
-}
 function gotoBlackThornBoard(){
   const f=state.p.flags; const o=[];
   HIGH_JOBS.forEach((hj,i)=>{
@@ -7009,14 +6753,6 @@ function gotoBlackThornBoard(){
     else if(f['highJob'+i]&&!f['highDone'+i]) o.push(['寻踪：'+hj[0]+'（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
     else if(f['highDone'+i]) o.push(['交差：'+hj[0]+'（+'+hj[2]+'铜币）',()=>collectHighJob(i)]);
   });
-  // 安普提斯：黑棘城完成10件委托后，荒野里刷新游荡Boss（击败三次可劝降）
-  const doneN=blackthornJobsDone();
-  if(!f.ampthisUnlocked){
-    if(doneN>=10){ f.ampthisUnlocked=true; f.ampthisPending=true; print('城里的委托做够了十件——荒野里的雾起了变化，有什么在等你','hint'); }
-    else o.push(['？？？：做完10件高危委托，荒野会记住你（当前 '+doneN+'/10）',()=>{},true]);
-  } else if(!f.ampthisJoined){
-    o.push(['传说：雾里的笑——她还在城外游荡（击败她三次，再问她跟不跟你走）',()=>{ print('去城外游荡——雾最浓的时候，她会来','dim'); }]);
-  }
   o.push(['离开',backToTown]);
   scene('告示板','黑棘城的告示板钉满了高危委托——这里是刀口上讨生活的地方，24张委托，张张要命',o);
 }
@@ -7052,14 +6788,6 @@ function gotoBlackThornTavern(){
     print(rs[state.p.flags.rumorIdx%rs.length],'dim'); state.p.flags.rumorIdx++;
     gotoBlackThornTavern();
   }],
-  ['打听：荒野里的疯子（免费）',()=>{
-    const f=state.p.flags;
-    if(!f.lasputiUnlocked){ print('"疯子？北边疯的多了去了"——他摆摆手，你问错了人','dim'); }
-    else if(f.lasputiDefeats>0){ print('"那个妖僧？他还在乱晃——哪里都可能有他，见谁打谁"','dim'); }
-    else if(!f.lasputiPending){ f.lasputiPending=true; print('"你说那个脖子上流血的？他专打活物，见谁打谁——出城游荡，他会在路上等你"','dim'); print('去荒野游荡——他或先找上你','hint'); }
-    else print('酒客们压低声音："那个疯子最近就在附近晃悠——别走夜路"','dim');
-    gotoBlackThornTavern();
-  }],
   ['离开',backToTown]
   ]);
 }
@@ -7080,8 +6808,6 @@ function gotoBlackThornRoad(){
 function wanderBlackThorn(){
   const f=state.p.flags;
   const roll=Math.random();
-  if(ampthisCheck())return; // 安普提斯：黑棘城10件委托后荒野游荡Boss（击败三次可劝降）
-  if(lasputiCheck(()=>scene('黑棘城外','你绕开了，继续走',[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]])))return; // 妖僧·拉斯普提
   if(twoLionsCheck(()=>scene('黑棘城外','你绕开了，继续走',[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]]))) return;
   if(huntCheck(()=>scene('黑棘城外','你绕开了，继续走',[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]]))) return;
   if(roll<0.32){ scene('黑棘城外','风卷着沙，路上一个人都没有',[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]]); return; }
@@ -7102,180 +6828,6 @@ function wanderBlackThorn(){
 }
 function wanderBlackThornNext(){ scene('黑棘城外','风呜呜地响',[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]]); }
 function wanderBlackThornBack(){ scene('黑棘城外','你绕开了',[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]]); }
-/* ---------- 安普提斯（0.25·角色档案九）：黑棘城完成10件委托后在荒野刷新，击败三次可劝降 ---------- */
-function ampthisBoss(){
-  const lv=Math.max(18,state.p.level);
-  return {name:'安普提斯',lv,xp:800,hp:1200+lv*50,atk:16+Math.round(lv/2),def:10,physRes:0.3,intro:'雾里走出一名女子，脸上挂着泪痕——她在笑，笑得让人心里发毛'};
-}
-function ampthisCheck(){
-  const f=state.p.flags;
-  if(!f.ampthisUnlocked||f.ampthisJoined)return false;
-  if(Date.now()<(f.ampthisReviveAt||0))return false;
-  if(!f.ampthisPending&&Math.random()>=0.1)return false;
-  f.ampthisPending=false;
-  startCombat(ampthisBoss(),{canFlee:true,onWin:ampthisWin,onFlee:()=>{ scene('黑棘城外','雾里的影子没有追来',[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]]); }});
-  return true;
-}
-function ampthisWin(){
-  const f=state.p.flags;
-  f.ampthisDefeats=(f.ampthisDefeats||0)+1;
-  if(f.ampthisDefeats<3){
-    f.ampthisReviveAt=Date.now()+480*1000;
-    f.ampthisPending=true;
-    const line=f.ampthisDefeats===1?'「有意思」她笑了，雾一样散开——480秒后才会再出现':'「又来了？你比那个疯子执着」她消失了——480秒后才会再出现';
-    scene('黑棘城外',line,[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]]);
-    return;
-  }
-  scene('黑棘城外','「……算了，你打够了没有？」——她笑 这次是真笑',[
-    ['跟我走',()=>{
-      state.p.ampthis={name:'安普提斯',type:'法杖',lv:Math.max(10,state.p.level),xp:0,role:'妖术师',passive:'妖雾：妖术/诅咒/幻觉（精神与诅咒系）法术效率×6，其余法术×3~5',hp:80,maxHp:80,mp:90,maxMp:90,d:2,atk:2,def:3,weapon:{name:'妖雾法杖',atk:10,type:'法杖'}};
-      f.ampthisJoined=true;
-      print('她走到你身侧——从此搭伙 她说："我叫安普提斯"','ok');
-      print('（她的法术效率是寻常法师的3~5倍，妖术/诅咒/幻觉六倍）','hint');
-      scene('黑棘城外','雾淡了 身边多了一个披着妖雾的影子',[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]]);
-    }],
-    ['走开',()=>{
-      f.ampthisReviveAt=Date.now()+480*1000; f.ampthisPending=true;
-      print('她耸耸肩，散进雾里——480秒后才会再出现','dim');
-      scene('黑棘城外','雾又浓了起来',[['继续游荡',wanderBlackThorn],['回城',gotoBlackThorn]]);
-    }]
-  ]);
-}
-/* ---------- 与轩辕十四单挑（0.25·白水镇支线，需先完成招募）：放水状态两阶段隐藏BOSS ---------- */
-function acceptRegulusDuel(){ const f=state.p.flags; f.regulusDuelJob=true; print('轩辕十四按住你的肩："白水河畔，我等你——只带剑"','dim'); backToTown(); }
-function regulusDuelCheck(back){
-  const f=state.p.flags;
-  if(!f.regulusDuelJob||f.regulusDuelDone)return false;
-  scene('白水河畔','轩辕十四拄剑站在河滩上——没有别人，只有剑，他等你',[
-    ['上前',startRegulusDuel],
-    ['改天再来',back]
-  ]);
-  return true;
-}
-function startRegulusDuel(){
-  const f=state.p.flags;
-  f.regulusDuelJob=true;
-  startCombat({name:'轩辕十四·单挑',lv:50,xp:1200,hp:2200,atk:42,def:12,intro:'他拔剑向你行礼——狮子不偷袭，骑士不背身'},{canFlee:true,solo:true,
-   onWin:()=>{
-     f.regulusDuelJob=false; f.regulusDuelDone=true;
-     print('他单膝跪地，剑插进河滩的沙里——「你活过了终焉一击」','hint');
-     print('「回去交差吧——能与你的剑交手，是我的荣幸」','dim');
-     gotoNewTown('whitewater');
-   },
-   onFlee:()=>{ print('你退开了——他收剑站在原地，还在等','dim'); gotoNewRoad('whitewater'); }});
-}
-function collectRegulusDuel(){
-  const f=state.p.flags;
-  state.p.gold+=150;
-  f.regulusDuelDone=false; f.regulusDuelReward=true; f.jobCount++;
-  const r=state.p.regulus;
-  if(r){ r.atk=(r.atk||0)+15; r.atk0=(r.atk0||0)+15; r.def=(r.def||0)+5; r.def0=(r.def0||0)+5; print('轩辕十四解下护腕："与你交手之后，狮子的枷锁松了一些"——他攻击+15，防御+5','ok'); }
-  print('白水镇凑了150铜币——全镇都看见了河畔那场剑斗','ok');
-  gotoNewBoard('whitewater');
-}
-function regulusDuelTurn(def){
-  const en=ctx.en;
-  // 二阶段：25%血以下主动变身（被法术攻击羞辱过则不进入）
-  if(!en.phase2&&!ctx.regulusNoP2&&en.hp>0&&en.hp<=en.maxHp*0.25){
-    en.phase2=true; en.invuln=1; en.cycle2=0;
-    en.hp=Math.min(en.maxHp,en.hp+Math.round(en.maxHp*0.3));
-    print('他放下了剑——兽形解禁，一头金鬃狮子立在河滩上（回血30%，下回合不行动）','hint');
-    return;
-  }
-  if(en.invuln>0){ en.invuln=0; print('兽形解禁的金光里，他缓缓踱步——这一回合没有攻击','dim'); return; }
-  if(!en.unyieldUsed&&en.hp>0&&en.hp<=en.maxHp*0.5){ en.unyield=3; en.unyieldUsed=true; print('不屈——他拄剑不倒（3回合内不会死亡，攻击+30%）','hint'); }
-  en.swordWill=Math.min(5,(en.swordWill||0)+1); // 剑意蓄势
-  const base=en.atk;
-  let mult=1+0.05*en.swordWill;
-  if(en.unyield>0)mult*=1.3;
-  if(en.phase2){
-    en.cycle2=(en.cycle2||0)+1;
-    if(en.hp<=en.maxHp*0.15)mult*=1.5; // 末路狂奔
-    if(state.p.buff.流血>0||state.p.buff.硬直>0)mult*=1.25; // 猎食本能
-    if(en.hp<=en.maxHp*0.05){
-      en.finalBlow=true;
-      print('终焉一击——他把一切都押在这一爪上！');
-      const h=applyEnemyHit(Math.round(base*mult*3),def);
-      if(h){ state.p.buff.流血+=3; print('撕裂爪击×3（流血+3层）','bad'); }
-      return;
-    }
-    if(en.cycle2%5===0){
-      print('狮吼——白水河都在抖！');
-      state.p.buff.硬直=1;
-      state.p.hp=Math.max(1,state.p.hp-Math.round(state.p.maxHp*0.15));
-      print('真实伤害：最大生命15%（无视护甲），你被震得耳鸣','bad');
-      return;
-    }
-    if(en.cycle2%4===0){
-      print('狂怒连击——三爪齐出！');
-      for(let i=0;i<3;i++){ if(state.p.hp<=0)break; const h=applyEnemyHit(Math.round(base*mult*0.8),def); if(h)state.p.buff.流血+=1; }
-      print('狂怒连击×3（每爪+1流血）','hint');
-      return;
-    }
-    print('撕裂爪击！');
-    const h=applyEnemyHit(Math.round(base*mult),def);
-    if(h){ state.p.buff.流血+=2; print('狮爪撕开皮肉（流血+2层）','bad'); }
-    return;
-  }
-  en.chargeCd=(en.chargeCd||0)+1;
-  if(en.chargeCd%3===0){
-    print('冲锋斩——他直线冲到你面前！');
-    const h=applyEnemyHit(Math.round(base*mult*1.4),def);
-    if(h){ print('冲锋斩的余势未消（×1.4）','bad'); }
-    return;
-  }
-  print('他挥剑——剑势沉得像山');
-  applyEnemyHit(Math.round(base*mult),def);
-}
-/* ---------- 妖僧·拉斯普提（0.25·16-BOSS与传奇单位）：击败10名骑士后解锁，全地图游荡，480秒复活，不可招募 ---------- */
-const KNIGHT_NAMES={轻甲骑士:1,骑士扈从:1,重甲骑士:1,长枪骑士:1,黑甲骑士:1,游侠骑士:1,斥候骑士:1,巡防骑士:1,巡防队长:1,教团护教骑士:1,弃誓骑士:1,灰衣骑士:1,灰衣队长:1,灰衣指挥官:1,血池甲士:1,铁壳骑士:1,雹铁骑士:1,铁匠骑士:1,驻军巡逻兵:1,疫岸野骑士:1,灰墙守备长:1,灰墙弩阵:1,'报丧骑士·菲洛斯':1,'腐败骑士·多明戈':1,'断弓骑士·马特奥':1,'苍白骑士·塞拉斯':1,'寒铁骑士·维罗妮卡':1,'断剑骑士·塞萨尔':1,'鲸骨骑士·华金':1};
-let lasputiResume=null;
-function lasputiCheck(back){
-  const f=state.p.flags;
-  if(!f.lasputiUnlocked)return false;
-  if(Date.now()<(f.lasputiReviveAt||0))return false;
-  if(!f.lasputiPending && (f.lasputiDefeats||0)<=0)return false; // 首次遭遇须去黑棘城酒馆打听
-  let chance=0.1;
-  if(state.p.ampthis)chance*=1.5; // 安普提斯在场：遭遇概率+50%
-  if(!f.lasputiPending && Math.random()>=chance)return false;
-  f.lasputiPending=false;
-  lasputiResume=back;
-  const lv=f.lasputiLv||60;
-  startCombat({name:'妖僧·拉斯普提',lv,xp:900,hp:900+lv*25,atk:20+Math.round(lv/2),def:10,physRes:0.35,legendLives:3,intro:'一个穿破烂僧袍的身影站在路中间，脑袋歪搭在肩上，脖子上的血一直在流——他看见你，笑了'},{canFlee:true,onWin:lasputiWin,onFlee:()=>{ print('你绕开了——笑声还在身后跟着','dim'); if(lasputiResume)lasputiResume(); }});
-  return true;
-}
-function lasputiWin(){
-  const f=state.p.flags;
-  f.lasputiDefeats=(f.lasputiDefeats||0)+1;
-  const lv0=f.lasputiLv||60;
-  f.lasputiLv=Math.min(120,lv0+Math.floor(Math.random()*6));
-  f.lasputiReviveAt=Date.now()+480*1000;
-  f.lasputiPending=true;
-  addItem('妖僧残页',2); addItem('拉斯普提的碎甲片',1); addItem('疯狂核心',1); addItem('拉斯普提的毒血',1);
-  print('他倒下去——笑得更大声了（妖僧残页×2·碎甲片·疯狂核心·毒血）','ok');
-  if(!f.lasputiCandle){ f.lasputiCandle=true; addItem('疯子的蜡烛',1); print('他怀里滚出一根灰白的蜡烛——人皮的，这是通往格里莫的路','hint'); }
-  print('奥提斯的手从虚空里按下来——他的等级被压回'+f.lasputiLv+'（480秒后复活，越打越强）','dim');
-  if(lasputiResume)lasputiResume(); else backToTown();
-}
-function lasputiTurn(def){
-  const en=ctx.en;
-  const heal=Math.max(1,Math.round(en.maxHp*0.04));
-  en.hp=Math.min(en.maxHp,en.hp+heal);
-  print('暗愈——妖化的身体在自我修补（+'+heal+'）','hint');
-  print('他脖子上的伤口又裂开了，血顺着僧袍往下淌——他不在乎','dim');
-  if(Math.random()<0.2){ state.p.buff.硬直=1; print('催眠注视——他的眼睛对上了你的（你被催眠，下回合无法行动）','bad'); }
-  const r=Math.random();
-  if(r<0.25){ state.p.buff.流血=(state.p.buff.流血||0)+2; print('妖僧术·腐蚀——黑气缠上你（流血+2层）','bad'); }
-  else if(r<0.5){ state.p.buff.流血=(state.p.buff.流血||0)+1; state.p.buff.硬直=Math.max(state.p.buff.硬直,1); print('妖僧术·精神侵蚀——你头痛欲裂（流血+1·硬直1）','bad'); }
-  else if(r<0.7){ state.p.curseLas=(state.p.curseLas||0)+2; print('妖僧术·诅咒——霉运落了下来（你本场攻击-2）','bad'); }
-  else { const h2=Math.max(1,Math.round(en.maxHp*0.08)); en.hp=Math.min(en.maxHp,en.hp+h2); print('妖僧术·吞食——他咀嚼着什么（+'+h2+'生命）','hint'); }
-  const fury=1+0.15*(en.lasFury||0);
-  print('他扑了上来——嘴里念叨着碎句！');
-  const h=applyEnemyHit(Math.round(en.atk*fury),def);
-  if(h){ state.p.buff.流血=(state.p.buff.流血||0)+1; print('妖气渗进伤口（+1层流血）','bad'); }
-  if(Math.random()<0.2){ state.p.buff.流血=(state.p.buff.流血||0)+2; print('他的左手自己动了起来——独立施法·腐蚀2层！','bad'); }
-  if(Math.random()<0.1){ state.p.lasTaunt=(state.p.lasTaunt||0)+1; print('「你也想打我？——来——来——」你一阵烦躁（攻击-5%，可叠加）','bad'); }
-}
 /* 黑原荒野 */
 function gotoBlackPlain(){
   curScene='blackplain';
@@ -8308,7 +7860,6 @@ function wanderTanwo(){
   if(twoLionsCheck(()=>scene('坦沃郊野','你绕开了，继续走',[['继续游荡',wanderTanwo],['回城',gotoTanwo]]))) return;
   if(state.p.level>=LEG_KNIGHTS[3].lv-10&&!f.legF3&&Math.random()<0.025){ legKnightFight(3,wanderTanwoNext); return; }
   if(huntCheck(()=>scene('坦沃郊野','你绕开了，继续走',[['继续游荡',wanderTanwo],['回城',gotoTanwo]]))) return;
-  if(lasputiCheck(()=>scene('坦沃郊野','你绕开了，继续走',[['继续游荡',wanderTanwo],['回城',gotoTanwo]]))) return;
   if(roll<0.3){ scene('坦沃郊野','你走了半天地面沙沙响',[['继续游荡',wanderTanwo],['回城',gotoTanwo]]); return; }
   if(roll<0.55){
     const pick=Math.random();
@@ -8363,7 +7914,6 @@ function wanderCromford(){
   if(twoLionsCheck(()=>scene('克罗姆福德郊野','你绕开了，继续走',[['继续游荡',wanderCromford],['回城',gotoCromford]]))) return;
   if(state.p.level>=LEG_KNIGHTS[2].lv-10&&!f.legF2&&Math.random()<0.025){ legKnightFight(2,wanderCromfordNext); return; }
   if(huntCheck(()=>scene('克罗姆福德郊野','你绕开了，继续走',[['继续游荡',wanderCromford],['回城',gotoCromford]]))) return;
-  if(lasputiCheck(()=>scene('克罗姆福德郊野','你绕开了，继续走',[['继续游荡',wanderCromford],['回城',gotoCromford]]))) return;
   if(roll<0.32){ scene('克罗姆福德郊野','你踩着泥走蛙声从四面八方来',[['继续游荡',wanderCromford],['回城',gotoCromford]]); return; }
   if(roll<0.62){
     const pick=Math.random();
@@ -8698,7 +8248,6 @@ function wanderLienfiel(){
   }
   if(state.p.level>=LEG_KNIGHTS[4].lv-10&&!f.legF4&&Math.random()<0.025){ legKnightFight(4,wanderLienfielNext); return; }
   if(huntCheck(()=>scene('利恩菲尔郊野','你绕开了，继续走',[['继续游荡',wanderLienfiel],['回城',gotoLienfiel]]))) return;
-  if(lasputiCheck(()=>scene('利恩菲尔郊野','你绕开了，继续走',[['继续游荡',wanderLienfiel],['回城',gotoLienfiel]]))) return;
   if(roll<0.32){ scene('利恩菲尔郊野','你走在腐田之间嗡声包围着你',[['继续游荡',wanderLienfiel],['回城',gotoLienfiel]]); return; }
   if(roll<0.6){
     const pick=Math.random();
@@ -9004,7 +8553,6 @@ function wanderWarrin(){
   }
   if(state.p.level>=LEG_KNIGHTS[5].lv-10&&!f.legF5&&Math.random()<0.025){ legKnightFight(5,wanderWarrinNext); return; }
   if(huntCheck(()=>scene('沃林郊野','你绕开了，继续走',[['继续游荡',wanderWarrin],['回城',gotoWarrin]]))) return;
-  if(lasputiCheck(()=>scene('沃林郊野','你绕开了，继续走',[['继续游荡',wanderWarrin],['回城',gotoWarrin]]))) return;
   if(roll<0.32){ scene('沃林郊野','河风里都是煮骨头的味',[['继续游荡',wanderWarrin],['回城',gotoWarrin]]); return; }
   if(roll<0.6){
     const pick=Math.random();
@@ -9310,7 +8858,6 @@ function wanderWhitestone(){
   }
   if(state.p.level>=LEG_KNIGHTS[6].lv-10&&!f.legF6&&Math.random()<0.025){ legKnightFight(6,wanderWhitestoneNext); return; }
   if(huntCheck(()=>scene('白石镇郊野','你绕开了，继续走',[['继续游荡',wanderWhitestone],['回城',gotoWhitestone]]))) return;
-  if(lasputiCheck(()=>scene('白石镇郊野','你绕开了，继续走',[['继续游荡',wanderWhitestone],['回城',gotoWhitestone]]))) return;
   if(roll<0.35){ scene('白石镇郊野','官道笔直，两边的麦田绿得发亮',[['继续游荡',wanderWhitestone],['回城',gotoWhitestone]]); return; }
   if(roll<0.62){
     const pick=Math.random();
@@ -9678,7 +9225,6 @@ function wanderWindcap(){
   if(twoLionsCheck(()=>scene('风角港郊野','你绕开了，继续走',[['继续游荡',wanderWindcap],['回城',gotoWindcap]]))) return;
   if(state.p.level>=LEG_KNIGHTS[7].lv-10&&!f.legF7&&Math.random()<0.025){ legKnightFight(7,wanderWindcapNext); return; }
   if(huntCheck(()=>scene('风角港郊野','你绕开了，继续走',[['继续游荡',wanderWindcap],['回城',gotoWindcap]]))) return;
-  if(lasputiCheck(()=>scene('风角港郊野','你绕开了，继续走',[['继续游荡',wanderWindcap],['回城',gotoWindcap]]))) return;
   if(roll<0.34){ scene('风角港郊野','浪一下一下拍着礁石',[['继续游荡',wanderWindcap],['回城',gotoWindcap]]); return; }
   if(roll<0.62){
     const pick=Math.random();
@@ -9813,7 +9359,7 @@ function teamMenu(back){
   print('你（主角）· 生命 '+state.p.hp+'/'+state.p.maxHp,'ok');
   if(cur!=='主角')print('  身先士卒（主角在队时的底色）——所有队友与你同进退','dim');
   allies().forEach(a=>{
-    const roleTxt=a.name===cur?'领队':(a.role==='王者'?'王者':a.role==='support'?'支援':a.role==='妖术师'?'妖术师':'佣兵');
+    const roleTxt=a.name===cur?'领队':(a.role==='王者'?'王者':a.role==='support'?'支援':'佣兵');
     const isMerc=state.p.mercs.includes(a);
     const lvTxt=(a.lv!==undefined&&!isMerc)?(' Lv.'+a.lv+(a.xp!==undefined?'（'+a.xp+'/'+allyXpNeed(a)+'）':'')):'';
     const statTxt=(!isMerc&&a.atk!==undefined)?(' · 攻'+allyAtk(a)+' · 防'+(a.def||0)+(a.weapon?' · 武器：'+a.weapon.name+'（每击贡献'+allyWeaponDmg(a)+'）':'')):'';
@@ -9854,7 +9400,7 @@ function weaponMenu(){
 function allyWeaponMenu(){
   clearActs();
   const o=[];
-  [state.p.knight,state.p.companion,state.p.regulus,state.p.ampthis].forEach(a=>{
+  [state.p.knight,state.p.companion,state.p.regulus].forEach(a=>{
     if(!a)return;
     const w=a.weapon;
     o.push([a.name+'（Lv.'+(a.lv||1)+' · 攻'+allyAtk(a)+' · 防'+(a.def||0)+'）'+(w?('武器：'+w.name+'（每击贡献'+allyWeaponDmg(a)+'）'):'（没有武器）'),()=>allyWeaponPick(a)]);
@@ -10032,19 +9578,6 @@ function runCmd(s){
   else if(c==='/黑原'){ state.p.journey=null; gotoBlackPlain(); }
   else if(c==='/北古'){ state.p.journey=null; gotoNorthBattlefield(); }
   else if(c==='/军团'){ state.p.journey=null; state.p.flags.northWarWarlord=false; northWarArmyScene(); }
-  else if(c==='/安普'||c==='/安普提斯'){
-    if(ctx){ print('战斗结束后再召唤','bad'); }
-    else if(state.p.flags.ampthisJoined){ print('安普提斯就在队伍里——抬头看看','dim'); }
-    else startCombat(ampthisBoss(),{canFlee:true,onWin:ampthisWin,onFlee:()=>{ print('你退开了——她在雾里看着你','dim'); backToTown(); }});
-  }
-  else if(c==='/妖僧'||c==='/拉斯普提'){
-    if(ctx){ print('战斗结束后再召唤','bad'); }
-    else {
-      const lv=state.p.flags.lasputiLv||60;
-      lasputiResume=null;
-      startCombat({name:'妖僧·拉斯普提',lv,xp:900,hp:900+lv*25,atk:20+Math.round(lv/2),def:10,physRes:0.35,legendLives:3,intro:'你念出那个名字——他就站在那儿了，脑袋歪搭在肩上，脖子上的血滴答滴答'},{canFlee:true,onWin:lasputiWin,onFlee:()=>{ print('你退开了——他还在原地笑','dim'); backToTown(); }});
-    }
-  }
   else if(c==='/龙'){ state.p.flags.dragonMet=false; startCombat({name:'老龙',lv:20,xp:50,hp:400,atk:18,def:8,physRes:0.5,intro:'它落下来的时候，风先到了'},{canFlee:false,items:{覆金属龙皮:2,精炼熔断钢铁:1},onWin:()=>{ scene('野外','它倒下了，这不是它该有的结局',[['继续走',backToTown]]); }}); }
   else if(c==='/赤龙'){ startCombat({name:'赤河龙',lv:40,xp:400,hp:900,atk:30,def:12,physRes:0.6,intro:'河水红了，赤河龙从河里升起'},{canFlee:false,items:{覆金属龙皮:3,龙鳞:2,精炼熔断钢铁:1,管理者材料:1},onWin:()=>{ scene('河滩','它沉回了河里，河水慢慢变清',[['继续走',backToTown]]); }}); }
   else if(c==='/狮子'){
@@ -10097,8 +9630,6 @@ function devHelp(){
   print('  /双狮 —— 直接开始双狮之试','dim');
   print('  /骑士 N —— 直接挑战传奇骑士（1报丧/2腐败/3断弓/4苍白/5寒铁/6断剑/7鲸骨）','dim');
   print('  /军团 —— 触发北古战场特殊事件：北境战帅率队（8~40人）列阵','dim');
-  print('  /安普 —— 直接召唤安普提斯（游荡Boss战，三败后可劝降）','dim');
-  print('  /妖僧 —— 直接召唤妖僧·拉斯普提（游荡Boss战）','dim');
   print('  /reset —— 重新开始','dim');
 }
 cmd.addEventListener('keydown',e=>{ if(e.key==='Enter'){ runCmd(cmd.value); cmd.value=''; } });
@@ -10107,6 +9638,3 @@ log.addEventListener('click',()=>skipTw()); // 点击文字：立即完成当前
 /* ---------- 启动 ---------- */
 applyFont();
 titleScreen();
-</script>
-</body>
-</html>

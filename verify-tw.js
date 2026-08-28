@@ -42,7 +42,7 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
   click('新的开始');
   // 场景描述应逐字打印：立即看应是"部分文字"，2 秒后应是完整文字
   const immediately = allText();
-  const full = '你在河边醒来\n身上什么都没有，河水在耳边响\n一只乌鸦停在旁边，啄了啄你的肩膀，叫了一声，飞走了\n\n身边躺着一把木剑，剑柄上刻着一个"W"';
+  const full = '你在河边醒来\n你是个北方人——你的领地被夺走了，人也被放逐到了南方\n身上什么都没有，河水在耳边响\n一只乌鸦停在旁边，啄了啄你的肩膀，叫了一声，飞走了\n\n身边躺着一把木剑，剑柄上刻着一个"W"\n\n夺走你领地的人，就盘踞在北方——想回去，得先在南境站住脚';
   if (immediately.includes(full)) throw new Error('打字机未生效：文本一次性出现');
   let waited = 0;
   while (!allText().includes(full) && waited < 12000) { await sleep(300); waited += 300; }
@@ -61,7 +61,9 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
   st().p.gold = 777;
   click('⚙ 系统');
   await sleep(300);
-  click('打字机效果：开'); // 关闭打字机，清空队列
+  click('打字机效果：正常（点击文字可跳过）'); // → 快速
+  await sleep(100);
+  click('打字机效果：快速（点击文字可跳过）'); // → 关闭，清空队列
   await sleep(200);
   globalThis.__export();
   await sleep(200);

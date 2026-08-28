@@ -1,4 +1,4 @@
-// 冒烟测试 v3：DOM 桩 + 全流程（接单直达/游荡/BOSS解锁/轮换）
+// 冒烟测试 v4：DOM 桩 + 全流程（接单直达/游荡/BOSS解锁/轮换）
 const fs = require('fs');
 const html = fs.readFileSync('D:/DSS/prototype/isolde-prototype.html', 'utf8');
 const m = html.match(/<script>([\s\S]*)<\/script>/);
@@ -33,7 +33,7 @@ global.document = {
   createElement: el
 };
 
-eval(js + '\n;globalThis.__getState=()=>state;globalThis.__getCtx=()=>ctx;globalThis.__runCmd=runCmd;globalThis.__hunts=HUNT_LIST;globalThis.__curScene=()=>curScene;globalThis.__statsForLevel=statsForLevel;globalThis.__migrate=migrate;globalThis.__xpNeed=xpNeed;');
+eval(js + '\n;globalThis.__getState=()=>state;globalThis.__getCtx=()=>ctx;globalThis.__runCmd=runCmd;globalThis.__hunts=HUNT_LIST;globalThis.__highJobs=HIGH_JOBS;globalThis.__curScene=()=>curScene;globalThis.__statsForLevel=statsForLevel;globalThis.__migrate=migrate;globalThis.__xpNeed=xpNeed;globalThis.__prepEnemy=prepEnemy;globalThis.__highFoe=HIGH_FOE;globalThis.__playerAtk=playerAtk;globalThis.__accDefs=ACC_DEFS;globalThis.__skipTw=skipTw;globalThis.__twSpeed=twSpeed;globalThis.__print=print;globalThis.__allySpellPower=allySpellPower;globalThis.__regulusAllyAct=regulusAllyAct;globalThis.__allySkill=allySkill;');
 
 const st = () => globalThis.__getState();
 function btns() { return actEl.children.filter(c => c.tag === 'button' && !c.disabled).map(c => c._text); }
@@ -59,10 +59,11 @@ function fightUntilOver(maxRounds = 80) {
     if (++guard > maxRounds) throw new Error('战斗循环超时');
   }
 }
+function buyOne(label){ click(label); const b=btns().find(t=>t.startsWith('买 1 个')); if(!b)throw new Error('无买1按钮: '+JSON.stringify(btns())); click(b); }
+function sellOne(label){ click(label); const b=btns().find(t=>t.startsWith('卖 1 个')); if(!b)throw new Error('无卖1按钮: '+JSON.stringify(btns())); click(b); }
 function fightWander(maxR = 60) {
   let g = 0;
-  while (has('攻击·侧面 (×1.3)') && g++ < maxR) {
-    if (st().p.hp < 22 && has('逃跑')) { click('逃跑'); continue; }
+  while (has('攻击·侧面 (×1.3)') && g++ < maxR) {    if (st().p.hp < 22 && has('逃跑')) { click('逃跑'); continue; }
     else if (has('刺腹部（弱点）')) click('刺腹部（弱点）');
     else if (has('刺腹部 (×2.0)')) click('刺腹部 (×2.0)');
     else if (st().p.hp < 30 && has('格挡 (减伤50%)')) click('格挡 (减伤50%)');
@@ -88,7 +89,7 @@ const HUNT_ACTS = ['查看水迹', '追踪（耗10体力）', '下矿（碰运�
 function huntJob(doneRow, maxTries = 90) {
   __runCmd('/heal');
   let g = 0;
-  while (!has(doneRow) && g++ < maxTries) {
+  while (!(has(doneRow) || rawBtns().includes(doneRow)) && g++ < maxTries) {
     if (has('攻击·侧面 (×1.3)')) { fightUntilOver(); continue; }
     if (has('战斗') && !has('攻击·侧面 (×1.3)')) { click('战斗'); continue; } // 伙伴决策
     if (has('起身')) { click('起身'); click('离开'); continue; }
@@ -97,6 +98,11 @@ function huntJob(doneRow, maxTries = 90) {
     const backBtn = btns().find(b => b.startsWith('回告示板'));
     if (backBtn) { click(backBtn); continue; }
     if (has('进去')) { click('进去'); continue; }
+    // 委托完成后（无活跃寻踪）优先回告示板交差；进行中则出城游荡
+    const active = activeHunts().length > 0;
+    if (!active && has('告示板')) { click('告示板'); continue; }
+    if (!active && has('回城')) { click('回城'); continue; }
+    if (has('出城')) { click('出城'); continue; }
     if (has('继续游荡')) { click('继续游荡'); continue; }
     if (has('在野外游荡')) { click('在野外游荡'); continue; }
     if (has('在矿区游荡')) { click('在矿区游荡'); continue; }
@@ -118,12 +124,14 @@ function huntJob(doneRow, maxTries = 90) {
     if (has('告示板')) { click('告示板'); continue; }
     throw new Error('寻踪异常: ' + JSON.stringify(btns()));
   }
-  if (!has(doneRow)) throw new Error('寻踪未完成: ' + doneRow + ' ' + JSON.stringify(btns()));
+  if (!(has(doneRow) || rawBtns().includes(doneRow))) throw new Error('寻踪未完成: ' + doneRow + ' ' + JSON.stringify(btns()));
 }
 // 野外游荡直到某个状态达成（星图残片等）
 function activeHunts() {
   const f = st().p.flags;
-  return (globalThis.__hunts || []).filter(h => h.test ? h.test() : (f[h.flag] && !f[h.done])).map(h => h.name);
+  const base = (globalThis.__hunts || []).filter(h => h.test ? h.test() : (f[h.flag] && !f[h.done])).map(h => h.name);
+  (globalThis.__highJobs || []).forEach((hj, i) => { if (f['highJob' + i] && !f['highDone' + i]) base.push(hj[0]); });
+  return base;
 }
 function wanderUntil(pred, maxTries = 60, debug = false) {
   let g = 0;
@@ -162,18 +170,404 @@ function wanderUntil(pred, maxTries = 60, debug = false) {
 step('标题→新的开始', () => { click('新的开始'); st().p.flags.dragonChainDone = true; /* 屏蔽早期野外老龙败局引发的「龙之低语」寻踪干扰，龙之低语步骤前恢复 */ });
 step('捡起木剑', () => click('捡起木剑'));
 step('沿路北上', () => click('沿着河往北走'));
-step('野狗首战', () => { click('拔剑'); if (!logHas('敌意：')) throw new Error('未显示敌方意图'); fightUntilOver(); if (!st().p.inv.兽皮) throw new Error('未获得兽皮'); });
+step('野狗首战', () => { click('拔剑'); if (!logHas('敌意：')) throw new Error('未显示敌方意图'); fightUntilOver(); if (!st().p.inv.兽皮) throw new Error('未获得兽皮'); if ((st().p.inv.军阀密令||0) !== 0) throw new Error('普通野狗不应掉密令: ' + st().p.inv.军阀密令); if (!logHas('普通敌人身上没有北边的密令')) throw new Error('密令来源提示缺失'); if (!(st().p.bestiary||{})['野狗']) throw new Error('图鉴未记录野狗'); if ((st().p.kills||0) < 1) throw new Error('击杀数未记录'); });
 step('到达阿什沃德（六家店铺）', () => { click('继续走');
   for (const b of ['铁匠铺','杂货铺','酒馆','告示板','佣兵市场','异域商人']) if (!has(b)) throw new Error('缺少店铺按钮: '+b); });
+step('0.25提尔锋（庄园废墟）', () => {
+  if (has('离开')) click('离开');
+  __runCmd('/阿');
+  click('庄园废墟（南边）');
+  click('伸手探进树洞');
+  if (!st().p.flags.tyrfing) throw new Error('提尔锋未融入');
+  if (!logHas('必杀之约')) throw new Error('诅咒提示缺失');
+  const pa = globalThis.__playerAtk();
+  const baseT = st().p.atk + (st().p.weapon ? st().p.weapon.atk : 0);
+  if (pa < baseT + 8) throw new Error('提尔锋增伤未生效: ' + pa + ' vs ' + baseT);
+  click('伸手探进树洞');
+  if (!logHas('已经空了')) throw new Error('重复获取未阻止');
+  click('回城');
+  console.log('  · 提尔锋：庄园废墟空心树→融入体内（伤害+25%/攻击+8）+必杀之约诅咒');
+});
 step('铁匠铺·没钱买剑', () => { click('铁匠铺'); click('买：破铁剑（20铜币，+8攻击）'); if (!logHas('钱不够')) throw new Error('应当提示钱不够'); });
-step('卖兽皮+3', () => { click('卖：兽皮 ×1（3铜币）'); if (st().p.gold !== 3) throw new Error('金币=' + st().p.gold); });
-step('杂货铺·买净水袋+卖不出旧铁片', () => { click('离开'); click('杂货铺'); click('买：净水袋（2铜币，+10体力）');
+step('卖兽皮+3', () => { sellOne('卖：兽皮 ×1（3铜币）'); if (st().p.gold !== 3) throw new Error('金币=' + st().p.gold); });
+step('杂货铺·买净水袋+卖不出旧铁片', () => { click('离开'); click('杂货铺'); buyOne('买：净水袋（2铜币，+10体力）');
   if (st().p.inv.净水袋 !== 1 || st().p.gold !== 1) throw new Error('净水袋/金币异常');
   for (const b of ['买：止血膏（8铜币，+25生命·战斗）','买：醒神草（7铜币，+25体力·战斗外）','买：盐渍肉（10铜币，+30生命·战斗外）','买：猛火油（12铜币，投掷12伤害，惧火者×2）']) {
     if (!has(b)) throw new Error('缺少补给品: ' + b);
   }
   click('卖：旧铁片'); if (!logHas('收不起')) throw new Error('旧铁片应被拒收'); });
-step('异域商人·买绷带钱不够', () => { click('离开'); click('异域商人'); click('买：绷带（5铜币，+10生命）'); if (!logHas('钱不够')) throw new Error('1铜币应买不起绷带'); });
+step('批量买卖', () => {
+  const g0 = st().p.gold;
+  __runCmd('/钱 100');
+  if (!has('买：绷带（5铜币，+10生命）')) { click('离开'); click('杂货铺'); }
+  click('买：绷带（5铜币，+10生命）');
+  if (!has('买 5 个（25铜币）')) throw new Error('批量买5缺失: ' + JSON.stringify(btns()));
+  if (!has('买 10 个（50铜币）')) throw new Error('批量买10缺失');
+  if (!has('全买（20个 · 100铜币）')) throw new Error('全买缺失: ' + JSON.stringify(btns()));
+  const goldBefore = st().p.gold;
+  click('买 5 个（25铜币）');
+  if (st().p.inv.绷带 !== 5 || st().p.gold !== goldBefore - 25) throw new Error('批量买5未生效: 绷带=' + st().p.inv.绷带 + ' 金币=' + st().p.gold + ' 期望' + (goldBefore - 25));
+  __runCmd('/item 兽皮 12');
+  click('离开'); click('杂货铺');
+  click('卖：兽皮 ×12（3铜币）');
+  if (!has('卖 5 个（+15铜币）')) throw new Error('批量卖5缺失: ' + JSON.stringify(btns()));
+  if (!has('卖 10 个（+30铜币）')) throw new Error('批量卖10缺失');
+  if (!has('全卖（12个 · +36铜币）')) throw new Error('全卖缺失');
+  click('卖 5 个（+15铜币）');
+  if (st().p.inv.兽皮 !== 7) throw new Error('批量卖5未生效: ' + st().p.inv.兽皮);
+  click('卖：兽皮 ×7（3铜币）');
+  click('全卖（7个 · +21铜币）');
+  if (st().p.inv.兽皮 !== 0) throw new Error('全卖未生效');
+  st().p.gold = g0; // 恢复测试前金币，避免影响后续硬编码断言
+  console.log('  · 批量买卖：买1/5/10/全买，卖1/5/10/全卖');
+});
+step('法术系统（飞石/治愈/研习）', () => {
+  const gSpell = st().p.gold;
+  click('离开'); click('出城');
+  let fg = 0;
+  while (!has('攻击·侧面 (×1.3)') && fg++ < 15) {
+    if (has('在野外游荡')) click('在野外游荡');
+    else if (has('继续游荡')) click('继续游荡');
+    else if (has('继续走')) click('继续走');
+    else if (has('改天再来')) click('改天再来');
+    else if (has('别管他')) click('别管他');
+    else if (has('继续赶路')) click('继续赶路');
+    else if (has('回城')) { click('回城'); click('出城'); }
+    else throw new Error('遇敌异常: ' + JSON.stringify(btns()));
+  }
+  if (!has('攻击·侧面 (×1.3)')) throw new Error('未遇敌');
+  const spellBtn = () => btns().find(b => b.startsWith('法术（MP'));
+  if (!spellBtn()) throw new Error('无法术按钮: ' + JSON.stringify(btns()));
+  click(spellBtn());
+  if (!has('飞石（8MP · 唤起飞石砸向目标）')) throw new Error('飞石缺失: ' + JSON.stringify(btns()));
+  if (!has('治愈微光（10MP · 恢复30点生命）')) throw new Error('治愈微光缺失');
+  const mp0 = st().p.mp;
+  click('飞石（8MP · 唤起飞石砸向目标）');
+  if (!logHas('飞石击中')) throw new Error('飞石未生效');
+  if (st().p.mp !== mp0 - 8) throw new Error('MP 未扣: ' + st().p.mp + ' 期望 ' + (mp0 - 8));
+  click(spellBtn());
+  click('治愈微光（10MP · 恢复30点生命）');
+  if (!logHas('治愈微光')) throw new Error('治愈未生效');
+  fightUntilOver(80);
+  let rb = 0;
+  while (!has('回城') && rb++ < 8) {
+    if (has('继续走')) click('继续走');
+    else if (has('继续游荡')) click('继续游荡');
+    else if (has('在野外游荡')) click('在野外游荡');
+    else if (has('改天再来')) click('改天再来');
+    else if (has('别管他')) click('别管他');
+    else if (has('继续赶路')) click('继续赶路');
+    else if (has('出城')) break; // 已在城内
+    else break;
+  }
+  if (has('回城')) click('回城');
+  click('杂货铺');
+  __runCmd('/钱 60');
+  buyOne('买：法术书·火舌（30铜币，营地研习后学会火舌）');
+  if (st().p.inv['法术书·火舌'] !== 1) throw new Error('法术书未入包: ' + st().p.inv['法术书·火舌']);
+  click('离开'); click('出城'); click('扎营');
+  click('研习法术');
+  click('研习：法术书·火舌 → 学会火舌');
+  if (!st().p.spells.includes('火舌')) throw new Error('火舌未学会');
+  click('返回'); click('离开'); click('回城'); // 回营地→回城外→回城镇
+  st().p.gold = gSpell; // 恢复测试前金币
+  console.log('  · 法术系统：飞石/治愈微光/研习法术书（火舌入列）');
+});
+step('异域商人·买绷带钱不够', () => { if (has('离开')) click('离开'); click('异域商人'); click('买：绷带（5铜币，+10生命）'); if (!logHas('钱不够')) throw new Error('1铜币应买不起绷带'); });
+step('0.25更多可购法术（含转正标题）', () => {
+  const g0 = st().p.gold;
+  if (has('离开')) click('离开');
+  click('异域商人');
+  if (!has('买：法术书·灼热射线（60铜币，营地研习后学会灼热射线）')) throw new Error('异域商人缺灼热射线书: ' + JSON.stringify(btns().slice(0, 8)));
+  __runCmd('/钱 500');
+  buyOne('买：法术书·灼热射线（60铜币，营地研习后学会灼热射线）');
+  buyOne('买：法术书·生命虹吸（65铜币，营地研习后学会生命虹吸）');
+  buyOne('买：法术书·灼热新星（90铜币，营地研习后学会灼热新星）');
+  click('离开'); click('杂货铺');
+  for (const n of ['火舌', '霜刃', '石拳', '冰锥术', '荆棘缠绕', '治愈环流', '雷击', '霜雾']) {
+    if (!btns().some(b => b.startsWith('买：法术书·' + n + '（'))) throw new Error('杂货铺缺法术书·' + n + ': ' + JSON.stringify(btns()));
+  }
+  buyOne('买：法术书·石拳（30铜币，营地研习后学会石拳）');
+  buyOne('买：法术书·冰锥术（28铜币，营地研习后学会冰锥术）');
+  buyOne('买：法术书·荆棘缠绕（40铜币，营地研习后学会荆棘缠绕）');
+  buyOne('买：法术书·治愈环流（45铜币，营地研习后学会治愈环流）');
+  buyOne('买：法术书·雷击（55铜币，营地研习后学会雷击）');
+  buyOne('买：法术书·霜雾（70铜币，营地研习后学会霜雾）');
+  click('离开'); click('出城'); click('扎营');
+  click('研习法术');
+  let sg = 0;
+  while (btns().some(x => x.startsWith('研习：')) && sg++ < 20) click(btns().find(x => x.startsWith('研习：')));
+  for (const n of ['石拳', '冰锥术', '荆棘缠绕', '治愈环流', '雷击', '霜雾', '灼热射线', '生命虹吸', '灼热新星']) {
+    if (!st().p.spells.includes(n)) throw new Error(n + '未学会: ' + JSON.stringify(st().p.spells));
+  }
+  click('返回');
+  // 法术记忆槽：容量随等级（1-10级=3），提级后记忆本次要用的四招
+  __runCmd('/级 11');
+  click('研习法术');
+  for (const n of ['飞石', '治愈微光']) { const b = btns().find(x => x.startsWith('遗忘：' + n)); if (b) click(b); }
+  for (const n of ['雷击', '治愈环流', '生命虹吸', '灼热新星']) {
+    const b = btns().find(x => x.startsWith('记忆：' + n));
+    if (!b) throw new Error('无法记忆 ' + n + ': ' + JSON.stringify(btns()));
+    click(b);
+  }
+  click('返回'); click('离开');
+  // 实战：治愈环流（全队回血）/ 生命虹吸（汲取回血）/ 雷击（必硬直）/ 灼热新星（群攻火系）
+  if (!st().p.flags.god) __runCmd('/god');
+  __runCmd('/赤龙'); // 血厚的靶子，避免战斗提前结束
+  __runCmd('/heal');
+  st().p.hp = 5; // 制造伤口验证治疗
+  const castOne = (name) => {
+    st().p.mp = st().p.maxMp; // 每发前补满法力（不动生命）
+    click(btns().find(b => b.startsWith('法术（MP')));
+    click(btns().find(b => b.startsWith(name + '（')));
+    let ag = 0;
+    while (has('战斗') && !has('攻击·侧面 (×1.3)') && ag++ < 8) click('战斗');
+    if (!has('攻击·侧面 (×1.3)')) throw new Error(name + ' 施放后战斗异常: ' + JSON.stringify(btns()));
+  };
+  castOne('治愈环流');
+  if (st().p.hp !== 20) throw new Error('治愈环流未回15: ' + st().p.hp);
+  if (!logHas('环过全队')) throw new Error('治愈环流提示缺失');
+  castOne('生命虹吸');
+  if (st().p.hp < 21) throw new Error('生命虹吸未汲取回血: ' + st().p.hp);
+  if (!logHas('汲取生命')) throw new Error('生命虹吸提示缺失');
+  castOne('雷击');
+  if (!logHas('雷击击中')) throw new Error('雷击未生效');
+  castOne('灼热新星');
+  if (!logHas('灼热新星击中')) throw new Error('灼热新星未生效');
+  __runCmd('/kill');
+  if (has('继续走')) click('继续走');
+  __runCmd('/heal');
+  st().p.gold = g0; // 恢复测试前金币
+  if (st().p.flags.god) __runCmd('/god');
+  click('异域商人'); // 留在带「离开」的界面，衔接下一步
+  console.log('  · 可购法术书：杂货铺8种+异域商人3种（石拳/冰锥术/荆棘缠绕/治愈环流/雷击/霜雾/灼热射线/生命虹吸/灼热新星）；治愈环流全队回血、生命虹吸汲取回血、雷击硬直、灼热新星群攻实测通过');
+});
+step('0.25饰品烹饪炼金与营地新功能', () => {
+  const g0 = st().p.gold;
+  const hp0 = st().p.maxHp, mp0 = st().p.maxMp;
+  if (has('离开')) click('离开');
+  __runCmd('/阿'); __runCmd('/钱 3000');
+  __runCmd('/item 野猪肉 5'); __runCmd('/item 草药 5'); __runCmd('/item 海鱼 3'); __runCmd('/item 胡椒 3');
+  __runCmd('/item 骨头 4'); __runCmd('/item 血盐 6'); __runCmd('/item 血水结晶 1'); __runCmd('/item 巨魔牙 1');
+  __runCmd('/item 蛇皮 4'); __runCmd('/item 蛙油膏 3'); __runCmd('/item 蛛丝 4'); __runCmd('/item 除虱粉 1');
+  __runCmd('/item 龙鳞 4'); __runCmd('/item 净水袋 3'); __runCmd('/item 大鱼 1'); __runCmd('/item 覆金属龙皮 1'); __runCmd('/item 精炼熔断钢铁 2');
+  // ① 大师锻造饰品：第一章仅此一件
+  click('铁匠铺');
+  const forgeRow = '大师锻造饰品：北归之誓（覆金属龙皮×1+精炼熔断钢铁×2+龙鳞×3+400铜币——第一章仅此一件）';
+  if (!has(forgeRow)) throw new Error('大师锻造入口缺失: ' + JSON.stringify(btns().slice(0, 8)));
+  click(forgeRow);
+  if (!st().p.accBag.some(a => a.name === '北归之誓')) throw new Error('北归之誓未入饰品袋');
+  if (!st().p.flags.masterForged) throw new Error('masterForged未置位');
+  if (has(forgeRow)) throw new Error('大师锻造可重复');
+  if (!rawBtns().some(b => b.includes('已完成'))) throw new Error('大师锻造已完成行缺失');
+  click('离开');
+  // ② 商店饰品（同类可重复获得；名册总数≥50）
+  if (Object.keys(globalThis.__accDefs).length < 50) throw new Error('饰品名册不足: ' + Object.keys(globalThis.__accDefs).length);
+  click('杂货铺');
+  if (!has('买：铁指环（30铜币，饰：攻击+1）')) throw new Error('杂货铺缺铁指环: ' + JSON.stringify(btns().slice(0, 10)));
+  if (!has('买：铜手环（15铜币，饰：体力上限+5）')) throw new Error('杂货铺缺铜手环');
+  click('买：铁指环（30铜币，饰：攻击+1）'); click('买：铜坠（25铜币，饰：生命上限+15）');
+  click('买：铁指环（30铜币，饰：攻击+1）'); // 重复购买同款
+  if (st().p.accBag.filter(a => a.name === '铁指环').length !== 2) throw new Error('饰品未支持重复获得');
+  click('离开'); click('异域商人');
+  if (!has('买：影步符（170铜币，饰：闪避+10%）')) throw new Error('异域商人缺影步符');
+  click('买：血石坠（150铜币，饰：命中回2生命）');
+  click('买：狮牙坠（160铜币，饰：攻击+3，命中8%震住）');
+  click('买：星辉之坠（300铜币，饰：攻击+4，攻击再+5%，法力+20）');
+  buyOne('买：法术书·御土之盾（60铜币，营地研习后学会御土之盾）');
+  buyOne('买：法术书·增幅术（65铜币，营地研习后学会增幅术）');
+  click('离开'); click('出城'); click('扎营');
+  // ③ 营地饰品：佩戴6件，第7件被拒
+  click('饰品（最多6件）');
+  const wear = (n) => { const b = btns().find(x => x.startsWith('佩戴：' + n)); if (!b) throw new Error('无佩戴按钮: ' + n + ' ' + JSON.stringify(btns())); click(b); };
+  wear('北归之誓'); wear('铁指环'); wear('铜坠'); wear('血石坠'); wear('狮牙坠'); wear('星辉之坠');
+  if (st().p.accs.length !== 6) throw new Error('应佩戴6件: ' + st().p.accs.length);
+  if (st().p.maxHp !== hp0 + 15 + 40) throw new Error('饰品生命加成异常: ' + st().p.maxHp + ' 期望 ' + (hp0 + 55));
+  if (st().p.maxMp !== mp0 + 20) throw new Error('饰品法力加成异常: ' + st().p.maxMp + ' 期望 ' + (mp0 + 20));
+  wear('铁指环'); // 第7件
+  if (st().p.accs.length !== 6) throw new Error('第7件不应戴上去');
+  if (!logHas('最多同时戴6件')) throw new Error('上限提示缺失');
+  const pa0 = globalThis.__playerAtk();
+  const base0 = st().p.atk + (st().p.weapon ? st().p.weapon.atk : 0);
+  if (pa0 < base0 + 13) throw new Error('饰品攻击加成未生效: ' + pa0 + ' vs ' + base0);
+  click('返回');
+  // ④ 烹饪
+  click('烹饪（料理）');
+  click('烹制：佣兵糊（生命+25 体力+15）');
+  click('烹制：铁骨汤（生命+30，3场内所受伤害-2）');
+  click('烹制：猛火兽肉（生命+20，3场内攻击+3）');
+  st().p.hp = 10;
+  click('吃：佣兵糊 ×1（生命+25 体力+15）');
+  if (st().p.hp !== 35) throw new Error('吃料理未回血: ' + st().p.hp);
+  click('吃：铁骨汤 ×1（生命+30，3场内所受伤害-2）');
+  if (st().p.buffSys.防.v !== 2 || st().p.buffSys.防.n !== 3) throw new Error('料理防buff异常: ' + JSON.stringify(st().p.buffSys.防));
+  click('吃：猛火兽肉 ×1（生命+20，3场内攻击+3）');
+  if (st().p.buffSys.攻.v !== 3) throw new Error('料理攻buff异常: ' + JSON.stringify(st().p.buffSys.攻));
+  click('返回');
+  // ⑤ 炼金
+  click('炼金（药剂）');
+  click('炼制：生命药水（+40生命）');
+  click('炼制：猛力药（3场内攻击+3）');
+  click('炼制：硬皮药（3场内所受伤害-2）');
+  click('炼制：迅捷药（3场内闪避+5%）');
+  click('炼制：净化药（清除流血与硬直，+10生命）');
+  click('炼制：龙息火瓶（投掷15火伤，惧火者×2）');
+  click('炼制：血盐涂毒（武器淬毒：5次命中附加流血）');
+  if (!(st().p.inv.生命药水 >= 1) || !(st().p.inv.龙息火瓶 >= 1) || !(st().p.inv.血盐涂毒 >= 1)) throw new Error('炼金产物缺失');
+  st().p.buff.流血 = 2; st().p.buff.硬直 = 1;
+  click('使用：净化药 ×1');
+  if (st().p.buff.流血 !== 0 || st().p.buff.硬直 !== 0) throw new Error('净化药未清除状态');
+  click('返回');
+  // ⑥ 研习新法术
+  click('研习法术');
+  let sg = 0;
+  while (btns().some(x => x.startsWith('研习：')) && sg++ < 20) click(btns().find(x => x.startsWith('研习：')));
+  for (const n of ['御土之盾', '增幅术']) {
+    if (!st().p.spells.includes(n)) throw new Error(n + '未学会: ' + JSON.stringify(st().p.spells));
+  }
+  // 法术记忆槽：遗忘两个旧的，记忆御土之盾与增幅术
+  for (const n of ['治愈环流', '生命虹吸']) { const fb = btns().find(x => x.startsWith('遗忘：' + n)); if (fb) click(fb); }
+  for (const n of ['御土之盾', '增幅术']) {
+    const mb = btns().find(x => x.startsWith('记忆：' + n));
+    if (!mb) throw new Error('无法记忆' + n + ': ' + JSON.stringify(btns()));
+    click(mb);
+  }
+  click('返回'); click('离开');
+  // ⑦ 实战：饰品吸血/药水/涂毒/火瓶/buff法术
+  if (!st().p.flags.god) __runCmd('/god');
+  __runCmd('/赤龙');
+  click('攻击·侧面 (×1.3)');
+  if (!logHas('饰品汲血——回复2生命')) throw new Error('饰品吸血未生效');
+  st().p.hp = 10;
+  click('道具');
+  click('生命药水 ×1（+40生命）');
+  if (st().p.hp !== 50) throw new Error('生命药水未生效: ' + st().p.hp);
+  if (!has('攻击·侧面 (×1.3)')) { let g2 = 0; while (has('战斗') && !has('攻击·侧面 (×1.3)') && g2++ < 8) click('战斗'); }
+  click('道具');
+  click('血盐涂毒 ×1（武器淬毒：5次命中附加流血）');
+  if ((st().p.coat || 0) !== 5) throw new Error('涂毒未上刃: ' + st().p.coat);
+  click('攻击·侧面 (×1.3)');
+  if (!logHas('血盐涂毒渗入伤口')) throw new Error('涂毒未生效');
+  if ((st().p.coat || 0) !== 4) throw new Error('涂毒未消耗: ' + st().p.coat);
+  click('道具');
+  click('龙息火瓶 ×1（投掷15火伤，惧火者×2）');
+  if (!logHas('龙息火瓶砸在')) throw new Error('火瓶未投掷');
+  click(btns().find(b => b.startsWith('法术（MP')));
+  click(btns().find(b => b.startsWith('御土之盾（')));
+  if ((st().p.fort || 0) !== 3) throw new Error('御土之盾未生效: ' + st().p.fort);
+  click(btns().find(b => b.startsWith('法术（MP')));
+  click(btns().find(b => b.startsWith('增幅术（')));
+  if ((st().p.pow || 0) !== 4) throw new Error('增幅术未生效: ' + st().p.pow);
+  __runCmd('/kill');
+  if (has('继续走')) click('继续走');
+  // 场次buff随战斗递减
+  if (st().p.buffSys.攻.n !== 2 || st().p.buffSys.防.n !== 2) throw new Error('场次buff未递减: ' + JSON.stringify(st().p.buffSys));
+  // ⑧ 收尾：卸下全部饰品，恢复属性基线
+  __runCmd('/阿');
+  click('出城'); click('扎营');
+  click('饰品（最多6件）');
+  let ue = 0;
+  while (btns().some(b => b.startsWith('卸下：')) && ue++ < 8) click(btns().find(b => b.startsWith('卸下：')));
+  if (st().p.accs.length !== 0) throw new Error('饰品未卸净');
+  const sL = globalThis.__statsForLevel(st().p.level);
+  if (st().p.maxHp !== sL.maxHp + (st().p.armguard ? 100 : 0)) throw new Error('maxHp未还原: ' + st().p.maxHp + ' 期望 ' + (sL.maxHp + (st().p.armguard ? 100 : 0)));
+  if (st().p.maxMp !== sL.maxMp) throw new Error('maxMp未还原: ' + st().p.maxMp + ' 期望 ' + sL.maxMp);
+  click('返回'); click('离开');
+  if (has('回城')) click('回城');
+  st().p.gold = g0;
+  if (st().p.flags.god) __runCmd('/god');
+  click('异域商人');
+  console.log('  · 饰品≤6件可重复（普通→大师锻造唯一/狩猎品BOSS掉）；烹饪8道/炼金7种（药水+火瓶+涂毒）；场次buff攻防速递减；御土之盾/增幅术buff法术实测');
+});
+step('0.25架势第二战技回收与文本加速', () => {
+  const g0 = st().p.gold;
+  if (has('离开')) click('离开');
+  __runCmd('/阿');
+  // ① 回收系统：多余装备拆材料
+  const t0 = st().p.inv.铁料 || 0, y0 = st().p.inv.旧银币 || 0, b0 = st().p.inv.碎布条 || 0, g0g = st().p.inv.精炼熔断钢铁 || 0;
+  st().p.owned.push({ name: '回收测试剑', atk: 24, type: '剑', fx: ['血腥'] });
+  st().p.armorBag.push({ name: '回收测试甲', slot: '胸', def: 5 });
+  st().p.accBag.push({ name: '铁指环' });
+  click('出城'); click('扎营');
+  click('回收装备（拆解）');
+  const rw = btns().find(b => b.startsWith('回收武器：回收测试剑'));
+  if (!rw) throw new Error('回收武器行缺失: ' + JSON.stringify(btns()));
+  click(rw);
+  click(btns().find(b => b.startsWith('回收护甲：回收测试甲')));
+  click(btns().find(b => b.startsWith('回收饰品：铁指环')));
+  if ((st().p.inv.铁料 || 0) !== t0 + 6 + 5 + 1) throw new Error('回收铁料异常: ' + st().p.inv.铁料);
+  if ((st().p.inv.旧银币 || 0) !== y0 + 1) throw new Error('回收旧银币异常');
+  if (st().p.owned.some(w => w.name === '回收测试剑')) throw new Error('回收后武器仍存在');
+  st().p.inv.铁料 = t0; st().p.inv.旧银币 = y0; st().p.inv.碎布条 = b0; st().p.inv.精炼熔断钢铁 = g0g; // 还原材料，避免影响后续精确断言
+  click('返回'); click('离开');
+  // ② 武器熟练度（按文档）+ 剑的攻防架势 + 重武器架势系统
+  if (!st().p.flags.god) __runCmd('/god');
+  __runCmd('/heal');
+  st().p.wprof = {};
+  st().p.weapon = { name: '测试剑', atk: 10, type: '剑', fx: [] };
+  st().p.stance = '攻势';
+  __runCmd('/赤龙');
+  // Lv1 只解锁第一招（熟练度门槛）
+  if (!btns().some(b => b.startsWith('战技·突进刺'))) throw new Error('Lv1应只有突进刺: ' + JSON.stringify(btns().filter(b => b.includes('战技'))));
+  if (btns().some(b => b.startsWith('战技·剑气斩'))) throw new Error('Lv1不应有剑气斩');
+  // 熟练度升到 Lv3（80次使用）后三招齐开
+  st().p.wprof.剑 = 80;
+  __runCmd('/赤龙');
+  if (!btns().some(b => b.startsWith('战技·突进刺'))) throw new Error('突进刺缺失');
+  if (!btns().some(b => b.startsWith('战技·架势切换·剑'))) throw new Error('剑架势切换缺失: ' + JSON.stringify(btns().filter(b => b.includes('战技'))));
+  if (!btns().some(b => b.startsWith('战技·剑气斩'))) throw new Error('剑气斩缺失');
+  click(btns().find(b => b.startsWith('战技·架势切换·剑')));
+  if (st().p.stance !== '攻击架势' && st().p.stance !== '防御架势') throw new Error('剑架势切换异常: ' + st().p.stance);
+  click(btns().find(b => b.startsWith('战技·剑气斩')));
+  if (!logHas('战技——剑气斩')) throw new Error('剑气斩未生效');
+  __runCmd('/kill');
+  if (has('继续走')) click('继续走');
+  // 重武器架势：大剑 攻势/守势/破势 + 追加架势战技
+  st().p.wprof.大剑 = 80;
+  st().p.weapon = { name: '测试大剑', atk: 12, type: '大剑', fx: [] };
+  st().p.stance = '攻势';
+  __runCmd('/赤龙');
+  const stBtn = () => btns().find(b => b.startsWith('架势：'));
+  if (!stBtn()) throw new Error('大剑无架势按钮: ' + JSON.stringify(btns()));
+  const cycle = ['攻势', '守势', '破势', '攻势'];
+  for (let i = 0; i < 3; i++) {
+    click(stBtn());
+    if (st().p.stance !== cycle[i + 1]) throw new Error('架势循环异常: ' + st().p.stance + ' 期望 ' + cycle[i + 1]);
+  }
+  if (!logHas('守势') || !logHas('破势')) throw new Error('架势提示缺失');
+  click(stBtn()); click(stBtn()); // 攻势→守势→破势（切换按钮不消耗回合）
+  if (st().p.stance !== '破势') throw new Error('未切到破势: ' + st().p.stance);
+  const addBtn = btns().find(b => b.startsWith('架势战技·裂隙斩'));
+  if (!addBtn) throw new Error('追加架势战技缺失: ' + JSON.stringify(btns().filter(b => b.includes('战技'))));
+  click(addBtn);
+  if (!logHas('战技——裂隙斩')) throw new Error('追加架势战技未生效');
+  // 队友战技不得取架势切换（mult缺失曾把敌人血打成NaN）
+  const skH = globalThis.__allySkill({ type: '大剑' });
+  if (!skH || skH.mult === undefined || skH.name === '架势切换') throw new Error('队友大剑战技异常: ' + JSON.stringify(skH));
+  const skSword = globalThis.__allySkill({ type: '剑' });
+  if (!skSword || skSword.name !== '突进刺') throw new Error('队友剑战技异常: ' + JSON.stringify(skSword));
+  __runCmd('/kill');
+  if (has('继续走')) click('继续走');
+  st().p.weapon = { name: '木剑', atk: 3, type: '剑' };
+  // ③ 文本加速/跳过：关闭→正常→快速→关闭 循环，快速模式下点文字跳过
+  __runCmd('/阿');
+  click('⚙ 系统');
+  if (!has('打字机效果：关闭（点击文字可跳过）')) throw new Error('初始应为关闭: ' + JSON.stringify(btns().filter(b => b.includes('打字机'))));
+  click('打字机效果：关闭（点击文字可跳过）');
+  if (!has('打字机效果：正常（点击文字可跳过）')) throw new Error('未切到正常');
+  click('打字机效果：正常（点击文字可跳过）');
+  if (!has('打字机效果：快速（点击文字可跳过）')) throw new Error('未切到快速');
+  globalThis.__print('跳过测试行XYZ', 'dim');
+  globalThis.__skipTw();
+  if (!logHas('跳过测试行XYZ')) throw new Error('点击跳过未生效');
+  click('打字机效果：快速（点击文字可跳过）');
+  if (!has('打字机效果：关闭（点击文字可跳过）')) throw new Error('未切回关闭');
+  click('返回');
+  st().p.gold = g0;
+  if (st().p.flags.god) __runCmd('/god');
+  click('异域商人'); // 留在带「离开」的界面，衔接下一步
+  console.log('  · 回收拆解（武器/护甲/饰品→材料）；武器熟练度Lv门槛（30/80次解锁战技）+剑攻防架势+大剑攻势/守势/破势与追加架势战技；打字机关闭/快速/正常+点文字跳过');
+});
 step('酒馆打听', () => { click('离开'); click('酒馆'); click('打听消息（免费）'); if (!logHas('军阀')) throw new Error('传闻缺失'); });
 step('营地休息=存档+过天', () => { click('离开'); click('出城'); click('扎营'); click('休息（恢复全部+存档）');
   if (!store['isolde_proto_v1']) throw new Error('存档未写入'); if (st().p.days !== 1) throw new Error('天数=' + st().p.days); });
@@ -414,10 +808,10 @@ step('开发者指令', () => {
 step('补给品采购与战斗使用', () => {
   __runCmd('/钱 60');
   click('杂货铺');
-  click('买：止血膏（8铜币，+25生命·战斗）');
-  click('买：醒神草（7铜币，+25体力·战斗外）');
-  click('买：盐渍肉（10铜币，+30生命·战斗外）');
-  click('买：猛火油（12铜币，投掷12伤害，惧火者×2）');
+  buyOne('买：止血膏（8铜币，+25生命·战斗）');
+  buyOne('买：醒神草（7铜币，+25体力·战斗外）');
+  buyOne('买：盐渍肉（10铜币，+30生命·战斗外）');
+  buyOne('买：猛火油（12铜币，投掷12伤害，惧火者×2）');
   for (const k of ['止血膏','醒神草','盐渍肉','猛火油']) {
     if (st().p.inv[k] !== 1) throw new Error(k + '未到账');
   }
@@ -488,17 +882,17 @@ step('新武器类型（军刀/战戟）', () => {
   if (st().p.weapon.name !== '木剑') throw new Error('购买不应自动换武器');
   if (!has('买：长戟（45铜币，+12攻击，战戟）')) throw new Error('长戟购买项缺失');
   // 买铁料应留在铁匠铺（曾经跳转杂货铺的 bug）
-  click('买：铁料（2铜币/块，定制武器用）');
+  buyOne('买：铁料（2铜币/块，定制武器用）');
   if (!btns().some(b => b.startsWith('定制武器'))) throw new Error('买铁料后应留在铁匠铺: ' + JSON.stringify(btns()));
   if (st().p.inv.铁料 < 1) throw new Error('铁料未到账');
-  __runCmd('/item 铁料 5');
+  __runCmd('/item 铁料 5'); __runCmd('/item 木 2');
   click('定制武器（铁匠 Lv.1 · 0/1000）');
   click('军刀（铁料×3）');
-  click(btns().find(b => b.startsWith('开炉打造')));
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
+  click(btns().find(b => b.startsWith('木（普通木材')));
   if (st().p.weapon.type !== '军刀' && !st().p.weapon.name.includes('东方')) throw new Error('定制军刀类型错误: ' + st().p.weapon.type);
   const okNames = ['弯刀', '马刀', '长军刀', '东方'];
   if (!okNames.some(n => st().p.weapon.name.includes(n))) throw new Error('军刀分支异常: ' + st().p.weapon.name);
-  click('返回'); click('返回');
   click('离开');
   // 东方武器：黄刀应带异纹词条（进背包）
   click('异域商人');
@@ -509,44 +903,41 @@ step('新武器类型（军刀/战戟）', () => {
 });
 step('铁匠定制武器（多材料锻造）', () => {
   __runCmd('/钱 500');
-  __runCmd('/item 铁料 40');
+  __runCmd('/item 铁料 90'); __runCmd('/item 木 30'); __runCmd('/item 旧银币 5'); __runCmd('/item 陨铁 3'); __runCmd('/item 鲸骨 3');
   click('铁匠铺');
   const entry = btns().find(b => b.startsWith('定制武器（铁匠 Lv.1 ·'));
   if (!entry) throw new Error('定制入口缺失: ' + JSON.stringify(btns()));
-  click(entry);
-  for (let i = 0; i < 12; i++) {
+  const forgeBasic = () => {
+    click(btns().find(b => b.startsWith('定制武器（铁匠 Lv.')));
     click('剑（铁料×3）');
-    click(btns().find(b => b.startsWith('开炉打造')));
-    if (i < 11) click('返回');
-  }
+    click(btns().find(b => b.startsWith('铁料（基础铁')));
+    click(btns().find(b => b.startsWith('木（普通木材')));
+    click(btns().find(b => b.startsWith('铁料（基础铁')));
+  };
+  for (let i = 0; i < 12; i++) forgeBasic();
   if (st().p.forge.count !== 13) throw new Error('打造数=' + st().p.forge.count);
   if (!logHas('升到了 Lv.2')) throw new Error('12把后未升级（10把应升Lv.2）');
   if (st().p.owned.length < 2) throw new Error('武器未入库');
   if (st().p.weapon.name === '木剑') throw new Error('新武器未自动装备');
-  // 辅料锻造：血水结晶 → 汲血词条
-  click('返回'); // 回到类别菜单
-  __runCmd('/item 铁料 10');
-  __runCmd('/item 血水结晶 1');
+  // 部位选材：陨铁剑身+鲸骨剑柄+银护手 → 精准+鲸骨词条
+  click(btns().find(b => b.startsWith('定制武器（铁匠 Lv.')));
   click('剑（铁料×3）');
-  click('血水结晶（汲血：命中回复2生命） ×' + st().p.inv.血水结晶);
-  click(btns().find(b => b.startsWith('开炉打造')));
-  if (!st().p.weapon.fx.includes('汲血')) throw new Error('汲血词条未生效: ' + st().p.weapon.fx.join('/'));
-  // 多辅料叠加：覆金属龙皮 + 疫骨（2件，上限20）
-  click('返回'); // 重新进入类别菜单以刷新材料计数
-  __runCmd('/item 覆金属龙皮 1');
-  __runCmd('/item 疫骨 1');
-  click('剑（铁料×3）');
-  click('覆金属龙皮（龙威：攻击+20%·保底优良） ×' + st().p.inv.覆金属龙皮);
-  click('疫骨（疫蚀：攻击+6%，必出血腥） ×' + st().p.inv.疫骨);
-  if (!logHas('已选：覆金属龙皮、疫骨')) throw new Error('辅料叠加列表未显示');
-  click(btns().find(b => b.startsWith('开炉打造')));
+  click(btns().find(b => b.startsWith('陨铁（')));
+  click(btns().find(b => b.startsWith('鲸骨（')));
+  click(btns().find(b => b.startsWith('旧银币（')));
   const w = st().p.weapon;
-  if (!w.fx.includes('龙威') || !w.fx.includes('血腥')) throw new Error('多辅料叠加词条未生效: ' + w.fx.join('/'));
-  if (!/优良|稀有|史诗|东方/.test(w.name)) throw new Error('龙皮未保底品质: ' + w.name);
-  if (st().p.forge.count !== 15) throw new Error('辅料锻造未计数: ' + st().p.forge.count);
-  // 护甲定制（辅料：黑鳄皮 +2防）
-  click('返回'); // → 类别菜单
-  click('返回'); // → 铁匠铺
+  if (!w.fx.includes('精准') || !w.fx.includes('鲸骨')) throw new Error('材质词条未生效: ' + w.fx.join('/'));
+  // 龙钢配方：1精炼熔断钢铁+10覆金属龙皮+10龙鳞 → 龙钢×1
+  __runCmd('/item 覆金属龙皮 10'); __runCmd('/item 龙鳞 10'); __runCmd('/item 精炼熔断钢铁 1');
+  click(btns().find(b => b.startsWith('熔炼龙钢（')));
+  if ((st().p.inv.龙钢 || 0) !== 1) throw new Error('龙钢未炼出: ' + st().p.inv.龙钢);
+  click(btns().find(b => b.startsWith('定制武器（')));
+  click('剑（铁料×3）');
+  click(btns().find(b => b.startsWith('龙钢（')));
+  click(btns().find(b => b.startsWith('木（普通木材')));
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
+  if (!st().p.weapon.fx.includes('锋利')) throw new Error('龙钢词条未生效: ' + st().p.weapon.fx.join('/'));
+  // 护甲定制（辅料：黑鳄皮 +2防）——打完武器已回到铁匠铺
   click('定制护甲（头/胸/腿/披风）');
   __runCmd('/item 黑鳄皮 1');
   click('胸（铁料×4）');
@@ -569,16 +960,19 @@ step('精炼熔断钢铁（大马士革原料）', () => {
     click('熔炼精钢（铁料×20+50铜币 → 精炼熔断钢铁×1）');
   }
   if (st().p.inv.精炼熔断钢铁 < sBefore + 1) throw new Error('熔炼未产出精钢');
-  // 用精钢锻造：必出史诗+基础攻击+10
+  // 用精钢锻造剑身：必出史诗+攻击+20%
   const entryS = btns().find(b => b.startsWith('定制武器（铁匠 Lv.'));
   click(entryS);
   click('剑（铁料×3）');
-  click('精炼熔断钢铁（必出史诗，基础攻击+10） ×' + st().p.inv.精炼熔断钢铁);
-  click(btns().find(b => b.startsWith('开炉打造')));
+  click(btns().find(b => b.startsWith('精炼熔断钢铁（精钢：')));
+  click(btns().find(b => b.startsWith('木（普通木材')));
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
   const wS = st().p.weapon;
-  if (!/史诗|东方/.test(wS.name)) throw new Error('精钢未保底史诗: ' + wS.name);
-  if (wS.atk < 10) throw new Error('精钢基础攻击未生效: ' + wS.atk);
-  click('返回'); click('返回'); click('离开');
+  if (!wS.name.includes('东方')) {
+    if (!/史诗/.test(wS.name)) throw new Error('精钢未保底史诗: ' + wS.name);
+    if (wS.atk < 55) throw new Error('精钢攻击+20%未生效: ' + wS.atk);
+  }
+  click('离开');
   // 大马士革刀：+50攻击，7200铜币（异域商人轮换货，跨周期找）
   __runCmd('/钱 7300');
   let dam = null, dg = 0;
@@ -592,7 +986,7 @@ step('精炼熔断钢铁（大马士革原料）', () => {
   click(dam);
   if (!st().p.owned.some(w => w.name === '大马士革刀' && w.atk === 50)) throw new Error('大马士革刀应入背包且+50: ' + JSON.stringify(st().p.owned.filter(w => w.name.includes('大马'))));
   click('离开');
-  console.log('  · 熔炼精钢×1+精钢锻造必史诗+大马士革刀7200铜币+50攻击（入背包）');
+  console.log('  · 熔炼精钢×1+精钢剑身必史诗+20%+大马士革刀7200铜币+50攻击（入背包）');
 });
 step('连携（匕首→大剑佣兵）', () => {
   __runCmd('/清人');
@@ -664,7 +1058,7 @@ step('克罗姆福德：安普卢斯+井水任务', () => {
   if (st().p.inv.陈年果酒 < 2) throw new Error('果酒未到账');
   // 购物后不应传送回出生点
   click('离开'); click('蛙油铺');
-  click('买：蛙油膏（4铜币，战斗外+10生命）');
+  buyOne('买：蛙油膏（4铜币，战斗外+10生命）');
   if (st().p.inv.蛙油膏 !== 1) throw new Error('蛙油膏未到账');
   click('离开');
   if (!has('蛙油铺')) throw new Error('购物后应留在克罗姆福德: ' + JSON.stringify(btns()));
@@ -727,7 +1121,7 @@ step('设置与读档', () => {
   click('字体大小：中');
   const st2 = JSON.parse(store['isolde_settings'] || '{}');
   if (st2.font !== 'l') throw new Error('字体设置未生效: ' + JSON.stringify(st2));
-  if (!has('打字机效果：关')) throw new Error('缺少打字机开关');
+  if (!has('打字机效果：关闭（点击文字可跳过）')) throw new Error('缺少打字机开关');
   click('导出存档（复制存档码）');
   if (!logHas('ISOLDE')) throw new Error('导出存档码未打印');
   click('返回');
@@ -754,6 +1148,35 @@ step('坦沃：怪物潮+成建制小队', () => {
   if (!has('交差：清虱潮（+15铜币）')) throw new Error('虱潮未完成: ' + JSON.stringify(btns()));
   click('交差：清虱潮（+15铜币）');
   click('接：灰衣骑士小队（成建制，报酬25铜币）');
+  // 敌阵验证：三敌同场+号令+盾阵+切换目标+横扫
+  let sq = 0;
+  while (sq++ < 200 && !btns().some(b => b.startsWith('切换目标→'))) {
+    if (has('攻击·侧面 (×1.3)')) { fightUntilOver(); continue; }
+    if (has('战斗') && !has('攻击·侧面 (×1.3)')) { click('战斗'); continue; }
+    if (has('进去')) { click('进去'); continue; }
+    if (has('在野外游荡')) { click('在野外游荡'); continue; }
+    if (has('继续游荡')) { click('继续游荡'); continue; }
+    if (has('回城')) { click('回城'); continue; }
+    if (has('出城')) { click('出城'); continue; }
+    if (has('离开')) { click('离开'); continue; }
+    if (has('告示板')) { click('告示板'); continue; }
+    if (has('冲阵')) { click('冲阵'); continue; }
+    if (has('先回去')) { click('先回去'); continue; }
+    if (has('改天再来')) { click('改天再来'); continue; }
+    if (has('继续赶路')) { click('继续赶路'); continue; }
+    if (has('继续走')) { click('继续走'); continue; }
+    if (has('别管他')) { click('别管他'); continue; }
+    throw new Error('灰衣小队游荡异常: ' + JSON.stringify(btns()));
+  }
+  if (!btns().some(b => b.startsWith('切换目标→'))) throw new Error('敌阵无切换目标按钮: ' + JSON.stringify(btns()));
+  if (st().p.sta >= 12 && !has('横扫（全体×0.6，耗12体力）')) throw new Error('敌阵无横扫按钮');
+  if (!logHas('灰衣队长')) throw new Error('敌阵未显示队长');
+  if (!logHas('号令')) throw new Error('敌阵未显示号令标记');
+  const knightLines = logEl.children.map(c => c._text).filter(t => t.includes('灰衣骑士 Lv.'));
+  if (knightLines.length < 2) throw new Error('敌阵骑士数量不足: ' + knightLines.length);
+  click(btns().find(b => b.startsWith('切换目标→')));
+  if (!logHas('你盯上了')) throw new Error('切换目标提示缺失');
+  if (st().p.sta >= 12) click('横扫（全体×0.6，耗12体力）');
   huntJob('交差：灰衣骑士小队（+25铜币）');
   click('交差：灰衣骑士小队（+25铜币）');
   click('接：驱赶矿洞流民（报酬10铜币）');
@@ -782,7 +1205,7 @@ step('旅程→白石镇（正常地区）', () => {
   for (let i = 0; i < 3; i++) click('扎营（休息+存档，过一天）');
   if (!has('集市')) throw new Error('未到达白石镇: ' + JSON.stringify(btns()));
   click('集市');
-  click('买：麦饼（3铜币，+20生命·战斗外）');
+  buyOne('买：麦饼（3铜币，+20生命·战斗外）');
   if (st().p.inv.麦饼 !== 1) throw new Error('麦饼未到账');
   click('离开');
   // 主城歇脚：恢复+存档+过一天
@@ -831,7 +1254,7 @@ step('旅程→利恩菲尔（第四城·蝇灾）', () => {
   for (let i = 0; i < 2; i++) fightUntilOver();
   if (!has('交差：安魂仪式（+12铜币+安魂十字）')) throw new Error('安魂仪式未完成: ' + JSON.stringify(btns()));
   click('交差：安魂仪式（+12铜币+安魂十字）');
-  if (!st().p.accessory || st().p.accessory.name !== '安魂十字') throw new Error('安魂十字未获得');
+  if (!st().p.accBag.some(a => a.name === '安魂十字') && !st().p.accs.some(a => a.name === '安魂十字')) throw new Error('安魂十字未获得');
   // 高危委托：教堂大执事（3连战）——交差后在教堂，需回告示板
   click('离开'); click('告示板');
   if (!has('高危委托：教堂大执事（圣坛·报酬55铜币+苦蜜蜡×3）')) throw new Error('教堂大执事委托缺失: ' + JSON.stringify(btns()));
@@ -863,17 +1286,17 @@ step('旅程→沃林（第五城·畜疫灾）', () => {
   huntJob('交差：骨匠帮（+30铜币+疫骨×2）');
   click('交差：骨匠帮（+30铜币+疫骨×2）');
   if (st().p.inv.疫骨 < 2) throw new Error('疫骨奖励未到账');
-  // 骨刃锻造（疫骨辅料 → 必出血腥）
+  // 骨刃锻造（疫骨刃身 → 必出血腥）
   click('离开'); click('铁匠铺');
   __runCmd('/item 铁料 5');
   const entry5 = btns().find(b => b.startsWith('定制武器（铁匠 Lv.'));
   click(entry5);
   click('骨刃（铁料×2）');
-  click('疫骨（疫蚀：攻击+6%，必出血腥） ×' + st().p.inv.疫骨);
-  click(btns().find(b => b.startsWith('开炉打造')));
-  if (!st().p.weapon.fx || !st().p.weapon.fx.includes('血腥')) throw new Error('疫骨辅料未出血腥词条: ' + JSON.stringify(st().p.weapon.fx));
+  click(btns().find(b => b.startsWith('疫骨（')));
+  click(btns().find(b => b.startsWith('木（普通木材')));
+  if (!st().p.weapon.fx || !st().p.weapon.fx.includes('血腥')) throw new Error('疫骨刃身未出血腥词条: ' + JSON.stringify(st().p.weapon.fx));
   if (st().p.weapon.type !== '骨刃' && !st().p.weapon.name.includes('东方')) throw new Error('骨刃锻造类型错误: ' + st().p.weapon.type);
-  click('返回'); click('返回'); click('离开');
+  click('离开');
   console.log('  · 骨器铺骨刀+疫骨甲+赶牲口×3+骨匠帮三连+疫骨辅料锻造（血腥词条）');
 });
 step('旅程→风角港（沿海·非灾区）', () => {
@@ -883,7 +1306,7 @@ step('旅程→风角港（沿海·非灾区）', () => {
   for (let i = 0; i < 3; i++) click('扎营（休息+存档，过一天）');
   if (!has('鱼市')) throw new Error('未到达风角港: ' + JSON.stringify(btns()));
   click('鱼市');
-  click('买：烤鱼（5铜币，+20体力·战斗外）');
+  buyOne('买：烤鱼（5铜币，+20体力·战斗外）');
   if (st().p.inv.烤鱼 !== 1) throw new Error('烤鱼未到账');
   click('离开');
   click('告示板');
@@ -958,11 +1381,13 @@ step('随从装备定制', () => {
   click('定制随从装备（骑士/伙伴）');
   if (!has('为安普卢斯打造')) throw new Error('安普卢斯不在定制名单');
   click('为安普卢斯打造');
+  const c0 = st().p.companion;
+  const atkBefore = c0.atk, defBefore = c0.def;
   click('武器（铁料×2，基础攻击+2，可锻造10次）');
   click('护甲（铁料×3，基础防御+1，可锻造10次）');
   const c2 = st().p.companion;
-  if (!c2 || !c2.fw || c2.atk !== 8) throw new Error('随从武器锻造未加基础攻击: ' + JSON.stringify(c2 && { fw: c2.fw, atk: c2.atk }));
-  if (!c2.fa || c2.def !== 2) throw new Error('随从护甲锻造未加基础防御: ' + JSON.stringify(c2 && { fa: c2.fa, def: c2.def }));
+  if (!c2 || !c2.fw || c2.atk !== atkBefore + 2) throw new Error('随从武器锻造未加基础攻击: ' + JSON.stringify(c2 && { fw: c2.fw, atk: c2.atk, atkBefore }));
+  if (!c2.fa || c2.def !== defBefore + 1) throw new Error('随从护甲锻造未加基础防御: ' + JSON.stringify(c2 && { fa: c2.fa, def: c2.def, defBefore }));
   // 队伍系统：查看领队/支援被动
   click('返回'); click('返回'); click('离开'); click('出城'); click('扎营');
   click('队伍');
@@ -977,7 +1402,7 @@ step('大龙遭遇（必败情节）', () => {
   if (has('离开')) click('离开');
   __runCmd('/龙');
   if (!has('攻击·正面 (×0.8)')) throw new Error('大龙战未开始: ' + JSON.stringify(btns()));
-  st().p.hp = 30; // 压低生命，确保在团队反杀前倒下（验证无回合限制下的败局路径）
+  st().p.hp = 12; // 压低生命，确保在团队反杀前倒下（验证无回合限制下的败局路径）
   let guard = 0;
   while ((has('攻击·正面 (×0.8)') || has('战斗')) && guard++ < 60) {
     if (has('攻击·正面 (×0.8)')) click('攻击·正面 (×0.8)'); // 不格挡，正面硬接
@@ -1083,17 +1508,45 @@ step('0.24新BOSS·血池之眼（寻踪讨伐→交差）', () => {
   click(row);
   if (!has('在野外游荡')) throw new Error('接单后应到城外: ' + JSON.stringify(btns()));
   const gold0 = st().p.gold, job0 = st().p.flags.jobCount, cry0 = st().p.inv.血水结晶;
+  const ord0 = st().p.inv.军阀密令 || 0, kills0 = st().p.kills || 0;
   const dc = st().p.flags.dragonChainDone;
   st().p.flags.dragonChainDone = true; // 屏蔽龙之低语寻踪干扰
   __runCmd('/god');
   huntJob('交差：血池之眼（+60铜币+血水结晶×3）');
   __runCmd('/god');
   st().p.flags.dragonChainDone = dc;
+  // 高危之敌身上才有密令；图鉴与战历同步记录
+  if ((st().p.inv.军阀密令||0) < ord0 + 1) throw new Error('高危之敌未掉密令: ' + st().p.inv.军阀密令);
+  if (!logHas('搜出军阀密令')) throw new Error('密令掉落提示缺失');
+  if (!(st().p.bestiary||{})['血池之眼']) throw new Error('图鉴未记录血池之眼');
+  if ((st().p.kills||0) <= kills0) throw new Error('击杀数未增长');
+  __runCmd('图鉴');
+  if (!logHas('血池之眼')) throw new Error('图鉴命令未显示血池之眼');
+  if (!logHas('累计击杀')) throw new Error('图鉴未显示战历');
+  if (!logHas('高危')) throw new Error('图鉴未标高危');
+  if (!st().p.accBag.some(a => a.name === '血池之瞳')) throw new Error('狩猎品血池之瞳未掉落');
   click('交差：血池之眼（+60铜币+血水结晶×3）');
   if (st().p.gold < gold0 + 60) throw new Error('血池之眼报酬异常: +' + (st().p.gold - gold0));
   if (st().p.inv.血水结晶 < cry0 + 3) throw new Error('血水结晶未到账');
   if (st().p.flags.jobCount !== job0 + 1) throw new Error('jobCount未+1');
-  console.log('  · 血池之眼：寻踪→击杀→交差，报酬60铜币+血水结晶×3');
+  console.log('  · 血池之眼：寻踪→击杀→交差，报酬60铜币+血水结晶×3；高危之敌掉密令，图鉴/战历同步记录');
+});
+step('0.25高危密令与图鉴默认', () => {
+  const S = JSON.parse(JSON.stringify(st()));
+  delete S.p.bestiary; delete S.p.kills; delete S.p.flags.orderHint;
+  globalThis.__migrate(S);
+  if (!S.p.bestiary || typeof S.p.bestiary !== 'object') throw new Error('migrate 未补齐图鉴默认');
+  if (S.p.kills !== 0) throw new Error('migrate 未补齐击杀数默认');
+  if (S.p.flags.orderHint !== false) throw new Error('migrate 未补齐密令提示默认');
+  // 名册抽查：普通敌人不在高危名册，高危之敌在册
+  const pre = globalThis.__prepEnemy;
+  if (typeof pre !== 'function') throw new Error('prepEnemy 未导出');
+  const dog = pre({ name: '野狗', lv: 1, hp: 10, atk: 2, def: 0 });
+  const lord = pre({ name: '黑棘城主', lv: 36, hp: 100, atk: 5, def: 1 });
+  if (dog.high) throw new Error('普通野狗不应标高危');
+  if (!lord.high) throw new Error('黑棘城主应标高危');
+  if (!(st().p.bestiary||{})['野狗']) throw new Error('野狗图鉴记录缺失');
+  console.log('  · 密令仅高危之敌掉落（名册抽查：野狗否/黑棘城主是）；图鉴默认值迁移完整');
 });
 step('0.25狮子之瞳·30级随机城镇告示板', () => {
   if (has('离开')) click('离开');
@@ -1243,6 +1696,60 @@ step('0.25双狮之试·轩辕十四入队', () => {
   }
   console.log('  · 双狮之试：两头50级4000血狮形野兽→半血/20血时轩辕十四降临（全队恢复）→永久入队');
 });
+step('0.25轩辕十四法术池（六个强化身体法术）', () => {
+  if (has('离开')) click('离开');
+  __runCmd('/阿');
+  if (!st().p.flags.god) __runCmd('/god');
+  st().p.control = '轩辕十四'; // 战斗外切换操控，带入下场战斗
+  __runCmd('/赤龙');
+  const r = st().p.regulus;
+  if (!r) throw new Error('轩辕十四不在队');
+  const mp0 = r.mp || 0;
+  const ctrlLine = logEl.children.map(c => c._text).filter(t => t.includes('当前操控：')).pop() || '';
+  if (!ctrlLine.includes('轩辕十四')) throw new Error('未带入操控: ' + ctrlLine);
+  if (!btns().some(b => b.startsWith('法术（MP'))) throw new Error('操控轩辕十四无法术按钮: ' + JSON.stringify(btns()));
+  // 法术选单应列全六个狮子/星辰法术
+  click(btns().find(b => b.startsWith('法术（MP')));
+  for (const n of ['狮心鼓动', '星辉甲胄', '狮王之力', '猎星之眼', '星坠步', '狮吼']) {
+    if (!btns().some(b => b.startsWith(n + '（'))) throw new Error('轩辕十四法术池缺 ' + n + ': ' + JSON.stringify(btns()));
+  }
+  click('返回');
+  const castOne = (name) => {
+    click(btns().find(b => b.startsWith('法术（MP')));
+    click(btns().find(b => b.startsWith(name + '（')));
+    let ag = 0;
+    while (has('战斗') && !has('攻击·侧面 (×1.3)') && ag++ < 8) click('战斗');
+    if (!has('攻击·侧面 (×1.3)')) throw new Error(name + ' 施放后战斗异常: ' + JSON.stringify(btns()));
+  };
+  castOne('狮王之力');
+  if (r.pow !== 6) throw new Error('狮王之力未强化攻击: ' + r.pow);
+  if (!logHas('狮力灌入四肢')) throw new Error('狮王之力提示缺失');
+  castOne('星辉甲胄');
+  if (r.fort !== 4) throw new Error('星辉甲胄未生效: ' + r.fort);
+  castOne('狮心鼓动');
+  if (!logHas('狮心鼓动——血液像鼓点一样奔流')) throw new Error('狮心鼓动提示缺失');
+  castOne('星坠步');
+  if (r.regen !== 5) throw new Error('星坠步未生效: ' + r.regen);
+  castOne('猎星之眼');
+  if (r.stunC !== 0.15) throw new Error('猎星之眼未生效: ' + r.stunC);
+  castOne('狮吼');
+  const en = globalThis.__getCtx().en;
+  if (en.fear !== 3) throw new Error('狮吼未震慑目标: fear=' + en.fear);
+  if (!logHas('狮吼——')) throw new Error('狮吼提示缺失');
+  if (!logHas('被震住了')) throw new Error('狮吼震住效果缺失');
+  // 法力消耗校验（六次共68，每回合回复2）
+  if (r.mp > mp0 - 56 || r.mp < mp0 - 68) throw new Error('法力消耗异常: ' + mp0 + '→' + r.mp);
+  // 强化带入实战：攻击结算含+6
+  const ctx0 = globalThis.__getCtx();
+  const atkLine = ctx0 && ctx0.control === r;
+  if (!atkLine) throw new Error('操控角色异常');
+  __runCmd('/kill');
+  if (has('继续走')) click('继续走');
+  st().p.control = null;
+  r.pow = 0; r.fort = 0; r.regen = 0; r.stunC = 0;
+  if (st().p.flags.god) __runCmd('/god');
+  console.log('  · 轩辕十四法术池：狮心鼓动/星辉甲胄/狮王之力/猎星之眼/星坠步/狮吼（强化身体系，扣各自法力）');
+});
 step('0.26队友换武器与等级显示', () => {
   if (has('离开')) click('离开');
   if (!st().p.companion) { st().p.companion = { name: '安普卢斯', type: '剑', d: 6, hp: 30, maxHp: 30, lv: 6, xp: 0, role: 'support', passive: '同行：每回合补刀，可挡刀', atk: 6, atk0: 6, def: 1, def0: 1, weapon: null, fw: 0, fa: 0 }; } // 双狮试炼中可能重伤离队
@@ -1281,7 +1788,109 @@ step('0.26队友换武器与等级显示', () => {
   if (mercLine.includes('Lv.')) throw new Error('佣兵不应显示等级: ' + mercLine);
   st().p.mercs = st().p.mercs.filter(m => m.name !== '测试佣兵');
   click('返回');
-  console.log('  · 轩辕十四基础攻防=主角+20；队友营地换武器（武器40%转化伤害）；队伍面板显示队友等级/攻防，佣兵不显示');
+  // 营地休息应给队友回血
+  st().p.companion.hp = 1;
+  if (st().p.knight) st().p.knight.hp = 1;
+  click('休息（恢复全部+存档）');
+  if (st().p.companion.hp !== st().p.companion.maxHp) throw new Error('营地休息未给安普卢斯回血: ' + st().p.companion.hp);
+  if (st().p.knight && st().p.knight.hp !== st().p.knight.maxHp) throw new Error('营地休息未给骑士回血');
+  console.log('  · 轩辕十四基础攻防=主角+20；队友营地换武器（武器40%转化伤害）；队伍面板显示队友等级/攻防，佣兵不显示；营地休息队友回血');
+});
+step('0.26切换操控（含佣兵）', () => {
+  click('离开'); click('回城');
+  __runCmd('/阿');
+  if (!st().p.mercs.length) st().p.mercs.push({ name: '测试佣兵', hp: 25, maxHp: 25, d: 4, lv: 3, traits: ['利落'] });
+  if (!st().p.companion) st().p.companion = { name: '安普卢斯', type: '剑', d: 6, hp: 30, maxHp: 30, lv: 6, xp: 0, role: 'support', passive: '同行：每回合补刀，可挡刀', atk: 6, atk0: 6, def: 1, def0: 1, weapon: null, fw: 0, fa: 0 };
+  if (!st().p.memSpells.includes('飞石')) st().p.memSpells.push('飞石'); // 记忆槽直补，供受控队友咏唱
+  // ① 战斗外切换操控（队伍面板）
+  click('队伍');
+  const teamSwitch = () => btns().find(b => b.startsWith('切换操控→'));
+  if (!teamSwitch()) throw new Error('队伍面板无切换操控: ' + JSON.stringify(btns()));
+  click(teamSwitch());
+  if (!st().p.control) throw new Error('战斗外切换未保存: ' + st().p.control);
+  if (!logHas('操控切换到')) throw new Error('战斗外切换提示缺失');
+  if (!logHas('当前操控：')) throw new Error('队伍面板未显示当前操控');
+  click('返回');
+  click('出城');
+  let cg = 0;
+  while (!has('攻击·侧面 (×1.3)') && cg++ < 15) {
+    if (has('在野外游荡')) click('在野外游荡');
+    else if (has('继续游荡')) click('继续游荡');
+    else if (has('继续走')) click('继续走');
+    else if (has('改天再来')) click('改天再来');
+    else if (has('别管他')) click('别管他');
+    else if (has('继续赶路')) click('继续赶路');
+    else if (has('回城')) { click('回城'); click('出城'); }
+    else throw new Error('切换操控遇敌异常: ' + JSON.stringify(btns()));
+  }
+  if (!has('攻击·侧面 (×1.3)')) throw new Error('未遇敌');
+  if (!st().p.flags.god) __runCmd('/god');
+  // ② 场外选的操控带进战斗，且受控角色可用法术与战技
+  const ctrlLine = logEl.children.map(c => c._text).filter(t => t.includes('当前操控：')).pop() || '';
+  const ctrlName = ctrlLine.replace('当前操控：', '').split('（')[0];
+  if (ctrlName !== st().p.control) throw new Error('战斗未带入操控: ' + ctrlName + ' vs ' + st().p.control);
+  const findCtrl = () => st().p.mercs.concat([st().p.knight, st().p.companion, st().p.regulus]).filter(Boolean).find(a => a.name === ctrlName);
+  if (!btns().some(b => b.startsWith('法术（MP'))) throw new Error('操控队友时应有法术按钮: ' + JSON.stringify(btns()));
+  const skBtn = btns().find(b => b.startsWith('战技·'));
+  if (!skBtn) throw new Error('操控队友时应有战技按钮: ' + JSON.stringify(btns()));
+  // ③ 受控角色放法术（飞石）
+  click(btns().find(b => b.startsWith('法术（MP')));
+  if (!btns().some(b => b.startsWith('飞石（8MP'))) throw new Error('队友法术选单缺飞石: ' + JSON.stringify(btns()));
+  const mpBefore = findCtrl().mp;
+  click(btns().find(b => b.startsWith('飞石（8MP')));
+  let agc = 0;
+  while (has('战斗') && !has('攻击·侧面 (×1.3)') && agc++ < 8) click('战斗');
+  if (!logHas(ctrlName + '咏唱')) throw new Error('队友未咏唱法术: ' + ctrlName);
+  if (findCtrl().mp !== mpBefore - 8) throw new Error('队友法术未扣法力: ' + mpBefore + '→' + findCtrl().mp);
+  // ④ 受控角色放战技（若战斗未结束）
+  if (has('攻击·侧面 (×1.3)')) {
+    const skBtn2 = btns().find(b => b.startsWith('战技·'));
+    if (!skBtn2) throw new Error('受控角色战技按钮消失: ' + JSON.stringify(btns()));
+    click(skBtn2);
+    let agc2 = 0;
+    while (has('战斗') && !has('攻击·侧面 (×1.3)') && agc2++ < 8) click('战斗');
+    if (!logHas(ctrlName + '战技——')) throw new Error('队友未施放战技: ' + ctrlName);
+  } else {
+    // 战斗已结束，再打一场测战技
+    fightUntilOver(200);
+    if (!st().p.flags.god) __runCmd('/god');
+    if (has('回城')) { click('回城'); }
+    click('出城');
+    let cg3 = 0;
+    while (!has('攻击·侧面 (×1.3)') && cg3++ < 15) {
+      if (has('在野外游荡')) click('在野外游荡');
+      else if (has('继续游荡')) click('继续游荡');
+      else if (has('继续走')) click('继续走');
+      else if (has('改天再来')) click('改天再来');
+      else if (has('别管他')) click('别管他');
+      else if (has('继续赶路')) click('继续赶路');
+      else if (has('回城')) { click('回城'); click('出城'); }
+      else throw new Error('战技复测遇敌异常: ' + JSON.stringify(btns()));
+    }
+    const skBtn3 = btns().find(b => b.startsWith('战技·'));
+    if (!skBtn3) throw new Error('第二场战技按钮缺失: ' + JSON.stringify(btns()));
+    click(skBtn3);
+    let agc3 = 0;
+    while (has('战斗') && !has('攻击·侧面 (×1.3)') && agc3++ < 8) click('战斗');
+    if (!logHas(ctrlName + '战技——')) throw new Error('队友未施放战技（第二场）: ' + ctrlName);
+  }
+  // ⑤ 切回主角：主角专属按钮恢复，操控存档清空
+  const ctrlBtn = () => btns().find(b => b.startsWith('切换操控→'));
+  let cg2 = 0;
+  while (has('攻击·侧面 (×1.3)') && !btns().some(b => b.startsWith('切换操控→你')) && cg2++ < 12) {
+    if (has('战斗') && !has('攻击·侧面 (×1.3)')) click('战斗');
+    else click(ctrlBtn());
+  }
+  if (btns().some(b => b.startsWith('切换操控→你'))) {
+    click(btns().find(b => b.startsWith('切换操控→你')));
+    if (!btns().some(b => b.startsWith('法术（MP'))) throw new Error('切回主角后应有法术按钮');
+    if (!logHas('你亲自出手')) throw new Error('切回提示缺失');
+    if (st().p.control !== null) throw new Error('切回主角未清空场外操控: ' + st().p.control);
+  }
+  fightUntilOver(200);
+  st().p.control = null; // 无论切回是否成功，收尾清空场外操控（防下游串场）
+  if (!st().p.flags.god) __runCmd('/god');
+  console.log('  · 切换操控：战斗外队伍面板可切（带入下场战斗）；受控角色可放法术（扣法力）与战技（扣冷却）；切回主角恢复专属按钮');
 });
 step('0.26队长切换+伙伴经验+装备入包', () => {
   if (has('离开')) click('离开');
@@ -1364,7 +1973,7 @@ step('0.27传奇骑士与精英掉落强化', () => {
   if (!st().p.flags.legF4) throw new Error('塞拉斯旗未置位');
   if (!st().p.owned.some(w => w.name === '苍白大剑')) throw new Error('苍白大剑未入包');
   if (!(st().p.inv.苍白板甲碎片 >= 1)) throw new Error('苍白板甲碎片未入包');
-  if (!st().p.accessory || st().p.accessory.name !== '塞拉斯的纹章') throw new Error('塞拉斯的纹章未获得');
+  if (!st().p.accBag.some(a => a.name === '塞拉斯的纹章') && !st().p.accs.some(a => a.name === '塞拉斯的纹章')) throw new Error('塞拉斯的纹章未获得');
   __runCmd('/god');
   console.log('  · 传奇骑士：专属武器/材料/饰物掉落，塞拉斯复活2次后真死');
 });
@@ -1438,6 +2047,40 @@ step('0.24第一章·地图与北境道路', () => {
   click('离开');
   console.log('  · 地图系统（当前位置金色高亮）+ 渡口镇/古战场/兰德尔枢纽/卡尔沃辐射道路连通');
 });
+step('0.24古战场新敌与野兽的呼唤', () => {
+  __runCmd('/渡'); click('出城');
+  click('北上：穿古战场，往兰德尔（3段路程）');
+  for (let i = 0; i < 3; i++) click('扎营（休息+存档，过一天）');
+  if (!has('在古战场游荡')) throw new Error('未到古战场: ' + JSON.stringify(btns()));
+  __runCmd('/god');
+  const evBtns = ['向断旗行礼', '拔走断旗', '挖开看看', '添一捧土', '问他', '给他一个铜币', '绕开', '先不过去', '循声过去'];
+  let g3 = 0;
+  while (g3++ < 500 && (!st().p.flags.beastCall1Done || !logHas('北境战兵') || !logHas('古战场龙'))) {
+    if (has('攻击·侧面 (×1.3)')) { fightWander(60); continue; }
+    if (has('战斗') && !has('攻击·侧面 (×1.3)')) { click('战斗'); continue; }
+    if (has('起身')) { click('起身'); click('离开'); continue; }
+    const ev = btns().find(b => evBtns.includes(b));
+    if (ev) { click(ev); continue; }
+    if (has('在古战场游荡')) { click('在古战场游荡'); continue; }
+    if (has('继续游荡')) { click('继续游荡'); continue; }
+    if (has('折返')) { click('折返'); continue; }
+    if (has('进去')) { click('进去'); continue; }
+    if (has('改天再来')) { click('改天再来'); continue; }
+    if (has('继续走')) { click('继续走'); continue; }
+    if (has('继续赶路')) { click('继续赶路'); continue; }
+    if (has('别管他')) { click('别管他'); continue; }
+    if (has('离开')) { click('离开'); continue; }
+    if (has('回城')) { click('回城'); continue; }
+    if (has('出城')) { click('出城'); continue; }
+    throw new Error('古战场游荡异常: ' + JSON.stringify(btns()));
+  }
+  __runCmd('/god');
+  if (!st().p.flags.beastCall1Done) throw new Error('野兽的呼唤·其一未完成');
+  if (!logHas('其二')) throw new Error('其二预告缺失');
+  if (!logHas('北境战兵')) throw new Error('古战场未遇北境战兵');
+  if (!logHas('古战场龙')) throw new Error('古战场未遇古战场龙');
+  console.log('  · 古战场：北境战兵/古战场龙刷新、断旗/无名坟/老兵鬼影事件、野兽的呼唤·其一');
+});
 step('0.24第一章·矿脉巨像', () => {
   __runCmd('/兰'); __runCmd('/活 24');
   click('告示板');
@@ -1479,6 +2122,7 @@ step('0.24第一章·东线港口链与要塞', () => {
   click('悬赏：山道劫匪（报酬30铜币·当场开打）');
   if (!has('攻击·侧面 (×1.3)')) throw new Error('悬赏战未开始');
   fightUntilOver(80);
+  if (!has('交差：山道劫匪（+30铜币）')) { click('告示板'); } // 悬赏完成后留在城镇，自行去告示板交差
   if (!has('交差：山道劫匪（+30铜币）')) throw new Error('悬赏交差行缺失: ' + JSON.stringify(btns()));
   click('交差：山道劫匪（+30铜币）');
   if (!has('悬赏：山道劫匪（报酬30铜币·当场开打）')) throw new Error('悬赏应可重接');
@@ -1504,6 +2148,9 @@ step('0.24第一章·东线港口链与要塞', () => {
   click('港道（主线进行中）');
   click('开打');
   fightUntilOver(80); fightUntilOver(80); fightUntilOver(80); // 海盗×2+潮音海妖
+  // 主线完成后留在潮音港（不再跳告示板），自行去告示板交差
+  if (!has('码头') && !has('告示板')) throw new Error('主线完成后未留在潮音港: ' + JSON.stringify(btns()));
+  click('告示板');
   if (!has('交差：疏通港道（+120铜币，港道恢复通航）')) throw new Error('主线交差行缺失: ' + JSON.stringify(btns()));
   click('交差：疏通港道（+120铜币，港道恢复通航）');
   if (!st().p.flags.tideMainReward) throw new Error('主线未结算');
@@ -1535,6 +2182,129 @@ step('0.24第一章·东线港口链与要塞', () => {
   if (!has('雹铁铺')) throw new Error('卡尔沃未到达: ' + JSON.stringify(btns()));
   __runCmd('/god');
   console.log('  · 东线：兰德尔→东岭→松风→峭壁→青石→北泉→潮音港（主线+5段航程）→北岭港→霜谷→银盾→灰墙要塞→卡尔沃；松风告示板≥8委托');
+});
+function huntLibFlag(flag, maxTries = 150) {
+  let g = 0;
+  while (g++ < maxTries && !st().p.flags[flag]) {
+    if (has('攻击·侧面 (×1.3)')) { fightUntilOver(200); continue; }
+    if (has('战斗') && !has('攻击·侧面 (×1.3)')) { click('战斗'); continue; }
+    if (has('起身')) { click('起身'); click('离开'); continue; }
+    if (has('进去')) { click('进去'); continue; }
+    if (has('在河边游荡')) { click('在河边游荡'); continue; }
+    if (has('在野外游荡')) { click('在野外游荡'); continue; }
+    if (has('在城外游荡')) { click('在城外游荡'); continue; }
+    if (has('在矿区游荡')) { click('在矿区游荡'); continue; }
+    if (has('在焦土游荡')) { click('在焦土游荡'); continue; }
+    if (has('在古战场游荡')) { click('在古战场游荡'); continue; }
+    if (has('在黑原游荡')) { click('在黑原游荡'); continue; }
+    if (has('在北古战场游荡')) { click('在北古战场游荡'); continue; }
+    if (has('在东荒原游荡')) { click('在东荒原游荡'); continue; }
+    if (has('继续游荡')) { click('继续游荡'); continue; }
+    if (has('折返')) { click('折返'); continue; }
+    if (has('改天再来')) { click('改天再来'); continue; }
+    if (has('继续走')) { click('继续走'); continue; }
+    if (has('继续赶路')) { click('继续赶路'); continue; }
+    if (has('别管他')) { click('别管他'); continue; }
+    if (has('回城')) { click('回城'); continue; }
+    if (has('出城')) { click('出城'); continue; }
+    if (has('离开')) { click('离开'); continue; }
+    if (has('告示板')) { click('告示板'); continue; }
+    throw new Error('解放游荡异常: ' + JSON.stringify(btns()));
+  }
+  if (!st().p.flags[flag]) throw new Error('解放未完成: ' + flag + ' ' + JSON.stringify(btns()));
+}
+step('0.24领地解放（渡口→克罗姆福德→阿什沃德解放战争）', () => {
+  // ① 渡口镇解放任务（周边城镇仍在野外寻踪）
+  __runCmd('/渡'); click('告示板');
+  if (!has('解放：渡口镇（寻踪·报酬30铜币）')) throw new Error('渡口镇解放任务缺失: ' + JSON.stringify(btns().slice(0, 8)));
+  click('解放：渡口镇（寻踪·报酬30铜币）');
+  if (!st().p.flags.god) __runCmd('/god');
+  const dcL = st().p.flags.dragonChainDone;
+  st().p.flags.dragonChainDone = true;
+  huntLibFlag('libT_ferrytownDone');
+  st().p.flags.dragonChainDone = dcL;
+  if (!st().p.flags.libT_ferrytownDone) throw new Error('渡口镇未解放');
+  // ② 克罗姆福德解放主线（城内讨取——祸首的老巢就在城里）
+  __runCmd('/克'); click('告示板');
+  if (!has('解放主线：克罗姆福德（城内讨取·报酬85铜币）')) throw new Error('克罗姆福德解放主线缺失: ' + JSON.stringify(btns().slice(0, 8)));
+  click('解放主线：克罗姆福德（城内讨取·报酬85铜币）');
+  click('告示板');
+  if (!has('讨取祸首：克罗姆福德（就在城内·决战）')) throw new Error('城内讨取按钮缺失: ' + JSON.stringify(btns().slice(0, 8)));
+  click('讨取祸首：克罗姆福德（就在城内·决战）');
+  let wgC = 0;
+  while (has('攻击·侧面 (×1.3)') && wgC++ < 200) { fightUntilOver(200); }
+  if (!st().p.flags.libC_cromfordDone) throw new Error('克罗姆福德主线未完成');
+  // ③ 阿什沃德解放主线（城内讨取）
+  __runCmd('/阿'); click('告示板');
+  click('解放主线：阿什沃德（城内讨取·报酬80铜币）');
+  click('告示板');
+  click('讨取祸首：阿什沃德（就在城内·决战）');
+  let wgA = 0;
+  while (has('攻击·侧面 (×1.3)') && wgA++ < 200) { fightUntilOver(200); }
+  if (!st().p.flags.libC_ashwoldDone) throw new Error('阿什沃德主线未完成');
+  // ④ 解放战争（城内决战）
+  click('离开'); click('告示板');
+  if (!has('⚔ 解放战争：阿什沃德（城内决战）')) throw new Error('解放战争按钮缺失: ' + JSON.stringify(btns().slice(0, 8)));
+  click('⚔ 解放战争：阿什沃德（城内决战）');
+  let wg2 = 0;
+  while (has('攻击·侧面 (×1.3)') && wg2++ < 200) { fightUntilOver(200); }
+  if (st().p.flags.god) __runCmd('/god');
+  if (!st().p.flags.libW_ashwold) throw new Error('阿什沃德未解放');
+  if (!rawBtns().some(b => b === '解放战争：阿什沃德（已解放）')) throw new Error('解放战争已完成行缺失: ' + JSON.stringify(rawBtns().slice(0, 6)));
+  if (!st().p.owned.some(w => w.name === '血督重剑')) throw new Error('血督重剑未入包');
+  click('离开');
+  if (!logHas('阿什沃德【已解放】')) throw new Error('城市解放状态未显示: ' + JSON.stringify(btns()));
+  console.log('  · 领地解放：渡口镇野外寻踪→克罗姆福德/阿什沃德主线城内讨取→解放战争城内决战（血督重剑+【已解放】）');
+});
+step('0.25传说武器·佛拉格拉克与布里欧纳克', () => {
+  const w0 = st().p.weapon;
+  st().p.control = null; // 防下游串场
+  if (!st().p.flags.god) __runCmd('/god');
+  // ① 佛拉格拉克（坦沃·灰土高地龙）
+  __runCmd('/坦'); click('告示板');
+  const fragRow = '传说讨伐：灰土高地龙（西边灰土高地·报酬120铜币+佛拉格拉克）';
+  if (!has(fragRow)) throw new Error('灰土高地龙委托缺失: ' + JSON.stringify(btns().slice(0, 8)));
+  click(fragRow);
+  huntJob('交差：灰土高地龙（+120铜币）');
+  if (!st().p.owned.some(w => w.name === '佛拉格拉克')) throw new Error('佛拉格拉克未入包');
+  click('交差：灰土高地龙（+120铜币）');
+  // ② 布里欧纳克（沃林·魔化之人）
+  __runCmd('/沃'); click('告示板');
+  const briRow = '传说讨伐：魔化之人（西郊旷野·报酬150铜币+布里欧纳克）';
+  if (!has(briRow)) throw new Error('魔化之人委托缺失: ' + JSON.stringify(btns().slice(0, 8)));
+  click(briRow);
+  huntJob('交差：魔化之人（+150铜币）');
+  if (!st().p.owned.some(w => w.name === '布里欧纳克')) throw new Error('布里欧纳克未入包');
+  click('交差：魔化之人（+150铜币）');
+  // ③ 装备佛拉格拉克：开局自动先攻 + 伤口不愈
+  st().p.weapon = { name: '佛拉格拉克', atk: 30, type: '剑', fx: ['自动', '不愈'] };
+  __runCmd('/赤龙');
+  if (!logHas('佛拉格拉克自己从腰间飞了出去')) throw new Error('自动先攻未触发');
+  click('攻击·侧面 (×1.3)');
+  if (!logHas('伤口不会愈合')) throw new Error('不愈未生效');
+  const ble1 = globalThis.__getCtx().en.不愈;
+  if (!ble1) throw new Error('不愈标记未挂上');
+  __runCmd('/kill');
+  if (has('继续走')) click('继续走');
+  // ④ 装备布里欧纳克：无药四光自伤，有药五光
+  st().p.weapon = { name: '布里欧纳克', atk: 28, type: '长枪', fx: ['五光'] };
+  __runCmd('/赤龙');
+  if (!logHas('四道光')) throw new Error('无药四光未触发');
+  if (!logHas('狂躁的光擦过你')) throw new Error('无药自伤未触发');
+  __runCmd('/kill');
+  if (has('继续走')) click('继续走');
+  __runCmd('/item 罂粟安眠药 1');
+  const cnt1 = logEl.children.filter(c => c._text.includes('狂躁的光擦过你')).length;
+  __runCmd('/赤龙');
+  if (!logHas('五道光芒')) throw new Error('有药五光未触发');
+  const cnt2 = logEl.children.filter(c => c._text.includes('狂躁的光擦过你')).length;
+  if (cnt2 !== cnt1) throw new Error('有药不应自伤');
+  if ((st().p.inv.罂粟安眠药 || 0) !== 0) throw new Error('罂粟安眠药未消耗');
+  __runCmd('/kill');
+  if (has('继续走')) click('继续走');
+  st().p.weapon = w0; // 还原武器，避免五光影响后续步骤
+  if (st().p.flags.god) __runCmd('/god');
+  console.log('  · 佛拉格拉克（自动先攻/伤口不愈）+ 布里欧纳克（五光魔枪，无药四光自伤，有药五光并消耗罂粟安眠药）');
 });
 step('0.24路网往返与黑棘城', () => {
   if (has('离开')) click('离开');
@@ -1587,6 +2357,34 @@ step('0.24路网往返与黑棘城', () => {
   st().p.flags.dragonChainDone = dc;
   click('交差：黑甲骑劫（+85铜币）');
   if (!has('悬赏：黑甲骑劫（寻踪·报酬85铜币）')) throw new Error('黑棘悬赏应可重接');
+  // 委托完成后应留在游荡（不直接回告示板）
+  click('悬赏：弃誓者（寻踪·报酬80铜币）');
+  __runCmd('/heal'); __runCmd('/god');
+  const dcB = st().p.flags.dragonChainDone;
+  st().p.flags.dragonChainDone = true;
+  let gg = 0;
+  while (!has('进去') && gg++ < 60) {
+    if (has('攻击·侧面 (×1.3)')) { fightUntilOver(200); continue; }
+    if (has('战斗') && !has('攻击·侧面 (×1.3)')) { click('战斗'); continue; }
+    if (has('在城外游荡')) click('在城外游荡');
+    else if (has('继续游荡')) click('继续游荡');
+    else if (has('回城')) click('回城');
+    else if (has('出城')) click('出城');
+    else if (has('离开')) click('离开');
+    else if (has('告示板')) click('告示板');
+    else throw new Error('弃誓者游荡异常: ' + JSON.stringify(btns()));
+  }
+  if (!has('进去')) throw new Error('弃誓者寻踪未出现');
+  click('进去');
+  let ff = 0;
+  while (has('攻击·侧面 (×1.3)') && ff++ < 200) { fightUntilOver(200); }
+  if (has('告示板')) throw new Error('委托完成后不应直接回告示板');
+  if (!has('继续游荡') && !has('在城外游荡')) throw new Error('委托完成后未回到游荡: ' + JSON.stringify(btns()));
+  __runCmd('/god');
+  st().p.flags.dragonChainDone = dcB;
+  huntJob('交差：弃誓者（+80铜币）', 60);
+  click('交差：弃誓者（+80铜币）');
+  if (!has('悬赏：弃誓者（寻踪·报酬80铜币）')) throw new Error('弃誓者悬赏未恢复');
   click('离开');
   if (!has('出城') || !has('告示板')) throw new Error('黑棘城告示板离开未回黑棘城: ' + JSON.stringify(btns()));
   // 黑棘城主：接单文案无undefined，寻踪击杀（一次性的最终高危）
@@ -1623,9 +2421,9 @@ step('0.24路网往返与黑棘城', () => {
   __runCmd('/god');
   if (!st().p.flags.northWarWarlord) throw new Error('军团战未讨取北境战帅');
   if (!logHas('被讨取')) throw new Error('讨取文案缺失');
-  if (!logHas('北境战兵')) throw new Error('军团战未出现北境战兵');
-  if (!logHas('弃誓骑士')) throw new Error('军团战未出现骑士兵种');
-  if (!logHas('列队出阵')) throw new Error('军团多阵型文案缺失');
+  if (!logHas('列队出阵')) throw new Error('军团波次文案缺失');
+  if (!logHas('弃誓骑士')) throw new Error('军团未出现骑士兵种');
+  if (!logHas('黑甲骑士')) throw new Error('军团骑士种类不足');
   // ⑤ 黑棘城西6段→风角港→回
   __runCmd('/黑'); click('出城');
   if (!has('西行：前往风角港（6段路程）')) throw new Error('黑棘城西6段缺失: ' + JSON.stringify(btns()));
@@ -1677,6 +2475,287 @@ step('0.24路网往返与黑棘城', () => {
   __runCmd('/god');
   console.log('  · 往返实测：北岭港⇄霜谷/要塞双向/观海⇄鹿鸣5段/黑棘城24高危（城主无undefined）/黑原北古战场/黑棘⇄风角港6段/三港互通');
 });
+step('0.25巫师店（法杖定制+诅咒/赐福法杖+新法术书）', () => {
+  __runCmd('/黑');
+  __runCmd('/钱 1500'); __runCmd('/item 铁料 3'); __runCmd('/item 龙鳞 1');
+  click('巫师店');
+  if (!has('定制法杖（部位选材·优质法杖得在这里打）')) throw new Error('巫师店菜单缺失: ' + JSON.stringify(btns()));
+  click('买：诅咒法杖（350铜币，优质法杖：诅咒系法术+30%，赐福系-30%）');
+  const cur = st().p.owned.find(w => w.name === '诅咒法杖·优质');
+  if (!cur || !cur.spellPct || cur.spellPct.诅咒 !== 1.3 || cur.spellPct.neg_赐福 !== 0.7) throw new Error('诅咒法杖属性缺失: ' + JSON.stringify(cur));
+  click('买：赐福法杖（350铜币，优质法杖：赐福系法术+30%，诅咒系-30%）');
+  const ble = st().p.owned.find(w => w.name === '赐福法杖·优质');
+  if (!ble || !ble.spellPct || ble.spellPct.赐福 !== 1.3 || ble.spellPct.neg_诅咒 !== 0.7) throw new Error('赐福法杖属性缺失: ' + JSON.stringify(ble));
+  buyOne('买：法术书·秘法飞弹（45铜币，营地研习后学会秘法飞弹）');
+  buyOne('买：法术书·心智鞭笞（55铜币，营地研习后学会心智鞭笞）');
+  buyOne('买：法术书·星陨术（90铜币，营地研习后学会星陨术）');
+  if (st().p.inv['法术书·秘法飞弹'] !== 1 || st().p.inv['法术书·心智鞭笞'] !== 1 || st().p.inv['法术书·星陨术'] !== 1) throw new Error('法术书未到账: ' + JSON.stringify({ a: st().p.inv['法术书·秘法飞弹'], b: st().p.inv['法术书·心智鞭笞'], c: st().p.inv['法术书·星陨术'] }));
+  // 定制优质法杖：诅咒载体木杖身+龙鳞杖头 → 诅咒+30%/赐福-30%/全法术+10%
+  buyOne('买：诅咒载体木（120铜币，杖身材料）');
+  if (st().p.inv['诅咒载体木'] !== 1) throw new Error('诅咒载体木未到账: ' + st().p.inv['诅咒载体木']);
+  click('定制法杖（部位选材·优质法杖得在这里打）');
+  click(btns().find(b => b.startsWith('诅咒载体木（')));
+  click(btns().find(b => b.startsWith('龙鳞（')));
+  const w = st().p.weapon;
+  if (w.type !== '法杖' && !w.name.includes('东方')) throw new Error('定制法杖类型错误: ' + w.type);
+  if (!w.spellPct || w.spellPct.诅咒 !== 1.3 || w.spellPct.neg_赐福 !== 0.7 || w.spellPct.all !== 1.1) throw new Error('定制法杖偏向缺失: ' + JSON.stringify(w.spellPct));
+  if (!has('买：诅咒法杖（350铜币，优质法杖：诅咒系法术+30%，赐福系-30%）')) throw new Error('打造后未回巫师店: ' + JSON.stringify(btns()));
+  click('离开');
+  console.log('  · 诅咒/赐福法杖+三本新法术书+诅咒载体木定制法杖（诅咒+30%/赐福-30%/全+10%）');
+});
+step('0.25收复灰墙要塞（卡尔沃主线→决战→练兵场）', () => {
+  st().p.flags.libW_carwo = true;
+  __runCmd('/卡');
+  if (!has('告示板')) throw new Error('未到卡尔沃: ' + JSON.stringify(btns()));
+  click('告示板');
+  click('主线：收复灰墙要塞（北境前哨·夺回我们的地盘）');
+  if (!st().p.flags.fortressJob) throw new Error('要塞主线未接取');
+  click('告示板');
+  click('出击：灰墙要塞（决战·夺回前哨）');
+  // 换回最强的剑（巫师店定制的法杖伤害低，免得决战拖太久）
+  const best = st().p.owned.slice().sort((a, b) => b.atk - a.atk)[0];
+  if (best) st().p.weapon = best;
+  __runCmd('/god');
+  let fg = 0;
+  while (has('攻击·侧面 (×1.3)') && fg++ < 60) fightUntilOver(120);
+  __runCmd('/god');
+  if (!st().p.flags.fortressTaken) throw new Error('灰墙要塞未收复');
+  if (!has('练兵场（训练佣兵）')) throw new Error('收复后要塞菜单缺失: ' + JSON.stringify(btns()));
+  if (!logHas('佣兵容量升至6')) throw new Error('佣兵容量提示缺失');
+  // 练兵场：训练佣兵（伤害+1/生命+10/扣30铜币）
+  st().p.mercs = st().p.mercs || [];
+  st().p.mercs.push({ name: '练兵测试佣兵', lv: 1, weapon: '剑', traits: ['老练'], tn: 0, price: 0, hp: 30, maxHp: 30, role: '佣兵' });
+  __runCmd('/钱 100');
+  const g0 = st().p.gold;
+  click('练兵场（训练佣兵）');
+  click('训练：练兵测试佣兵（每回合砍0→1·费用30铜币）');
+  const m = st().p.mercs.find(x => x.name === '练兵测试佣兵');
+  if (!m || m.tn !== 1 || m.maxHp !== 40) throw new Error('训练未生效: ' + JSON.stringify(m));
+  if (st().p.gold !== g0 - 30) throw new Error('训练未扣费: ' + st().p.gold);
+  click('返回');
+  click('离开');
+  console.log('  · 卡尔沃接主线→决战（守备长/弩阵/巡逻兵×2）→要塞易帜+练兵场训练生效');
+});
+step('0.25新材料获取（陨铁轮换/血术硬化钢二章锁）', () => {
+  // ① 血术硬化钢：第一章锁定提示，第二章解锁可用
+  __runCmd('/阿'); __runCmd('/钱 400'); __runCmd('/item 铁料 5'); __runCmd('/item 木 2'); __runCmd('/item 血术硬化钢 1');
+  click('铁匠铺');
+  click(btns().find(b => b.startsWith('定制武器（铁匠 Lv.')));
+  click('剑（铁料×3）');
+  const locked = btns().find(b => b.startsWith('血术硬化钢（'));
+  if (!locked || !locked.includes('第二章')) throw new Error('血术硬化钢未锁: ' + JSON.stringify(btns()));
+  click(locked);
+  if (!btns().some(b => b.startsWith('血术硬化钢（'))) throw new Error('锁定点击后应留在选材: ' + JSON.stringify(btns()));
+  st().p.flags.ch2 = true;
+  click(btns().find(b => b.startsWith('血术硬化钢（'))); // 第一下：旧锁定按钮重渲染为可用
+  click(btns().find(b => b.startsWith('血术硬化钢（'))); // 第二下：进入剑柄选材
+  click(btns().find(b => b.startsWith('木（普通木材')));
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
+  const w = st().p.weapon;
+  if (!w.fx || !w.fx.includes('血腥')) throw new Error('血术硬化钢词条缺失: ' + JSON.stringify(w.fx));
+  st().p.flags.ch2 = false;
+  click('离开');
+  // ② 陨铁：异域商人轮换货（跨周期找）
+  __runCmd('/钱 400');
+  let mBtn = null, mg = 0;
+  while (!mBtn && mg++ < 15) {
+    click('异域商人');
+    mBtn = btns().find(b => b.startsWith('新货：陨铁（'));
+    if (!mBtn) { click('离开'); __runCmd('/天 ' + (st().p.days + 3)); }
+  }
+  if (!mBtn) throw new Error('15个刷新周期没刷出陨铁（概率极小）');
+  if (!mBtn.includes('300')) throw new Error('陨铁价格错误: ' + mBtn);
+  click(mBtn);
+  if ((st().p.inv.陨铁 || 0) < 1) throw new Error('陨铁未入包: ' + st().p.inv.陨铁);
+  click('离开');
+  console.log('  · 血术硬化钢二章锁+解锁血腥词条+陨铁异域轮换300铜币');
+});
+step('0.25熔炼旧武器（锋利精钢继承四分之一）', () => {
+  __runCmd('/阿'); __runCmd('/钱 200'); __runCmd('/item 铁料 6'); __runCmd('/item 木 2');
+  click('铁匠铺');
+  // 打一把新剑（自动装备，之后换回木剑才能熔它）
+  click(btns().find(b => b.startsWith('定制武器（铁匠 Lv.')));
+  click('剑（铁料×3）');
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
+  click(btns().find(b => b.startsWith('木（普通木材')));
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
+  const forged = st().p.owned[st().p.owned.length - 1];
+  const inh = Math.max(1, Math.round(forged.atk / 4));
+  click('离开'); click('出城'); click('扎营'); click('换武器'); click('木剑（伤害+3）'); click('离开'); click('回城');
+  // 熔炼列表里应有这把新剑
+  click('铁匠铺');
+  const meltEntry = btns().find(b => b.startsWith('熔炼旧武器（'));
+  if (!meltEntry) throw new Error('熔炼入口缺失: ' + JSON.stringify(btns()));
+  click(meltEntry);
+  const rowLabel = '熔炼：' + forged.name + '（伤害+' + forged.atk + ' → 锋利精钢·继承攻击+' + inh + '）';
+  if (!btns().includes(rowLabel)) throw new Error('新剑未出现在熔炼列表: ' + rowLabel + ' / ' + JSON.stringify(btns()));
+  const ownedBefore = st().p.owned.length;
+  const steelBefore = st().p.sharpSteel.length;
+  click(rowLabel);
+  if (st().p.owned.length !== ownedBefore - 1) throw new Error('旧武器未熔掉');
+  if (st().p.sharpSteel.length !== steelBefore + 1) throw new Error('锋利精钢未到账');
+  if (st().p.sharpSteel[st().p.sharpSteel.length - 1] !== inh) throw new Error('继承值错误: ' + JSON.stringify(st().p.sharpSteel));
+  // 用锋利精钢锻造：新武器继承攻击
+  click('返回');
+  click(btns().find(b => b.startsWith('定制武器（铁匠 Lv.')));
+  click('剑（铁料×3）');
+  click(btns().find(b => b.startsWith('锋利精钢（')));
+  click(btns().find(b => b.startsWith('木（普通木材')));
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
+  if (!logHas('继承攻击+' + inh)) throw new Error('锋利精钢继承未生效');
+  if (st().p.sharpSteel.length !== steelBefore) throw new Error('锋利精钢未消耗: ' + JSON.stringify(st().p.sharpSteel));
+  click('离开');
+  console.log('  · 旧剑熔成锋利精钢（继承+' + inh + '），回炉锻造后新武器继承攻击生效');
+});
+step('0.25安普提斯（黑棘城十委托→荒野三败劝降）', () => {
+  const f = st().p.flags;
+  f.ampthisUnlocked = false; f.ampthisJoined = false; f.ampthisDefeats = 0; f.ampthisReviveAt = 0; f.ampthisPending = false; f.ampthisJobs = 0;
+  for (let i = 0; i < 24; i++) f['highReward' + i] = false;
+  st().p.ampthis = null;
+  // ① 未解锁：告示板提示
+  __runCmd('/黑');
+  click('告示板');
+  if (!rawBtns().some(b => b.startsWith('？？？：做完10件高危委托'))) throw new Error('安普提斯提示缺失: ' + JSON.stringify(btns()));
+  click('离开');
+  // ② 完成10件高危委托 → 解锁（解锁本次访问只提示，再次进入显示「传说」行）
+  for (let i = 0; i < 10; i++) f['highReward' + i] = true;
+  click('告示板');
+  if (!f.ampthisUnlocked) throw new Error('完成10件后未解锁');
+  click('离开'); click('告示板');
+  if (!btns().some(b => b.startsWith('传说：雾里的笑'))) throw new Error('解锁后提示缺失: ' + JSON.stringify(btns()));
+  click('离开');
+  // ③ 荒野遭遇×3（解锁后首次游荡必遇；测试中重置480分钟复活计时）
+  __runCmd('/god');
+  for (let d = 0; d < 3; d++) {
+    f.ampthisReviveAt = 0; f.ampthisPending = true;
+    click('出城');
+    click('在城外游荡');
+    const c = globalThis.__getCtx();
+    if (!c || c.en.name !== '安普提斯') throw new Error('未遇安普提斯: ' + JSON.stringify(btns()));
+    while (has('攻击·侧面 (×1.3)')) fightUntilOver(120);
+    if (d < 2) {
+      if (f.ampthisDefeats !== d + 1) throw new Error('击败计数错误: ' + f.ampthisDefeats);
+      if (f.ampthisReviveAt <= Date.now()) throw new Error('复活计时未设置');
+      click('回城');
+    }
+  }
+  // ④ 第三次击败 → 劝降选项
+  if (f.ampthisDefeats !== 3) throw new Error('第三次击败计数错误: ' + f.ampthisDefeats);
+  click('跟我走');
+  if (!f.ampthisJoined) throw new Error('安普提斯未入队');
+  const am = st().p.ampthis;
+  if (!am || am.name !== '安普提斯' || am.maxMp < 60 || !am.weapon || am.weapon.type !== '法杖') throw new Error('安普提斯属性缺失: ' + JSON.stringify(am));
+  // ⑤ 法术效率：常规3~5倍，诅咒/精神（妖术/幻觉）6倍
+  const P = globalThis.__allySpellPower;
+  const normal = { name: '路人法师', lv: am.lv, weapon: am.weapon };
+  const base = P('火舌', normal).dmg;
+  for (let t = 0; t < 40; t++) {
+    const v = P('火舌', am).dmg;
+    if (v < base * 3 || v > base * 5) throw new Error('安普提斯元素法术倍率越界: ' + v + ' vs ' + base);
+  }
+  const bCur = P('恐惧术', normal).dmg;
+  if (P('恐惧术', am).dmg !== bCur * 6) throw new Error('诅咒法术未×6: ' + P('恐惧术', am).dmg + ' vs ' + bCur);
+  __runCmd('/god');
+  click('回城');
+  console.log('  · 黑棘城十委托解锁→荒野三败（480秒复活）→跟我走入队+法术3~5倍/诅咒精神6倍');
+});
+step('0.25轩辕十四单挑（白水镇告示板）', () => {
+  const f = st().p.flags;
+  if (!st().p.regulus) throw new Error('轩辕十四未在队（前置：完成招募）');
+  st().p.control = null;
+  f.regulusDuelJob = false; f.regulusDuelDone = false; f.regulusDuelReward = false;
+  const rAtk0 = st().p.regulus.atk, rDef0 = st().p.regulus.def;
+  const gold0 = st().p.gold;
+  __runCmd('/白水');
+  click('告示板');
+  click('支线：与轩辕十四单挑（白水河畔·他等你·报酬150铜币）');
+  if (!f.regulusDuelJob) throw new Error('单挑未接取');
+  click('出城');
+  click('在郊野游荡');
+  if (!has('上前')) throw new Error('单挑遭遇缺失: ' + JSON.stringify(btns()));
+  click('上前');
+  const c = globalThis.__getCtx();
+  if (!c || c.en.name !== '轩辕十四·单挑') throw new Error('单挑目标错误: ' + (c && c.en.name));
+  if (btns().some(b => b.startsWith('指挥·'))) throw new Error('单挑不应有队友指挥行: ' + JSON.stringify(btns()));
+  __runCmd('/heal'); __runCmd('/god');
+  let g = 0;
+  while (has('攻击·侧面 (×1.3)') && g++ < 120) fightUntilOver(300);
+  __runCmd('/god');
+  if (!f.regulusDuelDone) throw new Error('单挑未取胜');
+  if (!logHas('荣耀之锁')) throw new Error('单挑荣耀之锁机制缺失');
+  if (!logHas('不屈')) throw new Error('单挑不屈机制缺失');
+  if (!logHas('兽形解禁')) throw new Error('单挑二阶段机制缺失');
+  if (!logHas('终焉一击')) throw new Error('单挑终焉一击机制缺失');
+  click('告示板');
+  const rAtk1 = st().p.regulus.atk, rDef1 = st().p.regulus.def; // 单挑经验可能让他升级，以交差前为准
+  click('交差：与轩辕十四单挑（+150铜币，他认了你）');
+  if (st().p.gold !== gold0 + 150) throw new Error('单挑报酬未到账: ' + st().p.gold);
+  if (st().p.regulus.atk !== rAtk1 + 15 || st().p.regulus.def !== rDef1 + 5) throw new Error('轩辕十四未强化: ' + st().p.regulus.atk + '/' + st().p.regulus.def);
+  if (!f.regulusDuelReward) throw new Error('单挑未结算');
+  if (!rawBtns().some(b => b.startsWith('支线：与轩辕十四单挑（已完成'))) throw new Error('已完成行缺失: ' + JSON.stringify(rawBtns()));
+  click('离开');
+  // ⑥ 队友强化：剑意蓄势/猎食本能/DYO加冕（直接调用队友行动函数验证）
+  const R = globalThis.__regulusAllyAct;
+  const rr = st().p.regulus;
+  rr.swordWill = 0; rr.lionForm = false; rr.unyield = 0; rr.crownCd = 3;
+  const dummy = { name: '测试木桩', hp: 500, maxHp: 500, def: 0, bleed: 1 };
+  const hpB = dummy.hp;
+  R(rr, dummy);
+  if (dummy.hp >= hpB) throw new Error('轩辕十四行动未造成伤害');
+  if (st().p.crown !== 3) throw new Error('DYO加冕未生效: ' + st().p.crown);
+  if (!logHas('以荣冠加冕无名之身')) throw new Error('加冕文案缺失');
+  if (rr.swordWill !== 1) throw new Error('剑意蓄势未生效: ' + rr.swordWill);
+  console.log('  · 白水镇接单挑→solo决战（荣耀之锁/剑意/不屈/二阶段/终焉一击）→交差+150铜币+轩辕十四攻+15防+5+DYO加冕/剑意验证');
+});
+step('0.25妖僧·拉斯普提（十名骑士解锁→酒馆打听→荒野游荡Boss）', () => {
+  const f = st().p.flags;
+  f.knightKills = 10; f.lasputiUnlocked = false; f.lasputiLv = 60; f.lasputiDefeats = 0; f.lasputiPending = false; f.lasputiReviveAt = 0; f.lasputiCandle = false;
+  st().p.inv['妖僧残页'] = 0; st().p.inv['拉斯普提的碎甲片'] = 0; st().p.inv['疯狂核心'] = 0; st().p.inv['拉斯普提的毒血'] = 0; st().p.inv['疯子的蜡烛'] = 0;
+  // ① 解锁前：酒馆打听无果
+  __runCmd('/黑');
+  click('酒馆');
+  click('打听：荒野里的疯子（免费）');
+  if (f.lasputiPending) throw new Error('未解锁不应武装遭遇');
+  // ② 解锁后：酒馆打听→荒野必遇
+  f.lasputiUnlocked = true;
+  click('打听：荒野里的疯子（免费）');
+  if (!f.lasputiPending) throw new Error('打听未武装遭遇');
+  click('离开'); click('出城'); click('在城外游荡');
+  const c = globalThis.__getCtx();
+  if (!c || c.en.name !== '妖僧·拉斯普提') throw new Error('未遇拉斯普提: ' + JSON.stringify(btns()));
+  __runCmd('/heal'); __runCmd('/god');
+  let g = 0;
+  while (has('攻击·侧面 (×1.3)') && g++ < 150) fightUntilOver(300);
+  __runCmd('/god');
+  if (f.lasputiDefeats !== 1) throw new Error('拉斯普提未击败: ' + f.lasputiDefeats);
+  if (st().p.inv['妖僧残页'] !== 2) throw new Error('妖僧残页未掉: ' + st().p.inv['妖僧残页']);
+  if (st().p.inv['疯子的蜡烛'] !== 1) throw new Error('疯子的蜡烛未掉（首次击败）');
+  if (st().p.inv['拉斯普提的碎甲片'] < 1 || st().p.inv['疯狂核心'] < 1 || st().p.inv['拉斯普提的毒血'] < 1) throw new Error('拉斯普提掉落缺失: ' + JSON.stringify({ a: st().p.inv['拉斯普提的碎甲片'], b: st().p.inv['疯狂核心'], c: st().p.inv['拉斯普提的毒血'] }));
+  if (f.lasputiReviveAt <= Date.now()) throw new Error('复活计时未设置');
+  if (f.lasputiLv < 60 || f.lasputiLv > 65) throw new Error('复活等级浮动异常: ' + f.lasputiLv);
+  if (!logHas('奥提斯的手')) throw new Error('奥提斯压制文案缺失');
+  if (!logHas('越打越疯')) throw new Error('越打越疯机制缺失');
+  click('回城');
+  // ④ 召唤指令：/安普（入队后提示）与 /妖僧（直接开打）
+  __runCmd('/安普');
+  if (!logHas('安普提斯就在队伍里')) throw new Error('/安普 入队提示缺失');
+  __runCmd('/妖僧');
+  let c2 = globalThis.__getCtx();
+  if (!c2 || c2.en.name !== '妖僧·拉斯普提') throw new Error('/妖僧 未召唤: ' + JSON.stringify(btns()));
+  let kk = 0;
+  while (globalThis.__getCtx() && kk++ < 6) __runCmd('/kill'); // 假死×3，要连杀4次
+  if (st().p.flags.lasputiDefeats < 2) throw new Error('/妖僧 击杀未结算: ' + st().p.flags.lasputiDefeats);
+  st().p.flags.ampthisJoined = false;
+  st().p.flags.ampthisDefeats = 0; st().p.flags.ampthisReviveAt = 0;
+  __runCmd('/安普');
+  const c3 = globalThis.__getCtx();
+  if (!c3 || c3.en.name !== '安普提斯') throw new Error('/安普 未召唤: ' + JSON.stringify(btns()));
+  __runCmd('/kill');
+  if (st().p.flags.ampthisDefeats !== 1) throw new Error('/安普 击败计数异常: ' + st().p.flags.ampthisDefeats);
+  st().p.flags.ampthisJoined = true;
+  click('回城');
+  console.log('  · 十骑士解锁→酒馆打听→荒野遭遇（假死×3+越打越疯+暗愈/催眠/左手）→掉落+疯子的蜡烛+480秒复活等级+0~5+/安普·/妖僧召唤指令');
+});
 step('0.24管理者材料指令与锻造', () => {
   const clickStarts = (prefix) => {
     const b = btns().find(t => t.startsWith(prefix));
@@ -1695,16 +2774,18 @@ step('0.24管理者材料指令与锻造', () => {
   globalThis.__migrate(st());
   if (st().p.inv['管理员材料'] !== undefined || st().p.inv['管理员物品'] !== undefined) throw new Error('migrate 未清理旧名物品');
   if (st().p.inv.管理者材料 < base + 10) throw new Error('migrate 未合并旧名数量: ' + st().p.inv.管理者材料);
-  __runCmd('/阿'); __runCmd('/item 铁料 30'); __runCmd('/钱 500');
+  __runCmd('/阿'); __runCmd('/item 铁料 30'); __runCmd('/item 木 3'); __runCmd('/钱 500');
   click('铁匠铺');
+  // 武器锻造不再提供管理员材料（正常游戏即可获取）
   clickStarts('定制武器');
   click('剑（铁料×3）');
-  click(btns().find(t => t.includes('管理者材料')));
+  if (btns().some(t => t.includes('管理者材料'))) throw new Error('武器锻造仍含管理员材料: ' + JSON.stringify(btns()));
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
+  click(btns().find(b => b.startsWith('木（普通木材')));
+  click(btns().find(b => b.startsWith('铁料（基础铁')));
   const wBefore = st().p.owned.length;
-  clickStarts('开炉打造');
-  const w = st().p.owned[wBefore];
-  if (!w || w.atk < 80) throw new Error('管理者材料武器锻造未加成: ' + JSON.stringify(w));
-  click('返回'); click('返回');
+  const w = st().p.owned[wBefore - 1];
+  if (!w) throw new Error('基础武器锻造失败');
   clickStarts('定制护甲');
   click('胸（铁料×4）');
   click(btns().find(t => t.includes('管理者材料')));
@@ -1726,7 +2807,7 @@ step('0.24管理者材料指令与锻造', () => {
   __runCmd('背包');
   if (!logHas('护甲包')) throw new Error('背包未显示护甲包');
   if (!logHas('管理者之甲')) throw new Error('背包未显示护甲包内容');
-  console.log('  · /管理员 指令 + 旧名合并 + 武器/护甲锻造（+80攻/+80防）+ 护甲包不消失、营地可换装');
+  console.log('  · /管理员 指令 + 旧名合并 + 护甲锻造（+80防）+ 武器锻造不再含管理员材料 + 护甲包不消失、营地可换装');
 });
 step('终局校验', () => {
   if (!store['isolde_proto_v1']) throw new Error('存档丢失');
@@ -1769,5 +2850,5 @@ step('0.24等级上限1000与分段曲线', () => {
   __runCmd('/级 ' + lv0); // 恢复自然等级（经验归零，终局打印无断言）
   console.log('  · 上限1000级：120-200加成最猛（HP' + hGold + '/级）、200级后经验指数增长（' + xN300 + '→' + xN400 + '→' + xN1000 + '）、加成递减');
 });
-console.log('\n=== 冒烟测试 v3 全部通过 ===');
+console.log('\n=== 冒烟测试 v4 全部通过 ===');
 console.log('结局: 第' + st().p.days + '天 · 等级=' + st().p.level + '（经验' + st().p.xp + '）· 金币=' + st().p.gold + ' · 武器=' + st().p.weapon.name + ' · 佣兵×' + st().p.mercs.length + ' · 活计完成=' + st().p.flags.jobCount + ' · 通缉=' + (st().p.flags.通缉 ? '是' : '否'));
