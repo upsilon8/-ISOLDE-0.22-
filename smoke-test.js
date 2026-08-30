@@ -33,7 +33,7 @@ global.document = {
   createElement: el
 };
 
-eval(js + '\n;globalThis.__getState=()=>state;globalThis.__getCtx=()=>ctx;globalThis.__runCmd=runCmd;globalThis.__hunts=HUNT_LIST;globalThis.__highJobs=HIGH_JOBS;globalThis.__curScene=()=>curScene;globalThis.__statsForLevel=statsForLevel;globalThis.__migrate=migrate;globalThis.__xpNeed=xpNeed;globalThis.__prepEnemy=prepEnemy;globalThis.__highFoe=HIGH_FOE;globalThis.__playerAtk=playerAtk;globalThis.__accDefs=ACC_DEFS;globalThis.__skipTw=skipTw;globalThis.__twSpeed=twSpeed;globalThis.__print=print;globalThis.__allySpellPower=allySpellPower;globalThis.__regulusAllyAct=regulusAllyAct;globalThis.__allySkill=allySkill;');
+eval(js + '\n;globalThis.__getState=()=>state;globalThis.__getCtx=()=>ctx;globalThis.__runCmd=runCmd;globalThis.__hunts=HUNT_LIST;globalThis.__highJobs=HIGH_JOBS;globalThis.__curScene=()=>curScene;globalThis.__statsForLevel=statsForLevel;globalThis.__migrate=migrate;globalThis.__xpNeed=xpNeed;globalThis.__prepEnemy=prepEnemy;globalThis.__highFoe=HIGH_FOE;globalThis.__playerAtk=playerAtk;globalThis.__accDefs=ACC_DEFS;globalThis.__skipTw=skipTw;globalThis.__twSpeed=twSpeed;globalThis.__print=print;globalThis.__allySpellPower=allySpellPower;globalThis.__regulusAllyAct=regulusAllyAct;globalThis.__allySkill=allySkill;globalThis.__accFx=accFx;globalThis.__daggerExtraHits=daggerExtraHits;globalThis.__prepEnemy2=prepEnemy;');
 
 const st = () => globalThis.__getState();
 function btns() { return actEl.children.filter(c => c.tag === 'button' && !c.disabled).map(c => c._text); }
@@ -353,7 +353,7 @@ step('0.25饰品烹饪炼金与营地新功能', () => {
   __runCmd('/item 龙鳞 4'); __runCmd('/item 净水袋 3'); __runCmd('/item 大鱼 1'); __runCmd('/item 覆金属龙皮 1'); __runCmd('/item 精炼熔断钢铁 2');
   // ① 大师锻造饰品：第一章仅此一件
   click('铁匠铺');
-  const forgeRow = '大师锻造饰品：北归之誓（覆金属龙皮×1+精炼熔断钢铁×2+龙鳞×3+400铜币——第一章仅此一件）';
+  const forgeRow = '大师锻造饰品：北归之誓（覆金属龙皮×1+精炼熔断钢铁×2+龙鳞×3+400铜币）';
   if (!has(forgeRow)) throw new Error('大师锻造入口缺失: ' + JSON.stringify(btns().slice(0, 8)));
   click(forgeRow);
   if (!st().p.accBag.some(a => a.name === '北归之誓')) throw new Error('北归之誓未入饰品袋');
@@ -706,7 +706,7 @@ step('野外游荡×12（随机遭遇）', () => {
   if (has('回城')) click('回城');
   console.log('  · 游荡12次完成，等级' + st().p.level + '，金币' + st().p.gold);
 });
-step('商店3天刷新', () => {
+step('商店隔天刷新（每日20种新货）', () => {
   const c0 = (st().p.shop.smith || { cycle: -1 }).cycle;
   if (has('改天再来')) click('改天再来'); // 防上一步收尾停在寻踪
   if (has('回城')) click('回城');
@@ -719,6 +719,7 @@ step('商店3天刷新', () => {
   click('回城'); click('铁匠铺');
   const c1 = (st().p.shop.smith || { cycle: -1 }).cycle;
   if (c0 === c1) throw new Error('商店周期未变化: ' + c0);
+  if ((st().p.shop.smith.items || []).length !== 20) throw new Error('铁匠铺新货应20种: ' + (st().p.shop.smith.items || []).length);
   if (!logHas('新货')) throw new Error('刷新后应显示新货');
 });
 step('佣兵市场每日轮换', () => {
@@ -2554,7 +2555,7 @@ step('0.25新材料获取（陨铁轮换/血术硬化钢二章锁）', () => {
   click(btns().find(b => b.startsWith('定制武器（铁匠 Lv.')));
   click('剑（铁料×3）');
   const locked = btns().find(b => b.startsWith('血术硬化钢（'));
-  if (!locked || !locked.includes('第二章')) throw new Error('血术硬化钢未锁: ' + JSON.stringify(btns()));
+  if (!locked || !locked.includes('未解锁')) throw new Error('血术硬化钢未锁: ' + JSON.stringify(btns()));
   click(locked);
   if (!btns().some(b => b.startsWith('血术硬化钢（'))) throw new Error('锁定点击后应留在选材: ' + JSON.stringify(btns()));
   st().p.flags.ch2 = true;
@@ -2642,6 +2643,53 @@ step('0.25锻造下料×10（一个环节十连下料）', () => {
   if (!logHas('已选辅料 10/20')) throw new Error('护甲×10未入列: ' + JSON.stringify(btns()));
   click('返回'); click('返回'); click('离开');
   console.log('  · 一个环节×10下料：10块陨铁剑身（攻击×4.05+精准）一次成型+护甲辅料×10入列');
+});
+step('0.25再次行动饰品与匕首连击', () => {
+  // ① 再次行动饰品：异域商人在售+佩戴生效
+  __runCmd('/阿'); __runCmd('/钱 800');
+  click('异域商人');
+  click('买：疾风腕轮（120铜币，饰：每回合15%概率再次行动）');
+  click('买：时计碎片（240铜币，饰：每回合25%概率再次行动）');
+  click('买：双心之坠（420铜币，饰：每回合35%概率再次行动）');
+  click('离开'); click('出城'); click('扎营'); click('饰品（最多6件）');
+  const wear2 = (n) => { const b = btns().find(x => x.startsWith('佩戴：' + n)); if (!b) throw new Error('无佩戴按钮: ' + n + ' ' + JSON.stringify(btns())); click(b); };
+  wear2('双心之坠');
+  if (globalThis.__accFx('extraTurn') !== 0.35) throw new Error('再次行动概率未生效: ' + globalThis.__accFx('extraTurn'));
+  click('返回'); click('离开'); click('回城');
+  // ② 匕首熟练度连击：Lv1只能打一次，熟练度越高追加越多
+  const D = globalThis.__daggerExtraHits;
+  st().p.wprof = st().p.wprof || {};
+  st().p.wprof['匕首'] = 0;
+  for (let i = 0; i < 100; i++) { if (D() !== 0) throw new Error('Lv1匕首不应连击'); }
+  const tiers = [[30, 1], [80, 2], [150, 2], [300, 3]]; // 使用次数→Lv→最多追加数
+  tiers.forEach(([uses, maxEx]) => {
+    st().p.wprof['匕首'] = uses;
+    let saw = 0, ok = true;
+    for (let i = 0; i < 300; i++) {
+      const e = D();
+      if (e < 0 || e > maxEx) ok = false;
+      if (e > 0) saw++;
+    }
+    if (!ok || saw === 0) throw new Error('匕首连击异常（uses=' + uses + ' saw=' + saw + '）');
+  });
+  st().p.wprof['匕首'] = 0;
+  console.log('  · 再次行动饰品×3（15/25/35%）+匕首熟练度连击（Lv2-5逐步提升次数与概率）');
+});
+step('0.26北归之路（斯特恩筹备区）', () => {
+  const f = st().p.flags;
+  f.libW_carwo = true; f.fortressTaken = true; f.ch2 = false;
+  __runCmd('/卡');
+  click('出城');
+  click('北上：斯特恩 · 北归之路');
+  if (!f.ch2) throw new Error('北归之路未开启');
+  for (let i = 0; i < 3; i++) click('扎营（休息+存档，过一天）');
+  if (!has('客栈（休息+存档，过一天）')) throw new Error('未到斯特恩: ' + JSON.stringify(btns()));
+  if (!has('告示板')) throw new Error('斯特恩告示板缺失');
+  click('出城');
+  if (!has('南下：回卡尔沃（3段路程）')) throw new Error('斯特恩回程缺失: ' + JSON.stringify(btns()));
+  if (!rawBtns().some(b => b.startsWith('北上：赫里克的军营——尚未开放'))) throw new Error('军营入口应关闭: ' + JSON.stringify(rawBtns()));
+  click('回城');
+  console.log('  · 卡尔沃北上（解放+要塞后）→北归之路三段→斯特恩筹备区（客栈/告示板/回程，军营入口尚未开放）');
 });
 step('0.25安普提斯（黑棘城十委托→荒野三败劝降）', () => {
   const f = st().p.flags;

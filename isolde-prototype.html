@@ -108,7 +108,7 @@ function statusLine(){
   statusEl.textContent=s;
 }
 let curScene='ashwold';
-function backToTown(){ if(state.p.lastTown==='cromford')gotoCromford(); else if(state.p.lastTown==='tanwo')gotoTanwo(); else if(state.p.lastTown==='lienfiel')gotoLienfiel(); else if(state.p.lastTown==='warrin')gotoWarrin(); else if(state.p.lastTown==='whitestone')gotoWhitestone(); else if(state.p.lastTown==='windcap')gotoWindcap(); else if(state.p.lastTown==='ferrytown')gotoFerryTown(); else if(state.p.lastTown==='landel')gotoLandel(); else if(state.p.lastTown==='carwo')gotoCarwo(); else if(state.p.lastTown==='blackthorn')gotoBlackThorn(); else if(state.p.lastTown&&NEW_TOWN_DEFS[state.p.lastTown])gotoNewTown(state.p.lastTown); else gotoAshwold(); }
+function backToTown(){ if(state.p.lastTown==='cromford')gotoCromford(); else if(state.p.lastTown==='tanwo')gotoTanwo(); else if(state.p.lastTown==='lienfiel')gotoLienfiel(); else if(state.p.lastTown==='warrin')gotoWarrin(); else if(state.p.lastTown==='whitestone')gotoWhitestone(); else if(state.p.lastTown==='windcap')gotoWindcap(); else if(state.p.lastTown==='ferrytown')gotoFerryTown(); else if(state.p.lastTown==='landel')gotoLandel(); else if(state.p.lastTown==='carwo')gotoCarwo(); else if(state.p.lastTown==='blackthorn')gotoBlackThorn(); else if(state.p.lastTown==='herik')gotoHerikCamp(); else if(state.p.lastTown&&NEW_TOWN_DEFS[state.p.lastTown])gotoNewTown(state.p.lastTown); else gotoAshwold(); }
 function restInTown(){
   state.p.days=(state.p.days||0)+1;
   state.p.hp=state.p.maxHp; state.p.sta=state.p.maxSta; state.p.mp=state.p.maxMp;
@@ -222,7 +222,7 @@ function migrate(s){
   if(p.flags.ampelosMet===undefined)p.flags.ampelosMet=false;
   if(p.flags.dragonMet===undefined)p.flags.dragonMet=false;
   if(p.lastTown===undefined)p.lastTown='ashwold';
-  for(const k of ['铁料','蛙皮','蛙油膏','覆金属龙皮','烟幕弹','苦蜜蜡','苦蜜酒','骨器','灰肉','疫骨','麦饼','龙鳞','精炼熔断钢铁','管理者材料','军阀密令','法术书·火舌','法术书·霜刃','法术书·雷击','法术书·霜雾','法术书·北风之怒','法术书·石拳','法术书·冰锥术','法术书·荆棘缠绕','法术书·治愈环流','法术书·灼热射线','法术书·生命虹吸','法术书·灼热新星','法术书·疾风刃','法术书·碎石雨','法术书·净光术','法术书·深眠咒','法术书·御土之盾','法术书·增幅术','法术书·恐惧术','法术书·虚弱诅咒','法术书·迟缓诅咒','法术书·破甲诅咒','法术书·疫病诅咒','法术书·背运诅咒','法术书·幻影术','法术书·安抚幻觉','法术书·失志诅咒','法术书·秘法飞弹','法术书·心智鞭笞','法术书·星陨术','法术书·陨星天降','法术书·焚世烈焰','法术书·绝对零度','法术书·雷霆万钧','法术书·湮灭射线','法术书·北境冰暴','法术书·死亡一指','法术书·血沸术','法术书·灵魂湮灭','法术书·精神崩解','法术书·灵魂尖啸','法术书·神罚之矛','木','竹','骨','橡木','白蜡木','紫杉木','赐福木','诅咒载体木','陨铁','龙钢','古战场铁','血术硬化钢','鲸骨','罂粟','海鱼','大鱼','烤鱼','兽皮','野猪肉','绷带','干粮','保养油','旧铁片','猪王皮','胡椒','烤肉','旧银币','巨魔牙','魔化兽皮','蛇蛋','净水袋','草药','陈年果酒','巨魔粗制饰品','磨石','肉桂','丁香','藏红花','血盐','血水结晶','女妖之泪','黑鳄皮','巨魔皮','碎布条','火把','止血膏','醒神草','盐渍肉','猛火油','皮革帽','铁头盔','锁子甲兜帽','板甲头盔','皮背心','锁子甲胸甲','板甲胸甲','皮革护腿','锁子甲护腿','板甲护腿','布披风','皮革披风','游侠短弓','骑士剑','熊皮','蛛丝','骨头','蛇皮','暗影之尘','送葬骨灰','水渍石','摆锤','弃誓之剑','空甲胄壳','虱壳','虱母壳','除虱粉','灰衣甲片','灰衣队长徽记','灰土结晶','妖僧残页','拉斯普提的碎甲片','疯狂核心','拉斯普提的毒血','疯子的蜡烛']){
+  for(const k of ['铁料','蛙皮','蛙油膏','覆金属龙皮','烟幕弹','苦蜜蜡','苦蜜酒','骨器','灰肉','疫骨','麦饼','龙鳞','精炼熔断钢铁','管理者材料','军阀密令','法术书·火舌','法术书·霜刃','法术书·雷击','法术书·霜雾','法术书·北风之怒','法术书·石拳','法术书·冰锥术','法术书·荆棘缠绕','法术书·治愈环流','法术书·灼热射线','法术书·生命虹吸','法术书·灼热新星','法术书·疾风刃','法术书·碎石雨','法术书·净光术','法术书·深眠咒','法术书·御土之盾','法术书·增幅术','法术书·恐惧术','法术书·虚弱诅咒','法术书·迟缓诅咒','法术书·破甲诅咒','法术书·疫病诅咒','法术书·背运诅咒','法术书·幻影术','法术书·安抚幻觉','法术书·失志诅咒','法术书·秘法飞弹','法术书·心智鞭笞','法术书·星陨术','法术书·陨星天降','法术书·焚世烈焰','法术书·绝对零度','法术书·雷霆万钧','法术书·湮灭射线','法术书·北境冰暴','法术书·死亡一指','法术书·血沸术','法术书·灵魂湮灭','法术书·精神崩解','法术书·灵魂尖啸','法术书·神罚之矛','木','竹','骨','橡木','白蜡木','紫杉木','赐福木','诅咒载体木','陨铁','龙钢','古战场铁','血术硬化钢','鲸骨','罂粟','海鱼','大鱼','烤鱼','兽皮','野猪肉','绷带','干粮','保养油','旧铁片','猪王皮','胡椒','烤肉','旧银币','巨魔牙','魔化兽皮','蛇蛋','净水袋','草药','陈年果酒','巨魔粗制饰品','磨石','肉桂','丁香','藏红花','血盐','血水结晶','女妖之泪','黑鳄皮','巨魔皮','碎布条','火把','止血膏','醒神草','盐渍肉','猛火油','皮革帽','铁头盔','锁子甲兜帽','板甲头盔','皮背心','锁子甲胸甲','板甲胸甲','皮革护腿','锁子甲护腿','板甲护腿','布披风','皮革披风','游侠短弓','骑士剑','熊皮','蛛丝','骨头','蛇皮','暗影之尘','送葬骨灰','水渍石','摆锤','弃誓之剑','空甲胄壳','虱壳','虱母壳','除虱粉','灰衣甲片','灰衣队长徽记','灰土结晶','妖僧残页','拉斯普提的碎甲片','疯狂核心','拉斯普提的毒血','疯子的蜡烛','蜂蜜','木炭']){
     if(p.inv[k]===undefined)p.inv[k]=0;
   }
   for(const k of ['wellJob','wellDone','wellReward','grainJob','grainDone','grainPay','frogJob','frogDone','frogsLeft','tideJob','tideDone','squadJob','squadDone','mineJob','mineDone','crowJob','crowDone','crowsLeft','crowFirst','beggarJob','beggarDone','diggerJob','diggerDone','diggerReward','flagJob','flagDone','flagReward','potFrogJob','potFrogDone','potFrogsLeft','hunterJob2','hunter2Done','hunter2Reward','queenJob','queenDone','queenReward','mudJob','mudDone','mudReward','scavJob','scavDone','ratJob','ratDone','ratsLeft','boneJob','boneDone','boneReward','taxJob','taxDone','taxReward','commanderJob','commanderDone','commanderReward','riverJob','riverStage','riverDone','riverReward','campJob2','campStage','camp2Done','camp2Reward','lostJob','lostStage','lostDone','lostReward','heavyJob','heavyDone','heavyReward','hagJob2','hag2Done','hag2Reward','nestJob','nestDone','nestReward','fliesJob','fliesDone','fliesLeft','riteJob','riteDone','riteReward','robberJob4','robber4Done','robber4Reward','honeyJob4','honey4Done','honey4Reward','relicJob4','relic4Done','relic4Reward','militiaJob4','militia4Done','militia4Reward','churchSit','patrolJob','patrolDone','patrolReward','saltCarJob','saltCarDone','saltCarReward','altarJob','altarDone','altarReward','legionJob','legionDone','legionReward','deaconJob','deaconDone','deaconReward','beastJob','beastDone','beastsLeft','haulerJob','haulerDone','haulerReward','craftJob','craftDone','craftReward','plagueRelicJob5','plagueRelic5Done','plagueRelic5Reward','plagueKnightJob','plagueKnightDone','plagueKnightReward','ferryJob','ferryDone','ferryReward','clearJob','clearDone','clearsLeft','escrowActive','escrowDone','escrowPay','wolfJob','wolfDone','wolfReward','duelJob','duelDone','duelReward','captainJob','captainDone','captainReward','fishJob','fishDone','fishNets','pirateJob','pirateDone','pirateReward','saltGhostJob','saltGhostDone','saltGhostReward','seaWolfJob','seaWolfDone','seaWolfReward','lairJob','lairStage','lairDone','lairReward','lighthouseJob','lighthouseDone','lighthouseReward','lairUnlocked','lairBest','armguardGot','dragonChain','dragonChainDone','bloodEyeJob','bloodEyeDone','bloodEyeReward','giantToadJob','giantToadDone','giantToadReward','overseerJob','overseerDone','overseerReward','facelessJob','facelessDone','facelessReward','bonePlagueJob','bonePlagueDone','bonePlagueReward','banditKingJob','banditKingDone','banditKingReward','sirenJob','sirenDone','sirenReward','leoEyeJob','leoEyeDone','leoEyeReward','regulus1','regulus2','regulus3','regulus4','regulus5','leoBeastJob','leoBeastDone','leoBeastReward','lionSwordJob','lionSwordPage','lionSwordRec','lionSwordHint','lionSwordDone','leoStarJob','starFrag1','starFrag2','starFrag3','starDone','leoKingJob','leoKingDone','leoKingReward','twoLionsReady','twoLionsMet','twoLionsDone','regulusGot','lionTrialJoined','legF1','legF2','legF3','legF4','legF5','legF6','legF7','saltGolemJob','saltGolemDone','saltGolemReward','frogMomJob','frogMomDone','frogMomReward','liceKingJob','liceKingDone','liceKingReward','cryptGuardJob','cryptGuardDone','cryptGuardReward','boneDragonJob','boneDragonDone','boneDragonReward','drownSoulJob','drownSoulDone','drownSoulReward','mudCrawlerJob','mudCrawlerDone','mudCrawlerReward','plagueWeaverJob','plagueWeaverDone','plagueWeaverReward','coffinSaintJob','coffinSaintDone','coffinSaintReward','ferrymanJob','ferrymanDone','ferrymanReward','redKnightJob','redKnightDone','tideKnightJob','tideKnightDone','greyKnight2Job','greyKnight2Done','rotKnightJob','rotKnightDone','shoreKnightJob','shoreKnightDone','ironKnightJob','ironKnightDone','hailKnightJob','hailKnightDone','mineGolemJob','mineGolemDone','mineGolemReward','thunderbirdJob','thunderbirdDone','thunderbirdReward','legF8','legF9','legF10','landelVisited','carwoVisited','tideMainJob','tideMainDone','tideMainReward','bountyAJob','bountyADone','bountyBJob','bountyBDone','bountyCJob','bountyCDone','bountyDJob','bountyDDone']){
@@ -258,6 +258,12 @@ function migrate(s){
   if(p.crown===undefined)p.crown=0;
   if(p.curseLas===undefined)p.curseLas=0;
   if(p.lasTaunt===undefined)p.lasTaunt=0;
+  if(p.flags.ch2===undefined)p.flags.ch2=false; // 北归之路（斯特恩）已开启
+  if(p.flags.supplyJob===undefined)p.flags.supplyJob=false;
+  if(p.flags.supplyStage===undefined)p.flags.supplyStage=0;
+  if(p.flags.roadBandJob===undefined)p.flags.roadBandJob=false;
+  if(p.flags.roadBandLeft===undefined)p.flags.roadBandLeft=0;
+  if(p.flags.errandCd===undefined)p.flags.errandCd=0;
   if(p.spells===undefined)p.spells=['飞石','治愈微光'];
   if(p.memSpells===undefined)p.memSpells=(p.spells||[]).slice(0,3); // 法术记忆槽
   const WMAP={木剑:{atk:3,type:'剑'},破铁剑:{atk:8,type:'剑'},生锈匕首:{atk:5,type:'匕首'},环头剑:{atk:8,type:'剑'},黄刀:{atk:8,mod:'硬直',type:'剑'},云剑:{atk:16,type:'剑'},小锤:{atk:6,type:'锤'},大马士革刀:{atk:50,type:'剑'}};
@@ -340,7 +346,7 @@ function importSave(){
 function newGame(){
   const g={ p:{
     hp:110,maxHp:110, mp:50,maxMp:50, sta:100,maxSta:100, atk:12, def:0, gold:0,
-    inv:{兽皮:0,野猪肉:0,绷带:0,干粮:0,保养油:0,旧铁片:0,猪王皮:0,胡椒:0,烤肉:0,旧银币:0,巨魔牙:0,魔化兽皮:0,蛇蛋:0,净水袋:0,草药:0,陈年果酒:0,巨魔粗制饰品:0,磨石:0,肉桂:0,丁香:0,藏红花:0,血盐:0,血水结晶:0,女妖之泪:0,黑鳄皮:0,巨魔皮:0,碎布条:0,火把:0,止血膏:0,醒神草:0,盐渍肉:0,猛火油:0,烟幕弹:0,苦蜜蜡:0,苦蜜酒:0,骨器:0,灰肉:0,疫骨:0,麦饼:0,龙鳞:0,精炼熔断钢铁:0,管理者材料:0,军阀密令:0,法术书·火舌:0,法术书·霜刃:0,法术书·雷击:0,法术书·霜雾:0,法术书·北风之怒:0,法术书·石拳:0,法术书·冰锥术:0,法术书·荆棘缠绕:0,法术书·治愈环流:0,法术书·灼热射线:0,法术书·生命虹吸:0,法术书·灼热新星:0,法术书·疾风刃:0,法术书·碎石雨:0,法术书·净光术:0,法术书·深眠咒:0,法术书·御土之盾:0,法术书·增幅术:0,法术书·恐惧术:0,法术书·虚弱诅咒:0,法术书·迟缓诅咒:0,法术书·破甲诅咒:0,法术书·疫病诅咒:0,法术书·背运诅咒:0,法术书·幻影术:0,法术书·安抚幻觉:0,法术书·失志诅咒:0,法术书·秘法飞弹:0,法术书·心智鞭笞:0,法术书·星陨术:0,法术书·陨星天降:0,法术书·焚世烈焰:0,法术书·绝对零度:0,法术书·雷霆万钧:0,法术书·湮灭射线:0,法术书·北境冰暴:0,法术书·死亡一指:0,法术书·血沸术:0,法术书·灵魂湮灭:0,法术书·精神崩解:0,法术书·灵魂尖啸:0,法术书·神罚之矛:0,木:0,竹:0,骨:0,橡木:0,白蜡木:0,紫杉木:0,赐福木:0,诅咒载体木:0,陨铁:0,龙钢:0,古战场铁:0,血术硬化钢:0,鲸骨:0,罂粟:0,海鱼:0,大鱼:0,烤鱼:0,皮革帽:0,铁头盔:0,锁子甲兜帽:0,板甲头盔:0,皮背心:0,锁子甲胸甲:0,板甲胸甲:0,皮革护腿:0,锁子甲护腿:0,板甲护腿:0,布披风:0,皮革披风:0,游侠短弓:0,骑士剑:0,铁料:0,蛙皮:0,蛙油膏:0,熊皮:0,蛛丝:0,骨头:0,蛇皮:0,暗影之尘:0,送葬骨灰:0,水渍石:0,摆锤:0,弃誓之剑:0,空甲胄壳:0,虱壳:0,虱母壳:0,除虱粉:0,灰衣甲片:0,灰衣队长徽记:0,灰土结晶:0,覆金属龙皮:0,妖僧残页:0,拉斯普提的碎甲片:0,疯狂核心:0,拉斯普提的毒血:0,疯子的蜡烛:0},
+    inv:{兽皮:0,野猪肉:0,绷带:0,干粮:0,保养油:0,旧铁片:0,猪王皮:0,胡椒:0,烤肉:0,旧银币:0,巨魔牙:0,魔化兽皮:0,蛇蛋:0,净水袋:0,草药:0,陈年果酒:0,巨魔粗制饰品:0,磨石:0,肉桂:0,丁香:0,藏红花:0,血盐:0,血水结晶:0,女妖之泪:0,黑鳄皮:0,巨魔皮:0,碎布条:0,火把:0,止血膏:0,醒神草:0,盐渍肉:0,猛火油:0,烟幕弹:0,苦蜜蜡:0,苦蜜酒:0,骨器:0,灰肉:0,疫骨:0,麦饼:0,龙鳞:0,精炼熔断钢铁:0,管理者材料:0,军阀密令:0,法术书·火舌:0,法术书·霜刃:0,法术书·雷击:0,法术书·霜雾:0,法术书·北风之怒:0,法术书·石拳:0,法术书·冰锥术:0,法术书·荆棘缠绕:0,法术书·治愈环流:0,法术书·灼热射线:0,法术书·生命虹吸:0,法术书·灼热新星:0,法术书·疾风刃:0,法术书·碎石雨:0,法术书·净光术:0,法术书·深眠咒:0,法术书·御土之盾:0,法术书·增幅术:0,法术书·恐惧术:0,法术书·虚弱诅咒:0,法术书·迟缓诅咒:0,法术书·破甲诅咒:0,法术书·疫病诅咒:0,法术书·背运诅咒:0,法术书·幻影术:0,法术书·安抚幻觉:0,法术书·失志诅咒:0,法术书·秘法飞弹:0,法术书·心智鞭笞:0,法术书·星陨术:0,法术书·陨星天降:0,法术书·焚世烈焰:0,法术书·绝对零度:0,法术书·雷霆万钧:0,法术书·湮灭射线:0,法术书·北境冰暴:0,法术书·死亡一指:0,法术书·血沸术:0,法术书·灵魂湮灭:0,法术书·精神崩解:0,法术书·灵魂尖啸:0,法术书·神罚之矛:0,木:0,竹:0,骨:0,橡木:0,白蜡木:0,紫杉木:0,赐福木:0,诅咒载体木:0,陨铁:0,龙钢:0,古战场铁:0,血术硬化钢:0,鲸骨:0,罂粟:0,海鱼:0,大鱼:0,烤鱼:0,皮革帽:0,铁头盔:0,锁子甲兜帽:0,板甲头盔:0,皮背心:0,锁子甲胸甲:0,板甲胸甲:0,皮革护腿:0,锁子甲护腿:0,板甲护腿:0,布披风:0,皮革披风:0,游侠短弓:0,骑士剑:0,铁料:0,蛙皮:0,蛙油膏:0,熊皮:0,蛛丝:0,骨头:0,蛇皮:0,暗影之尘:0,送葬骨灰:0,水渍石:0,摆锤:0,弃誓之剑:0,空甲胄壳:0,虱壳:0,虱母壳:0,除虱粉:0,灰衣甲片:0,灰衣队长徽记:0,灰土结晶:0,覆金属龙皮:0,妖僧残页:0,拉斯普提的碎甲片:0,疯狂核心:0,拉斯普提的毒血:0,疯子的蜡烛:0,蜂蜜:0,木炭:0},
     spells:['飞石','治愈微光'],
     memSpells:['飞石','治愈微光'],
     weapon:{name:'木剑',atk:3,type:'剑'}, owned:[{name:'木剑',atk:3,type:'剑'}], gear:{头:null,胸:null,腿:null,披风:null}, armorBag:[], campFrom:null, knight:null, companion:null, accs:[], accBag:[], accBonus:{hp:0,mp:0,sta:0}, pow:0, fort:0, coat:0, buffSys:{攻:{v:0,n:0},防:{v:0,n:0},速:{v:0,n:0}}, craftXP:{锻造:0,烹饪:0,炼金:0}, wprof:{}, stance:'攻势', armguard:null, lairFloor:1, mercs:[], regulus:null, lionSword:null, leader:'主角', control:null, bestiary:{}, kills:0,
@@ -361,6 +367,8 @@ function newGame(){
   g.p.flags.regulusDuelJob=false; g.p.flags.regulusDuelDone=false; g.p.flags.regulusDuelReward=false;
   g.p.flags.knightKills=0; g.p.flags.lasputiUnlocked=false; g.p.flags.lasputiLv=60; g.p.flags.lasputiReviveAt=0; g.p.flags.lasputiPending=false; g.p.flags.lasputiDefeats=0; g.p.flags.lasputiCandle=false;
   g.p.crown=0; g.p.curseLas=0; g.p.lasTaunt=0;
+  g.p.flags.ch2=false;
+  g.p.flags.supplyJob=false; g.p.flags.supplyStage=0; g.p.flags.roadBandJob=false; g.p.flags.roadBandLeft=0; g.p.flags.errandCd=0;
   return g;
 }
 /* ---------- 杂货与商店刷新 ---------- */
@@ -383,9 +391,12 @@ const CATALOG={
  '绷带包':{price:12,desc:'3个绷带',give:{绷带:3}},
  '疮药膏':{price:6,desc:'+25生命（战斗外）'}, '雹铁':{price:12,desc:'锻造材料·霜刃'},
  '古战场铁':{price:150,desc:'古战场出土的铁——锻造古战场铁剑身'},
- '陨铁':{price:300,desc:'天外陨铁——锻造陨铁剑身'}
+ '陨铁':{price:300,desc:'天外陨铁——锻造陨铁剑身'},
+ '锁子甲兜帽':{price:30,desc:'头部护甲·+3防'}, '皮革披风':{price:20,desc:'披风·保暖'},
+ '胡椒':{price:8,desc:'香料'}, '海鱼':{price:3,desc:'食材，可卖'}, '大鱼':{price:8,desc:'食材，可卖'},
+ '蜂蜜':{price:4,desc:'食材，可卖'}, '木炭':{price:2,desc:'杂物，可卖'}
 };
-function shopCycle(){ return Math.floor((state.p.days||0)/3); }
+function shopCycle(){ return Math.floor((state.p.days||0)/2); } // 商店隔天刷新
 function pickFrom(pool,n){
   const arr=pool.slice();
   let seed=shopCycle()*7+13;
@@ -397,7 +408,7 @@ function stockOf(shop,pool){
   if(!state.p.shop)state.p.shop={};
   const cyc=shopCycle();
   if(!state.p.shop[shop]||state.p.shop[shop].cycle!==cyc){
-    state.p.shop[shop]={cycle:cyc,items:pickFrom(pool,2)};
+    state.p.shop[shop]={cycle:cyc,items:pickFrom(pool,20)}; // 每天20种新货，隔天刷新
   }
   return state.p.shop[shop];
 }
@@ -586,7 +597,7 @@ const FORGE_MAT_DEF={
  陨铁:{atkPct:0.15,fx:['精准'],desc:'陨铁：攻击+15%，精准'},
  龙钢:{atkPct:0.2,fx:['锋利'],desc:'龙钢：攻击+20%，锋利'},
  古战场铁:{atkPct:0.1,fx:['噬魂'],desc:'古战场铁：攻击+10%，噬魂'},
- 血术硬化钢:{atkPct:0.1,fx:['血腥'],ch2:true,desc:'血术硬化钢：第二章才有的材料'},
+ 血术硬化钢:{atkPct:0.1,fx:['血腥'],ch2:true,desc:'血术硬化钢：北方的钢材，还不到用的时候'},
  鲸骨:{fx:['鲸骨'],desc:'鲸骨：耐力消耗-20%'},
  木:{desc:'普通木材'}, 竹:{desc:'竹材'}, 兽皮:{desc:'皮革包裹'}, 骨:{fx:['泪蚀'],desc:'骨：泪蚀'}, 疫骨:{atkPct:0.06,fx:['血腥'],desc:'疫骨：攻击+6%，必出血腥'},
  旧银币:{atkPct:0.05,desc:'银辉：攻击+5%'},
@@ -624,7 +635,7 @@ function forgePartMenu(cat,baseMat,chosen,idx,back){
     const have=state.p.inv[m]||0;
     const used=chosen.filter(x=>x===m).length;
     const locked=(d.ch2&&!(state.p.flags&&state.p.flags.ch2));
-    if(locked)o.push([m+'（'+d.desc+'）·第二章',()=>{ print('这是第二章才有的材料——北方的路还长','bad'); forgePartMenu(cat,baseMat,chosen,idx,back); }]);
+    if(locked)o.push([m+'（'+d.desc+'）·未解锁',()=>{ print('这是北方的钢材——还不到用的时候','bad'); forgePartMenu(cat,baseMat,chosen,idx,back); }]);
     else if(have-used<=0)o.push([m+'（'+d.desc+'）·缺',()=>{ print(m+'不够','bad'); forgePartMenu(cat,baseMat,chosen,idx,back); }]);
     else {
       o.push([m+'（'+d.desc+'）·'+have,()=>forgePartMenu(cat,baseMat,chosen.concat([m]),idx+1,back)]);
@@ -932,6 +943,16 @@ function gainWprof(type){
 }
 function wprofDmgPct(type){ const lv=wprofLv(type); if(lv>=5)return 1.2; if(lv>=4)return 1.1; return 1; }
 function wprofSta(type){ return wprofLv(type)>=5?0.9:1; }
+/* 匕首熟练度连击：熟练度越高，每回合追加攻击的次数与概率越高（Lv1只能打一次） */
+function daggerExtraHits(){
+  const lv=wprofLv('匕首');
+  if(lv<2)return 0;
+  const r=Math.random();
+  if(lv>=5){ if(r<0.10)return 3; if(r<0.35)return 2; if(r<0.65)return 1; return 0; }
+  if(lv>=4){ if(r<0.15)return 2; if(r<0.45)return 1; return 0; }
+  if(lv>=3){ if(r<0.08)return 2; if(r<0.28)return 1; return 0; }
+  if(r<0.20)return 1; return 0;
+}
 
 /* ---------- 每武器 3 战技（按文档：Lv1/Lv2/Lv3 熟练度解锁；重武器另有架势系统） ---------- */
 const WSKILLS={
@@ -1398,6 +1419,8 @@ function prepEnemy(en){
   // 精英强化：中后期一次性精英/首领（Lv20+，不含传奇骑士与巅峰级）生命+25% 攻击+15% 经验+30%
   const EL=ELITE_LOOT[en.name];
   if(EL&&EL.c===1&&(en.lv||0)>=20&&!ELITE_PINNACLE[en.name]){ en.hp=Math.round(en.hp*1.25); en.maxHp=en.hp; en.atk=Math.round(en.atk*1.15); en.xp=Math.round((en.xp||0)*1.3); }
+  // 第一章BOSS血量减半（太难打了——抵消上面的膨胀，回到设计值）
+  if((EL&&EL.c===1)||BOSS_HP_HALF[en.name]){ en.hp=Math.round(en.hp*0.5); en.maxHp=en.hp; }
   en.狂暴=false; en.stunned=false; en.physNoted=false; en.bleed=0; en.stolen=0; en.atkBoost=0; en.fear=0;
   en.atkDown=0; en.defDown=0; en.plague=0; en.luckDown=false; en.不愈=false; // 控场法术的减益字段
   en.high=!!HIGH_FOE[en.name]; // 高危之敌：身上带着北边的密令
@@ -1869,7 +1892,9 @@ function playerAct(kind,idx){
       if(vsR&&en.骑类){ dmg=Math.round(dmg*(1+vsR)); print('骑士克制的饰品低鸣——骑者受制','hint'); }
       if(en.name==='轩辕十四·单挑'&&en.finalBlow&&en.hp>0){ dmg=Math.max(dmg,en.hp); print('终焉一击之后，他力竭了——这一剑他躲不开','hint'); }
       if(en.blocked){ dmg=Math.max(1,Math.round(dmg*0.5)); print(en.name+'格挡了！你的伤害减半','def'); en.blocked=false; }
-      const hits=Math.max(1,Math.round(accFx('hits')));
+      let hits=Math.max(1,Math.round(accFx('hits')));
+      const wtMelee=weaponTypeOf(state.p.weapon);
+      if(wtMelee==='匕首'){ const ex=daggerExtraHits(); if(ex>0){ hits+=ex; print('匕首连击·追加'+ex+'击！','hint'); } }
       for(let h=0;h<hits;h++){
         if(en.hp<=0)break;
         en.hp-=dmg;
@@ -1898,6 +1923,16 @@ function playerAct(kind,idx){
     const rate=0.8+(fxs&&fxs.includes('迅影')?0.1:0)+accFx('fleePct');
     if(Math.random()<rate){ print('你转身就跑它没有追','ok'); ctx=null; state.p.buff.流血=0; allies().forEach(a=>{ a.fled=false; a.act=null; a.guard=false; a.dodge=false; }); if(state.p.flags.tyrfing&&!my.damagedEnemy){ state.p.hp=Math.max(1,state.p.hp-Math.round(state.p.maxHp*0.2)); print('必杀之约——你没有伤人，提尔锋借你的手刺穿了自己！','bad'); } if(my.opts.onFlee)my.opts.onFlee(); return; }
     print('你转身就跑——被扑了回来！','bad'); my.lastDef=null;
+  }
+  // 饰品·再次行动：攻击类行动后概率抢出第二击（每回合至多一次）
+  if(ctx===my && !my.control && en.hp>0 && !ctx.extraUsed && kind!=='逃跑' && kind!=='格挡' && kind!=='闪避'){
+    const ep=accFx('extraTurn');
+    if(ep>0 && Math.random()<ep){
+      ctx.extraUsed=true;
+      print('饰品低鸣——你抢出了又一次行动！','hint');
+      renderCombat();
+      return;
+    }
   }
   if(ctx!==my) return;
   if(en.hp<=0){ if(!enemyDown())return; }
@@ -2161,6 +2196,7 @@ function enemyTurn(){
   // 回合收尾：盟友姿态重置、战技冷却与法力回复（每回合一次）
   allies().forEach(a=>{ a.act=null; a.guard=false; a.dodge=false; if(a.skillCd>0)a.skillCd--; if(a.unyield>0)a.unyield--; if(a.maxMp&&a.mp<a.maxMp)a.mp=Math.min(a.maxMp,a.mp+2); if(a.regen&&a.hp>0&&a.hp<a.maxHp){ a.hp=Math.min(a.maxHp,a.hp+a.regen); print(a.name+'在星光里缓缓回复 '+a.regen+' 生命','dim'); } });
   if(state.p.crown>0)state.p.crown--; // DYO荣冠：3回合攻击+30%
+  ctx.extraUsed=false; // 再次行动：每回合至多一次
   const rg=accFx('regen');
   if(rg&&state.p.hp>0&&state.p.hp<state.p.maxHp){ state.p.hp=Math.min(state.p.maxHp,state.p.hp+rg); print('饰品温润——回复'+rg+'生命','dim'); }
 }
@@ -2370,6 +2406,8 @@ function enemyTurnOne(){
   else if(ctx.en.name==='魔化之人') brionacTurn(def);
   else if(ctx.en.name==='轩辕十四·单挑') regulusDuelTurn(def);
   else if(ctx.en.name==='妖僧·拉斯普提') lasputiTurn(def);
+  else if(ctx.en.name==='叛军散兵') rebelSoldierTurn(def);
+  else if(ctx.en.name==='劫粮流寇') banditScavTurn(def);
   if(ctx.en.bleed&&ctx.en.bleed>0){ ctx.en.hp=Math.max(0,ctx.en.hp-2); print(ctx.en.name+'伤口流血 −2','hit'); if(!ctx.en.不愈)ctx.en.bleed--; }
   if(ctx.en.plague&&ctx.en.plague>0){ ctx.en.hp=Math.max(0,ctx.en.hp-3); print(ctx.en.name+'疫病发作 −3','hit'); ctx.en.plague--; }
   ctx.cycle++;
@@ -2563,6 +2601,8 @@ function intentLine(en,r,t){
    老龙:r=>r<0.35?'它深吸一口气——龙息要来了':r<0.65?'它弓起尾巴——横扫':'它张开了嘴——撕咬',
    '轩辕十四·单挑':r=>r<0.35?'他横剑在前——冲锋斩的起手':r<0.7?'他缓缓蓄剑——剑意在涨':'他盯着你的眼睛——正面来',
    '妖僧·拉斯普提':r=>'他嘴里念叨着碎句，脖子上的血滴答滴答——看不出要干什么',
+   叛军散兵:r=>'他挺着长矛，眼睛发直——正规军的架势',
+   劫粮流寇:r=>'他盯着你的行囊——饿出来的狠劲',
    赤河龙:r=>r<0.4?'它喉头泛红——赤焰龙息':r<0.7?'它甩动巨尾':'它探颈欲咬',
    泥沼龙:r=>r<0.4?'沼息在它嘴里鼓泡':r<0.7?'它甩尾':'它张嘴要咬',
    旱地龙:r=>r<0.4?'尘沙在它喉间聚集':r<0.7?'它扫起沙暴':'它低头要撞',
@@ -3731,6 +3771,14 @@ const ELITE_LOOT={
  '旧王侍卫':{c:1,weapon:{name:'旧王卫剑',atk:26,type:'剑',fx:['破甲']}}
 };
 const ELITE_PINNACLE={'报丧骑士·菲洛斯':1,'腐败骑士·多明戈':1,'断弓骑士·马特奥':1,'苍白骑士·塞拉斯':1,'寒铁骑士·维罗妮卡':1,'断剑骑士·塞萨尔':1,'鲸骨骑士·华金':1,'铸甲骑士·埃内斯托':1,'灰烬骑士·鲁文':1,'空甲骑士·奥古斯丁':1,'矿脉巨像':1,'雷崖雷鸟':1,'渡河骨龙':1,'北境战帅':1,'黑棘战团长':1,'灰烬狂犬':1,'北境猎龙人':1,'霜原巨狼':1,'战旗亡魂':1,'要塞逃将':1,'荒原骨龙':1,'黑棘城主':1};
+/* 第一章BOSS名册（血量减半名单，覆盖不在掉落表里的领主/龙/解放祸首/游荡妖魔） */
+const BOSS_HP_HALF={
+ 猪王:1,吞骨鳄:1,断桥双魔:1,酒窖母:1,铜铃女:1,
+ 赤河龙:1,泥沼龙:1,旱地龙:1,墓岩龙:1,渡河龙:1,巨鲸之泉龙:1,巢穴之主:1,矿脉龙:1,雷崖龙:1,古战场龙:1,
+ 血督:1,蛙军帅:1,虱潮统帅:1,蝇潮教主:1,瘟帅:1,灰帅:1,雷帅:1,
+ 河湾祸首:1,白岭祸首:1,海狼帮头目:1,桥头税霸:1,灰岩矿霸:1,白水粮霸:1,东岭山寇:1,北望遗将:1,南碑盗首:1,港盗大档头:1,北岭私掠头:1,霜谷兵痞:1,银盾叛骑:1,灰墙守将:1,
+ 灰土高地龙:1,轩辕十四·单挑:1,安普提斯:1,'妖僧·拉斯普提':1
+};
 /* 高危之敌名册：只有它们身上带着北边的军阀密令（黑棘城高危委托/各城极危悬赏/解放战争的祸首/传奇骑士与巅峰BOSS） */
 const HIGH_FOE={
  '黑甲骑士':1,'弃誓骑士':1,'灰衣指挥官':1,'风暴元素':1,'炉灰魔物':1,'野狼王':1,'黑原鬣犬':1,'无头战魂':1,
@@ -3777,7 +3825,7 @@ const ACC_DEFS={
  '塞拉斯的纹章':{tier:'精品',fx:{atkPct:0.05},desc:'攻击+5%'},
  '安魂十字':{tier:'史诗',fx:{vs亡灵:0.1},desc:'对亡灵伤害+10%'},
  '铜铃':{tier:'精品',fx:{sta:15},desc:'体力上限+15，铜铃女怕它'},
- '北归之誓':{tier:'大师锻造',fx:{atk:6,atkPct:0.05,hp:40,regen:2},desc:'攻击+6，攻击再+5%，生命上限+40，每回合回复2生命——第一章仅此一件'},
+ '北归之誓':{tier:'大师锻造',fx:{atk:6,atkPct:0.05,hp:40,regen:2},desc:'攻击+6，攻击再+5%，生命上限+40，每回合回复2生命'},
  '猪王之牙':{tier:'狩猎品',fx:{atk:2,hp:20},desc:'攻击+2，生命上限+20'},
  '血池之瞳':{tier:'狩猎品',fx:{lifesteal:3},desc:'命中回复3生命'},
  '巨蟾毒珠':{tier:'狩猎品',fx:{stunC:0.1},desc:'命中10%震住目标'},
@@ -3812,6 +3860,9 @@ const ACC_DEFS={
  '星屑坠':{tier:'史诗',price:320,fx:{mp:40,regen:1},desc:'法力上限+40，每回合回1生命'},
  '巨力护腕坠':{tier:'史诗',price:280,fx:{atk:5},desc:'攻击+5'},
  '圣银十字':{tier:'史诗',price:350,fx:{vs亡灵:0.15},desc:'对亡灵伤害+15%'},
+ '疾风腕轮':{tier:'优良',price:120,fx:{extraTurn:0.15},desc:'每回合15%概率再次行动'},
+ '时计碎片':{tier:'精品',price:240,fx:{extraTurn:0.25},desc:'每回合25%概率再次行动'},
+ '双心之坠':{tier:'史诗',price:420,fx:{extraTurn:0.35},desc:'每回合35%概率再次行动'},
  '蛙母之卵':{tier:'狩猎品',fx:{hp:40,regen:1},desc:'生命上限+40，每回合回1生命'},
  '虱王须坠':{tier:'狩猎品',fx:{stunC:0.12},desc:'命中12%震住目标'},
  '墓守残徽':{tier:'狩猎品',fx:{vs亡灵:0.1},desc:'对亡灵伤害+10%'},
@@ -4057,7 +4108,7 @@ function winCombat(){
     const n=state.p.inv.军阀密令||0;
     print('你在敌人身上搜出军阀密令 ×'+highFallen.length+'（累计'+n+'份）','hint');
     print(LIB_ORDER_LINES[Math.max(0,n-1)%LIB_ORDER_LINES.length],'dim');
-    if(libOrdersLeft()===0)print('南境七城尽数解放——密令的尽头指向北方，那个夺走你领地的人就在那里（北归之路·第二章）','hint');
+    if(libOrdersLeft()===0)print('南境七城尽数解放——密令的尽头指向北方，那个夺走你领地的人就在那里','hint');
   } else if(!state.p.flags.orderHint){
     state.p.flags.orderHint=true;
     print('普通敌人身上没有北边的密令——密令只在高危之敌身上（黑棘城高危委托、各城极危悬赏、解放战争的祸首、传奇骑士）','dim');
@@ -4152,7 +4203,7 @@ function titleScreen(){
 '  ██║███████║╚██████╔╝███████╗╚██████╔╝███████╗██████╔╝███████╗\n'+
 '  ╚═╝╚══════╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚══════╝╚═════╝ ╚══════╝\n</pre>';
   log.appendChild(d);
-  print('伊索尔德 0.25 · 第一章：南境 · 领地解放/新城镇/古战场/兰德尔/卡尔沃/地图系统/高危密令/敌人图鉴/法术商店 · 若界面没有，说明浏览器在用旧缓存——请 Ctrl+F5 强制刷新','dim');
+  print('伊索尔德 0.26 · 第一章：南境 · 领地解放/新城镇/古战场/兰德尔/卡尔沃/地图系统/高危密令/敌人图鉴/法术商店 · 若界面没有，说明浏览器在用旧缓存——请 Ctrl+F5 强制刷新','dim');
   print('说明：按钮即行动；下方输入框支持 看/状态/背包/帮助，开发者刷数值用 /dev营地休息=存档，也是"过一天"','dim');
   hr();
   const o=[['新的开始',()=>{ state=newGame(); riverScene(); }]];
@@ -4253,13 +4304,13 @@ function gotoSmith(){
     print('炉温烧到发白，二十块铁料熔成一块精钢——大马士革刀的原料','ok');
     gotoSmith();
   }]);
-  if(!state.p.flags.masterForged) o.push(['大师锻造饰品：北归之誓（覆金属龙皮×1+精炼熔断钢铁×2+龙鳞×3+400铜币——第一章仅此一件）',()=>{
+  if(!state.p.flags.masterForged) o.push(['大师锻造饰品：北归之誓（覆金属龙皮×1+精炼熔断钢铁×2+龙鳞×3+400铜币）',()=>{
     if(state.p.inv.覆金属龙皮<1||state.p.inv.精炼熔断钢铁<2||state.p.inv.龙鳞<3){ print('缺材料：覆金属龙皮×1、精炼熔断钢铁×2、龙鳞×3','bad'); gotoSmith(); return; }
     if(state.p.gold<400){ print('加工费400铜币，钱不够','bad'); gotoSmith(); return; }
     state.p.inv.覆金属龙皮--; state.p.inv.精炼熔断钢铁-=2; state.p.inv.龙鳞-=3; state.p.gold-=400;
     state.p.flags.masterForged=true;
     state.p.accBag.push({name:'北归之誓'});
-    print('大师停了锤子，从炉火里钳起一件亮得发白的东西——北归之誓，第一章只会有这一件','ok');
+    print('大师停了锤子，从炉火里钳起一件亮得发白的东西——北归之誓，大师的手只抬得起这一次','ok');
     gotoSmith();
   }]);
   else o.push(['大师锻造：北归之誓（已完成——大师的手只抬得起一次）',()=>{},true]);
@@ -4273,12 +4324,12 @@ function gotoSmith(){
     print('下一步：出城往北岭——狮子岩（挖第三块界石）','hint');
     gotoSmith();
   }]);
-  const st=stockOf('smith',['小锤','铁头盔','皮革披风','锁子甲兜帽','磨石']);
+  const st=stockOf('smith',['小锤','铁头盔','皮革披风','锁子甲兜帽','磨石','锁子甲胸甲','板甲胸甲','板甲头盔','锁子甲护腿','板甲护腿','火把','止血膏','醒神草','盐渍肉','猛火油','草药','净水袋','麦饼','烤鱼','苦蜜酒','蛙油膏','疮药膏','烟幕弹','火绒','陈年果酒','肉桂','丁香','藏红花','绷带包','古战场铁','陨铁']);
   st.items.forEach(k=>{
     const ad=ARMOR_DEFS[k];
     if(ad) o.push(['新货：'+k+'（'+ad.price+'铜币，'+ad.slot+'·+'+ad.def+'防）',()=>{ takeStock('smith',k); buyArmorPiece(ad.slot,k,ad.price,ad.def); }]);
     else if(k==='小锤') o.push(['新货：小锤（12铜币，+6攻击）',()=>{ takeStock('smith','小锤'); buyWeapon('小锤',12,6,null,'锤'); }]);
-    else if(k==='磨石') o.push(['新货：磨石（5铜币，营地磨刀用）',()=>{ takeStock('smith','磨石'); buyG('磨石',5,gotoSmith); }]);
+    else if(CATALOG[k]) o.push(['新货：'+k+'（'+CATALOG[k].price+'铜币，'+CATALOG[k].desc+'）',()=>{ takeStock('smith',k); buyG(k,CATALOG[k].price,gotoSmith); }]);
   });
   if(state.p.inv.兽皮>0) o.push(['卖：兽皮 ×'+state.p.inv.兽皮+'（3铜币）',()=>sell('兽皮',3)]);
   if(state.p.inv.猪王皮>0) o.push(['卖：猪王皮 ×'+state.p.inv.猪王皮+'（6铜币）',()=>sell('猪王皮',6)]);
@@ -4340,11 +4391,11 @@ function gotoGoods(){
   o.push(['买：石坠（15铜币，饰：所受伤害-1）',()=>buyAcc('石坠',15,gotoGoods)]);
   o.push(['买：草绳结（10铜币，饰：生命上限+8）',()=>buyAcc('草绳结',10,gotoGoods)]);
   o.push(['买：木珠链（18铜币，饰：法力上限+8）',()=>buyAcc('木珠链',18,gotoGoods)]);
-  const st=stockOf('goods',['火绒','陈年果酒','巨魔粗制饰品','绷带包','古战场铁']);
+  const st=stockOf('goods',['火绒','陈年果酒','巨魔粗制饰品','绷带包','古战场铁','麦饼','烤鱼','苦蜜酒','蛙油膏','疮药膏','磨石','肉桂','丁香','藏红花','雹铁','陨铁','胡椒','海鱼','大鱼','蜂蜜','木炭']);
   st.items.forEach(k=>{
     o.push(['新货：'+k+'（'+CATALOG[k].price+'铜币，'+CATALOG[k].desc+'）',()=>{ takeStock('goods',k); buyG(k,CATALOG[k].price); }]);
   });
-  const SELL_LIST=[['兽皮',3],['猪王皮',6],['魔化兽皮',8],['黑鳄皮',8],['巨魔皮',5],['旧银币',6],['巨魔牙',4],['胡椒',8],['血盐',5],['血水结晶',12],['女妖之泪',15],['碎布条',2],['游侠短弓',8],['骑士剑',10],['锁子甲胸甲',28],['板甲胸甲',45],['板甲头盔',30],['锁子甲护腿',18],['板甲护腿',35],['巨魔粗制饰品',3],['蛇蛋',10],['熊皮',5],['蛛丝',3],['骨头',2],['蛇皮',4],['暗影之尘',8],['送葬骨灰',6],['水渍石',5],['摆锤',7],['弃誓之剑',15],['空甲胄壳',12],['虱壳',3],['虱母壳',8],['灰衣甲片',6],['灰衣队长徽记',15],['灰土结晶',10],['覆金属龙皮',15],['苦蜜蜡',6],['蛙皮',4],['蛙油膏',4],['骨器',5],['灰肉',4],['疫骨',10],['龙鳞',40],['妖僧残页',8],['拉斯普提的碎甲片',15],['疯狂核心',20],['拉斯普提的毒血',12],['疯子的蜡烛',80],['管理者材料',80],['海鱼',3],['大鱼',8],['烤鱼',2]];
+  const SELL_LIST=[['兽皮',3],['猪王皮',6],['魔化兽皮',8],['黑鳄皮',8],['巨魔皮',5],['旧银币',6],['巨魔牙',4],['胡椒',8],['血盐',5],['血水结晶',12],['女妖之泪',15],['碎布条',2],['游侠短弓',8],['骑士剑',10],['锁子甲胸甲',28],['板甲胸甲',45],['板甲头盔',30],['锁子甲护腿',18],['板甲护腿',35],['巨魔粗制饰品',3],['蛇蛋',10],['熊皮',5],['蛛丝',3],['骨头',2],['蛇皮',4],['暗影之尘',8],['送葬骨灰',6],['水渍石',5],['摆锤',7],['弃誓之剑',15],['空甲胄壳',12],['虱壳',3],['虱母壳',8],['灰衣甲片',6],['灰衣队长徽记',15],['灰土结晶',10],['覆金属龙皮',15],['苦蜜蜡',6],['蛙皮',4],['蛙油膏',4],['骨器',5],['灰肉',4],['疫骨',10],['龙鳞',40],['妖僧残页',8],['拉斯普提的碎甲片',15],['疯狂核心',20],['拉斯普提的毒血',12],['疯子的蜡烛',80],['蜂蜜',4],['木炭',2],['管理者材料',80],['海鱼',3],['大鱼',8],['烤鱼',2]];
   let hasSell=false;
   for(const pair of SELL_LIST){
     const k=pair[0], v=pair[1];
@@ -5179,7 +5230,7 @@ function arriveCarwo(){
   if(!state.p.flags.carwoVisited){
     state.p.flags.carwoVisited=true;
     print('旅店老板说："你来得不是时候，也不是——这里没有是时候的时候"','dim');
-    print('（第一章·南境至此——北边是军阀的地盘，第二章再开）','hint');
+    print('（南境至此——北边是军阀的地盘）','hint');
   }
   gotoCarwo();
 }
@@ -5450,7 +5501,13 @@ function gotoRoad9(){
   const o=[];
   o.push(['在焦土游荡',wanderCarwo]);
   o.push(['南下：穿过灰墙要塞，回银盾镇（3段路程）',()=>journeyToNew('fortress3')]);
-  o.push(['北上：斯特恩 · 北归之路——第二章未开放',()=>{},true]);
+  o.push(['北上：斯特恩 · 北归之路',()=>{
+    if(!state.p.flags.ch2){
+      if(state.p.flags.libW_carwo&&state.p.flags.fortressTaken){ state.p.flags.ch2=true; print('南境的仗打完了——北归之路开启','ok'); }
+      else { print('北边还是军阀的地盘——先在卡尔沃站稳脚跟','dim'); return; }
+    }
+    journeyToNew('stern1');
+  }]);
   if(f.hailKnightJob&&!f.hailKnightDone) o.push(['寻踪：雹铁骑士（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   if(f.thunderbirdJob&&!f.thunderbirdDone) o.push(['寻踪：雷崖雷鸟（去野外游荡碰运气）',()=>{ print('线索断在野外——出城游荡，它会自己找上你','dim'); }]);
   o.push(['扎营',gotoCamp]);
@@ -5822,10 +5879,15 @@ function gotoExotic(){
   o.push(['买：星屑坠（320铜币，饰：法力+40，每回合回1生命）',()=>buyAcc('星屑坠',320,gotoExotic)]);
   o.push(['买：巨力护腕坠（280铜币，饰：攻击+5）',()=>buyAcc('巨力护腕坠',280,gotoExotic)]);
   o.push(['买：圣银十字（350铜币，饰：对亡灵伤害+15%）',()=>buyAcc('圣银十字',350,gotoExotic)]);
-  const st=stockOf('exotic',['肉桂','丁香','藏红花','大马士革刀','陨铁']);
+  o.push(['买：疾风腕轮（120铜币，饰：每回合15%概率再次行动）',()=>buyAcc('疾风腕轮',120,gotoExotic)]);
+  o.push(['买：时计碎片（240铜币，饰：每回合25%概率再次行动）',()=>buyAcc('时计碎片',240,gotoExotic)]);
+  o.push(['买：双心之坠（420铜币，饰：每回合35%概率再次行动）',()=>buyAcc('双心之坠',420,gotoExotic)]);
+  const st=stockOf('exotic',['肉桂','丁香','藏红花','大马士革刀','陨铁','铁指环','铜坠','麻布护符','木符','铜手环','石坠','草绳结','木珠链','麦饼','烤鱼','苦蜜酒','蛙油膏','疮药膏','胡椒','海鱼','大鱼','蜂蜜','木炭']);
   st.items.forEach(k=>{
     if(k==='大马士革刀') o.push(['新货：大马士革刀（7200铜币，+50攻击）',()=>{ takeStock('exotic','大马士革刀'); buyExoticWeapon('大马士革刀',7200,50,null,'剑'); }]);
-    else o.push(['新货：'+k+'（'+CATALOG[k].price+'铜币，香料）',()=>{ takeStock('exotic',k); buyItem(k,CATALOG[k].price); }]);
+    else if(k==='陨铁') o.push(['新货：陨铁（300铜币，天外陨铁）',()=>{ takeStock('exotic','陨铁'); buyItem('陨铁',300); }]);
+    else if(ACC_DEFS[k]&&ACC_DEFS[k].price) o.push(['新货：'+k+'（'+ACC_DEFS[k].price+'铜币，饰：'+ACC_DEFS[k].desc+'）',()=>{ takeStock('exotic',k); buyAcc(k,ACC_DEFS[k].price,gotoExotic); }]);
+    else if(CATALOG[k]) o.push(['新货：'+k+'（'+CATALOG[k].price+'铜币，'+CATALOG[k].desc+'）',()=>{ takeStock('exotic',k); buyItem(k,CATALOG[k].price); }]);
   });
   o.push(['离开',backToTown]);
   scene('异域商人','一顶帐篷，货堆得比人高商人戴着海路来的头巾，摊子上摆着你没见过的刀剑，和一堆叫不出名字的香料'+(st.items.length?'\n他今天进了点新货':''),o);
@@ -6372,7 +6434,10 @@ const NEW_TOWN_DEFS={
   deliver:[['送葬骨灰',2,12],['骨头',4,10]],wander:'waste'},
  southmark:{cn:'南碑镇',desc:'古战场南边的镇子，镇口立着块无名碑',
   rumors:['"碑上没字——死了太多人，刻不过来"','"南边就是渡口镇，坐船过河也快"','"石桥镇的商队常从这儿过"'],
-  deliver:[['送葬骨灰',2,12],['草药',3,9]],wander:'waste'}
+  deliver:[['送葬骨灰',2,12],['草药',3,9]],wander:'waste'},
+ stern:{cn:'斯特恩',desc:'北归之路的尽头——斯特恩，灰扑扑的北方边城，风里有蝗群和军号的气味',
+  rumors:['"北边在打仗，商队都绕道了"','"赫里克的军营就在城外，别乱走"','"南境来的货在这里能翻三倍价"'],
+  deliver:[['麦饼',3,9],['铁料',3,9]],wander:'north'}
 };
 const NEW_ROADS={
  stonebridge:{town:'stonebridge',cn:'石桥镇城外',desc:'桥头车马不断，几道路口分向四方',
@@ -6410,9 +6475,13 @@ const NEW_ROADS={
  northwatch:{town:'northwatch',cn:'北望镇城外',desc:'能望见古战场的断旗，风里有锈味',
   journeys:[['南行：回古战场（3段路程）','northwatch2'],['北行：前往兰德尔（3段路程）','northwatch3'],['东行：进入东荒原（3段路程）','northwatch4'],['北上：前往黑棘城（6段路程）','blackthorn1']]},
  southmark:{town:'southmark',cn:'南碑镇城外',desc:'无名碑立在路口，字早就磨平了',
-  journeys:[['北行：回古战场（3段路程）','southmark2'],['南行：前往渡口镇（3段路程）','southmark3'],['西行：前往石桥镇（3段路程）','southmark4']]}
+  journeys:[['北行：回古战场（3段路程）','southmark2'],['南行：前往渡口镇（3段路程）','southmark3'],['西行：前往石桥镇（3段路程）','southmark4']]},
+ stern:{town:'stern',cn:'斯特恩城外',desc:'北风卷着蝗群的嗡声，灰扑扑的军道向北延伸',
+  journeys:[['南下：回卡尔沃（3段路程）','stern2'],['北上：赫里克的军营——尚未开放','stern4',true]]},
+ herik:{town:'herik',cn:'军营外',desc:'军道两旁立着拒马，北边传来练兵的号子',
+  journeys:[['南下：回斯特恩（2段路程）','herik1']]}
 };
-function addJourney(key,title,desc,event,eventFn,arriveTown,backRoad){ JOURNEY_DEFS[key]={title,desc,event,eventFn,arrive:'newtown:'+arriveTown,back:backRoad}; }
+function addJourney(key,title,desc,event,eventFn,arriveTown,backRoad,legs){ JOURNEY_DEFS[key]={title,desc,event,eventFn,arrive:'newtown:'+arriveTown,back:backRoad,legs:legs||3}; }
 addJourney('greyrock','北上 · 往灰岩镇','向北的路，石头慢慢变成灰的','山道客商','normal','greyrock','newroad:stonebridge');
 addJourney('stonebridge2','东南 · 往渡口镇','向东南的路，河腥味回来了','商队出没','normal','ferrytown','newroad:stonebridge');
 addJourney('stonebridge3','西南 · 往沃林','向西南的路，煮骨头的味渐浓','疫牲出没','plague','warrin','newroad:stonebridge');
@@ -6495,6 +6564,10 @@ addJourney('fortress1','北上 · 往灰墙要塞','向北的路，尽头是一�
 addJourney('fortress2','北上 · 绕西侧山口往卡尔沃','向西绕行，要塞的旗子看不见了','要塞盘查','worn','carwo','fortress');
 addJourney('fortress4','南下 · 绕西侧山口往银盾镇','向西绕行，要塞的旗子看不见了','要塞盘查','worn','silvershield','fortress');
 addJourney('landel4','西行 · 往白水镇','向西的路，灰天慢慢透亮','商队出没','normal','whitewater','landelRoad');
+addJourney('stern1','北上 · 北归之路','向北的路，越来越冷，风里有蝗群的气味','军阀兵丁','worn','stern','newroad:carwo');
+addJourney('stern2','南下 · 回卡尔沃','向南的路，风雪渐渐小了','商队绝迹','normal','carwo','newroad:stern');
+addJourney('stern4','北上 · 往赫里克的军营','向北的路，军号声越来越近','叛军散兵','worn','herik','newroad:stern',2);
+addJourney('herik1','南下 · 回斯特恩','向南的路，军号声远了','叛军散兵','normal','stern','newroad:herik',2);
 addJourney('landel5','东行 · 翻岭往东岭镇','向东的路，灰山让出山口','山道客商','normal','eastrange','landelRoad');
 addJourney('fortress3','南下 · 往灰墙要塞','向南的路，灰墙横在前头','要塞盘查','worn','fortressN','carwoRoad');
 function journeyToNew(target){ if(!state.p.journey||state.p.journey.target!==target)state.p.journey={target,step:0}; journeyScene(target); }
@@ -6512,6 +6585,7 @@ function arriveNewTown(key){
   if(key==='blackthorn'){ print('黑棘城到了——灰墙里全是刀口讨生活的人','dim'); gotoBlackThorn(); return; }
   if(key==='blackplain'){ print('黑原荒野——黑土一直铺到天边','dim'); gotoBlackPlain(); return; }
   if(key==='northbattlefield'){ print('北古战场——比南边的更老，断旗都烂成了布条','dim'); gotoNorthBattlefield(); return; }
+  if(key==='herik'){ print('赫里克的军营到了——军号声就在墙外','dim'); gotoHerikCamp(); return; }
   const d=NEW_TOWN_DEFS[key];
   print(d.cn+'到了','dim');
   gotoNewTown(key);
@@ -6522,6 +6596,7 @@ function gotoNewTown(key){
   if(key==='windcap'){ gotoWindcap(); return; }
   if(key==='landel'){ gotoLandel(); return; }
   if(key==='ferrytown'){ gotoFerryTown(); return; }
+  if(key==='herik'){ gotoHerikCamp(); return; }
   const d=NEW_TOWN_DEFS[key];
   curScene=key; state.p.lastTown=key;
   const o=[
@@ -6585,7 +6660,7 @@ function gotoNewRoad(key){
   curScene='newroad:'+key;
   const o=[];
   o.push(['在郊野游荡',()=>wanderNew(d.wander,key)]);
-  r.journeys.forEach(j=>o.push([j[0],()=>journeyToNew(j[1])]));
+  r.journeys.forEach(j=>{ if(j[2])o.push([j[0],()=>{},true]); else o.push([j[0],()=>journeyToNew(j[1])]); });
   o.push(['扎营',gotoCamp]);
   o.push(['⚙ 系统',sysMenu]);
   o.push(['地图',showMap]);
@@ -6595,6 +6670,13 @@ function gotoNewRoad(key){
 function wanderNew(pool,key){
   const f=state.p.flags;
   const roll=Math.random();
+  if(key==='herik'){
+    if(roll<0.4){ scene('军营外','风卷着沙，路上只有军靴印',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]); return; }
+    if(roll<0.7) startCombat({name:'叛军散兵',lv:30,xp:240,hp:1650,atk:26,def:9,intro:'一个掉队的叛军散兵从沟里钻出来'},{canFlee:true,gold:6,onWin:()=>wanderNewNext(pool,key),onFlee:()=>wanderNewBack(pool,key)});
+    else if(roll<0.9) startCombat({name:'劫粮流寇',lv:28,xp:220,hp:1500,atk:24,def:8,intro:'两个劫粮流寇盯上了你的干粮'},{canFlee:true,items:{干粮:1},onWin:()=>wanderNewNext(pool,key),onFlee:()=>wanderNewBack(pool,key)});
+    else { const pk=['铁料','草药','麦饼'][Math.floor(Math.random()*3)]; addItem(pk,1); scene('军营外','你在路边捡到 '+pk+'×1',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]); }
+    return;
+  }
   if(twoLionsCheck(()=>scene('郊野','你绕开了，继续走',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]))) return;
   if(key==='whitewater'&&regulusDuelCheck(()=>scene('郊野','你绕开了，继续走',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]))) return;
   if(lasputiCheck(()=>scene('郊野','你绕开了，继续走',[['继续游荡',()=>wanderNew(pool,key)],['回城',()=>gotoNewTown(key)]]))) return;
@@ -7106,7 +7188,7 @@ function gotoBlackThornRoad(){
   o.push(['南下：前往北望镇（6段路程）',()=>journeyToNew('blackthorn2')]);
   o.push(['西行：前往风角港（6段路程）',()=>journeyToNew('blackthorn3')]);
   o.push(['南下：进黑原荒野（2段路程）',()=>journeyToNew('blackthorn4')]);
-  o.push(['北上：斯特恩 · 北归之路——第二章未开放',()=>{},true]);
+  o.push(['北上：斯特恩 · 北归之路——尚未开放',()=>{},true]);
   o.push(['扎营',gotoCamp]);
   o.push(['⚙ 系统',sysMenu]);
   o.push(['地图',showMap]);
@@ -7310,6 +7392,88 @@ function lasputiTurn(def){
   if(h){ state.p.buff.流血=(state.p.buff.流血||0)+1; print('妖气渗进伤口（+1层流血）','bad'); }
   if(Math.random()<0.2){ state.p.buff.流血=(state.p.buff.流血||0)+2; print('他的左手自己动了起来——独立施法·腐蚀2层！','bad'); }
   if(Math.random()<0.1){ state.p.lasTaunt=(state.p.lasTaunt||0)+1; print('「你也想打我？——来——来——」你一阵烦躁（攻击-5%，可叠加）','bad'); }
+}
+/* ---------- 0.30 第二章·北归：赫里克的军营（2.1抵达/2.2磨合） ---------- */
+function gotoHerikCamp(){
+  curScene='herik'; state.p.lastTown='herik';
+  const o=[
+  ['兵舍（休息+存档，过一天）',restInTown],
+  ['篝火（过一晚）',campFireNight],
+  ['翻译',herikTranslator],
+  ['军务告示牌（活计）',gotoCampBoard],
+  ['队伍',()=>teamMenu(gotoHerikCamp)],
+  ['地图',showMap],
+  ['⚙ 系统',sysMenu],
+  ['出城',()=>gotoNewRoad('herik')]
+  ];
+  scene('赫里克的军营','军营不大——赫里克的正规军不多，大部分是雇来的佣兵，篝火旁边，一群没名没姓的人在喝酒、赌钱',o);
+}
+function campFireNight(){
+  const lines=[
+  '你坐在角落，擦剑——没人搭理你，你也不需要人搭理',
+  '一个佣兵输光了钱，把酒碗摔在地上，没人抬头',
+  '你擦了半宿剑——剑刃上有一道缺痕，是砍骨头崩的',
+  '火堆噼啪响——你想不起上一觉睡在哪里，也不重要'
+  ];
+  print(lines[(state.p.days||0)%lines.length],'dim');
+  state.p.sta=Math.min(state.p.maxSta,state.p.sta+10);
+  print('你在火堆边歇了半宿（体力+10）','ok');
+  state.p.days=(state.p.days||0)+1; saveGame();
+  gotoHerikCamp();
+}
+function herikTranslator(){
+  if(state.p.companion&&state.p.companion.name==='安普卢斯'){
+    scene('翻译','安普卢斯就是你的翻译——他把你和赫里克隔开，也把你和北边隔开',[
+      ['问军情（免费）',()=>{ print('"赫里克大人不亲自见你——先干活，干好了再说"他擦了擦眼镜，"去军务告示牌看看"','dim'); herikTranslator(); }],
+      ['离开',gotoHerikCamp]
+    ]);
+  } else {
+    scene('翻译','一个穿灰袍的翻译坐在军帐前，态度不冷不热，像在评估一件商品',[
+      ['打听（免费）',()=>{ print('"赫里克大人不亲自见你——先干活，干好了再说"——他把你从上到下看了一遍','dim'); herikTranslator(); }],
+      ['离开',gotoHerikCamp]
+    ]);
+  }
+}
+function gotoCampBoard(){
+  const f=state.p.flags; const o=[];
+  if(!f.supplyJob) o.push(['接：护卫补给队（3段押送·报酬20铜币）',()=>{ f.supplyJob=true; f.supplyStage=0; print('补给队等着开拔——叛军最近盯着粮道','dim'); gotoCampBoard(); }]);
+  else if(f.supplyStage<3) o.push(['继续押送（第'+(f.supplyStage+1)+'段/3段）',()=>supplyFight()]);
+  else { f.supplyJob=false; state.p.gold+=20; f.jobCount++; print('补给队抵达，军需官付了20铜币','ok'); gotoCampBoard(); }
+  o.push(['接：跑腿传令（送到斯特恩·报酬12铜币）',()=>{
+    if(f.errandCd&&(state.p.days||0)<f.errandCd){ print('上一趟刚回来，马都还没喘匀','dim'); gotoCampBoard(); return; }
+    state.p.gold+=12; f.jobCount++; f.errandCd=(state.p.days||0)+1;
+    print('你骑马跑了一趟斯特恩，传令兵给了你12铜币（隔天可再接）','ok'); gotoCampBoard();
+  }]);
+  if(!f.roadBandJob) o.push(['接：清剿路边匪患（劫粮流寇×2·报酬15铜币）',()=>{ f.roadBandJob=true; f.roadBandLeft=2; print('粮道两边又闹流寇，军需官点了你的名','dim'); gotoCampBoard(); }]);
+  else if(f.roadBandLeft>0) o.push(['继续清剿（还剩'+f.roadBandLeft+'股）',()=>roadBandFight()]);
+  else { f.roadBandJob=false; state.p.gold+=15; f.jobCount++; print('路边干净了，军需官付了15铜币','ok'); gotoCampBoard(); }
+  o.push(['离开',gotoHerikCamp]);
+  scene('军务告示牌','军务告示牌钉着几张油纸：补给队要人，粮道要扫，传令缺腿',o);
+}
+function supplyFight(){
+  const f=state.p.flags;
+  const enemies=[
+   {name:'劫粮流寇',lv:28,xp:220,hp:1500,atk:24,def:8,intro:'粮道边的流寇冲了出来——他们只认粮食'},
+   {name:'叛军散兵',lv:30,xp:240,hp:1650,atk:26,def:9,intro:'几个叛军散兵伏在坡后，冲出来截粮'},
+   {name:'叛军散兵',lv:31,xp:250,hp:1700,atk:27,def:9,intro:'最后一拨叛军散兵扑向粮车'}
+  ];
+  startCombat(enemies[f.supplyStage],{canFlee:true,onWin:()=>{ f.supplyStage++; print(f.supplyStage>=3?'补给队平安抵达':'粮队继续向北','ok'); gotoCampBoard(); },onFlee:()=>{ print('你撤了回来——粮队还在原地等你','dim'); gotoCampBoard(); }});
+}
+function roadBandFight(){
+  const f=state.p.flags;
+  startCombat({name:'劫粮流寇',lv:28,xp:220,hp:1500,atk:24,def:8,intro:'粮道边的流寇从草丛里扑出来'},{canFlee:true,gold:4,onWin:()=>{ f.roadBandLeft--; print(f.roadBandLeft>0?('还剩'+f.roadBandLeft+'股流寇'):'路边干净了','ok'); gotoCampBoard(); },onFlee:()=>{ print('你撤了回来','dim'); gotoCampBoard(); }});
+}
+function rebelSoldierTurn(def){
+  const r=Math.random();
+  if(r<0.4){ print('叛军散兵挺矛刺来！'); const h=applyEnemyHit(26,def); if(h){ state.p.buff.流血=(state.p.buff.流血||0)+1; print('矛尖撕开皮肉（+1层）','bad'); } }
+  else if(r<0.75){ print('他喊叫着挥刀乱砍！'); applyEnemyHit(24,def); }
+  else { print('他退了一步，重新举起了武器'); }
+}
+function banditScavTurn(def){
+  const r=Math.random();
+  if(r<0.5){ print('劫粮流寇抡着柴刀扑来！'); applyEnemyHit(22,def); }
+  else if(r<0.8){ print('他抓起一把沙土扬过来！'); applyEnemyHit(18,def); }
+  else { print('他盯着你的行囊，嘴里骂骂咧咧'); }
 }
 /* 黑原荒野 */
 function gotoBlackPlain(){
