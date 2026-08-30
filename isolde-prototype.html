@@ -266,7 +266,7 @@ function migrate(s){
   if(p.flags.errandCd===undefined)p.flags.errandCd=0;
   if(p.spells===undefined)p.spells=['飞石','治愈微光'];
   if(p.memSpells===undefined)p.memSpells=(p.spells||[]).slice(0,3); // 法术记忆槽
-  const WMAP={木剑:{atk:3,type:'剑'},破铁剑:{atk:8,type:'剑'},生锈匕首:{atk:5,type:'匕首'},环头剑:{atk:8,type:'剑'},黄刀:{atk:8,mod:'硬直',type:'剑'},云剑:{atk:16,type:'剑'},小锤:{atk:6,type:'锤'},大马士革刀:{atk:50,type:'剑'}};
+  const WMAP={木剑:{atk:3,type:'剑'},破铁剑:{atk:8,type:'剑'},生锈匕首:{atk:5,type:'匕首'},环头剑:{atk:8,type:'剑'},黄刀:{atk:8,mod:'硬直',type:'剑'},云剑:{atk:16,type:'剑'},小锤:{atk:6,type:'锤'},大马士革刀:{atk:70,type:'剑'}};
   if(p.owned&&p.owned.length&&typeof p.owned[0]==='string'){
     p.owned=p.owned.map(n=>({name:n,...(WMAP[n]||{atk:2,type:'剑'})}));
   }
@@ -530,7 +530,7 @@ const MAT_EFFECT={
  溺魂之水:{mul:1.08}, 疫病核心:{mul:1.05,fx:['血腥']},
  雹铁:{mul:1.08,fx:['霜刃']}, 雷核:{mul:1.1,fx:['霜刃']}, 矿脉核心:{mul:1.1,fx:['破甲']}, 灰烬核心:{mul:1.1,fx:['血腥']}, 空甲核心:{mul:1.06,fx:['无魂']}, 灰壳残片:{mul:1.05,fx:['破甲']}
 };
-const ORIENTAL=[['环头剑',8,'剑'],['黄刀',8,'剑'],['云剑',16,'剑'],['打刀',20,'大剑'],['太刀',34,'大剑'],['苗刀',34,'大剑'],['胁差',10,'匕首'],['薙刀',34,'长枪'],['马来克力士剑',20,'匕首'],['大马士革刀',50,'剑'],['龙泉剑',22,'剑'],['唐刀',18,'军刀'],['环首刀',24,'军刀'],['陌刀',40,'大剑'],['三尖两刃刀',30,'长枪']];
+const ORIENTAL=[['环头剑',8,'剑'],['黄刀',8,'剑'],['云剑',16,'剑'],['打刀',20,'大剑'],['太刀',34,'大剑'],['苗刀',34,'大剑'],['胁差',10,'匕首'],['薙刀',34,'长枪'],['马来克力士剑',20,'匕首'],['大马士革刀',70,'剑'],['龙泉剑',22,'剑'],['唐刀',18,'军刀'],['环首刀',24,'军刀'],['陌刀',40,'大剑'],['三尖两刃刀',30,'长枪']];
 function forgeLevel(){
   const c=state.p.forge?state.p.forge.count:0;
   if(c>=1000)return 8; if(c>=600)return 7; if(c>=350)return 6; if(c>=200)return 5;
@@ -1592,6 +1592,10 @@ function renderCombat(){
       if(afford)o.push(['战技·'+sk.n+'（'+(sk.mult?('×'+sk.mult+(sk.aoe?'·整排':sk.hits?'·'+sk.hits+'连击':'')):sk.stance?'切换':sk.counter?'反击':sk.spellBoost?'共鸣':'')+((sk.stance||sk.counter||sk.spellBoost)?'':'，CD2')+'）',()=>playerAct('战技',i)]);
     }
     if(ctx.skillCd&&pl>=1)print('战技冷却：还剩 '+ctx.skillCd+' 回合','dim');
+    if(state.p.weapon&&state.p.weapon.name==='小镰刀'){
+      if(!ctx.skillCd&&state.p.sta>=5) o.push(['战技·尖刺打击（弱点直击·半血上×2.2/半血下×3.0·僵直2回合·耗5体力）',()=>playerAct('镰技')]);
+      else if(ctx.skillCd&&pl>=1) print('战技冷却：还剩 '+ctx.skillCd+' 回合','dim');
+    }
     if(stSet&&pl>=1){
       const set=HEAVY_STANCES[wt2];
       const add=STANCE_ADD[wt2][state.p.stance||set[0]];
@@ -1794,6 +1798,25 @@ function playerAct(kind,idx){
       print(e.name+' −'+dmg,'hit');
     });
     while(ctx&&ctx.en&&ctx.en.hp<=0){ if(!enemyDown())return; }
+  } else if(kind==='镰技'){
+    // 小镰刀·尖刺打击：半血上×2.2/半血下×3.0，弱点直击僵直两回合，CD1·耗5体力
+    if(state.p.sta<5){ print('体力不够','bad'); renderCombat(); return; }
+    if(ctx.skillCd){ renderCombat(); return; }
+    state.p.sta=Math.max(0,state.p.sta-5);
+    ctx.skillCd=1;
+    gainWprof(weaponTypeOf(state.p.weapon));
+    const mult=en.hp>=en.maxHp*0.5?2.2:3.0;
+    let def=Math.max(0,en.def+squadDefBonus(en)-(en.defDown||0));
+    let dmg=hitDmg(playerAtk(),mult,def);
+    if(en.pos)dmg=Math.round(dmg*en.pos.belly);
+    else if(en.exposed)dmg=Math.round(dmg*2);
+    if(en.blocked){ dmg=Math.max(1,Math.round(dmg*0.5)); print(en.name+'格挡了！你的伤害减半','def'); en.blocked=false; }
+    en.hp-=dmg;
+    ctx.damagedEnemy=true;
+    en.stunned=2; // 必定打击弱点——僵直两回合
+    print('尖刺打击！——镰刃直取弱点（×'+mult.toFixed(1)+'）','hint');
+    print(en.name+' −'+dmg+'，弱点受创，僵直两回合！','hit');
+    applyWeaponFx(en);
   } else if(kind==='正面'||kind==='侧面'||kind==='腹部'||kind==='连携'||kind==='战技'||kind==='架势技'){
     let dmg=0;
     gainWprof(weaponTypeOf(state.p.weapon));
@@ -1849,6 +1872,7 @@ function playerAct(kind,idx){
           if(sk.pierce)def=Math.round(def*(1-sk.pierce));
           dmg=hitDmg(playerAtk(),sk.mult,def);
           dmg=duelGloryReduce(dmg);
+          if(state.p.weapon&&state.p.weapon.name==='小镰刀'){ if(en.pos)dmg=Math.round(dmg*en.pos.belly); else if(en.exposed)dmg=Math.round(dmg*2); print('镰刃直取弱点！','hint'); }
           if(en.blocked){ dmg=Math.max(1,Math.round(dmg*0.5)); print(en.name+'格挡了！你的伤害减半','def'); en.blocked=false; }
           print('战技——'+sk.n+'！','hint');
           if(sk.aoe){
@@ -2214,7 +2238,7 @@ function enemyTurnOne(){
     aim=liveAllies[Math.floor(ctx.nextT/0.4*liveAllies.length)].name;
   }
   ctx.en.aim=aim;
-  if(ctx.en.stunned){ ctx.en.stunned=false; print(ctx.en.name+'被震住了，没有行动','dim'); }
+  if(ctx.en.stunned){ ctx.en.stunned=(ctx.en.stunned===true?1:ctx.en.stunned)-1; print(ctx.en.name+'被震住了，没有行动','dim'); }
   else if(state.p.buff.硬直>0){ state.p.buff.硬直--; print(ctx.en.name+'逼近过来，而你僵在原地！','bad'); }
   else if(SHIELD_NAMES[ctx.en.name] && ctx.nextR!==undefined && ctx.nextR>0.72){
     ctx.en.blocked=true;
@@ -3697,78 +3721,78 @@ function kingTurn(def){
 }
 /* ---------- 0.27 精英与传奇骑士掉落（装备强化） ---------- */
 const ELITE_LOOT={
- '血池之眼':{c:1,weapon:{name:'血锈细剑',atk:16,type:'细剑',fx:['血腥']},acc:{name:'血池之瞳'}},
- '沼底巨蟾':{c:1,weapon:{name:'毒囊短矛',atk:16,type:'长枪',fx:['剧毒']},items:{'锁子甲胸甲·优良':1},acc:{name:'巨蟾毒珠'}},
- '灰衣督军':{c:1,weapon:{name:'督军佩剑',atk:17,type:'剑',fx:['破甲']}},
- '无面神父':{c:1,weapon:{name:'无面短剑',atk:15,type:'匕首',fx:['噬魂']}},
- '骨瘟术士':{c:1,weapon:{name:'骨刺剑',atk:16,type:'剑',fx:['剧毒']},acc:{name:'骨瘟指骨'}},
- '山贼王':{c:1,weapon:{name:'山贼王砍刀',atk:18,type:'军刀',fx:['锋利']}},
- '深潜海妖':{c:1,weapon:{name:'珊瑚刺',atk:16,type:'匕首',fx:['灵活']},acc:{name:'海妖泪晶'}},
- '灰衣指挥官':{c:0.2,weapon:{name:'指挥佩剑',atk:15,type:'剑',fx:['军令']},acc:{name:'灰衣令符'}},
- '巡防队长':{c:0.2,weapon:{name:'巡防长剑',atk:16,type:'剑',fx:['锋利']}},
- '黑甲骑士':{c:0.15,weapon:{name:'黑甲重剑',atk:20,type:'大剑',fx:['破甲']},items:{黑甲碎片:1}},
- '弃誓骑士':{c:0.25,weapon:{name:'弃誓之剑',atk:16,type:'剑',fx:['破甲']}},
- '狮瞳守卫':{c:1,weapon:{name:'狮瞳短剑',atk:15,type:'匕首',fx:['灵活']},acc:{name:'狮瞳之石'}},
- '多足的野兽':{c:1,weapon:{name:'多足毒刺',atk:16,type:'匕首',fx:['剧毒']},acc:{name:'千足节坠'}},
- '星坠之狮':{c:1,weapon:{name:'星辉细剑',atk:20,type:'细剑',fx:['锋利']},acc:{name:'十连星纹'}},
- '闪耀的小国王':{c:1,weapon:{name:'金冠短剑',atk:19,type:'剑',fx:['破甲']},acc:{name:'金冠徽记'}},
- '狮形野兽':{c:1,weapon:{name:'狮牙短剑',atk:20,type:'剑',fx:['破甲']},items:{狮鬃:1},acc:{name:'狮鬃结'}},
- '血盐巨像':{c:1,weapon:{name:'血盐长戟',atk:18,type:'长枪',fx:['血腥']},items:{血盐核心:1},acc:{name:'血盐之心'}},
- '蛙母':{c:1,weapon:{name:'蛙骨长枪',atk:18,type:'长枪',fx:['剧毒']},items:{蛙母皮:1},acc:{name:'蛙母之卵'}},
- '虱王':{c:1,weapon:{name:'虱王刺剑',atk:16,type:'剑',fx:['剧毒']},items:{虱王壳:1},acc:{name:'虱王须坠'}},
- '墓窟守卫':{c:1,weapon:{name:'墓守大剑',atk:22,type:'大剑',fx:['噬魂']},items:{墓石核心:1},acc:{name:'墓守残徽'}},
- '渡河骨龙':{c:1,weapon:{name:'骨龙重戟',atk:24,type:'战戟',fx:['血腥']},items:{龙骨碎片:2},acc:{name:'龙骸坠'}},
- '赤河溺魂':{c:1,weapon:{name:'溺魂短剑',atk:15,type:'匕首',fx:['汲血']},items:{溺魂之水:1},acc:{name:'溺魂泪石'}},
- '沼泽蠕动者':{c:1,weapon:{name:'蠕动骨刃',atk:16,type:'骨刃',fx:['汲血']},items:{蠕动者皮:1}},
- '疫病编织者':{c:1,weapon:{name:'疫织细剑',atk:17,type:'细剑',fx:['剧毒']},items:{疫病核心:1}},
- '棺中圣女':{c:1,weapon:{name:'圣女细剑',atk:19,type:'细剑',fx:['泪蚀']},items:{圣棺碎片:1},acc:{name:'棺钉十字'}},
- '渡河摆渡人':{c:1,weapon:{name:'摆渡长杆',atk:18,type:'长枪',fx:['沉重']},items:{骨器:3},acc:{name:'摆渡人铜钱'}},
- '赤河骑士':{c:0.2,weapon:{name:'赤河骑士剑',atk:15,type:'剑',fx:['血腥']},acc:{name:'赤河骑士纹'}},
- '潮岸骑士':{c:0.2,weapon:{name:'潮岸刺枪',atk:16,type:'长枪',fx:['剧毒']}},
- '灰甲骑士':{c:0.2,weapon:{name:'灰甲阔剑',atk:17,type:'剑',fx:['破甲']}},
- '腐甲骑士':{c:0.2,weapon:{name:'腐甲长戟',atk:18,type:'战戟',fx:['血腥']}},
- '疫岸骑士':{c:0.2,weapon:{name:'疫岸重剑',atk:19,type:'大剑',fx:['剧毒']}},
- '报丧骑士·菲洛斯':{c:1,weapon:{name:'泪蚀细剑',atk:18,type:'细剑',fx:['泪蚀']},items:{泪雾核心:1},acc:{name:'泪雾坠'}},
- '腐败骑士·多明戈':{c:1,weapon:{name:'毒蚀焰型大剑',atk:22,type:'焰型大剑',fx:['剧毒','血腥']},items:{腐核:1}},
- '断弓骑士·马特奥':{c:1,weapon:{name:'断弓',atk:16,type:'弓',fx:['精准']},items:{猎人印记:3}},
- '苍白骑士·塞拉斯':{c:1,weapon:{name:'苍白大剑',atk:24,type:'大剑',fx:['汲血']},items:{苍白板甲碎片:1},accessory:{name:'塞拉斯的纹章'}},
- '寒铁骑士·维罗妮卡':{c:1,weapon:{name:'寒铁长枪',atk:20,type:'长枪',fx:['霜刃']},items:{霜花碎片:2}},
- '断剑骑士·塞萨尔':{c:1,weapon:{name:'断剑',atk:18,type:'剑',fx:['锋利','破甲']},items:{铁拳套:1}},
- '鲸骨骑士·华金':{c:1,weapon:{name:'鲸骨大斧',atk:24,type:'斧',fx:['沉重']},items:{鲸油核心:1,鲸骨甲胄碎片:1}},
- '铸甲骑士·埃内斯托':{c:1,weapon:{name:'锻造重锤',atk:21,type:'重锤',fx:['破甲']},items:{自修板甲片:1},acc:{name:'铸甲碎屑'}},
- '灰烬骑士·鲁文':{c:1,weapon:{name:'烬大剑',atk:23,type:'焰型大剑',fx:['血腥']},items:{灰烬核心:1},acc:{name:'灰烬余火'}},
- '空甲骑士·奥古斯丁':{c:1,weapon:{name:'悬浮长枪',atk:22,type:'长枪',fx:['破甲']},items:{空甲核心:1},acc:{name:'空甲浮环'}},
- '矿脉巨像':{c:1,weapon:{name:'矿脉重锤',atk:22,type:'重锤',fx:['破甲']},items:{矿脉核心:1}},
- '雷崖雷鸟':{c:1,weapon:{name:'雷鸟翎枪',atk:22,type:'长枪',fx:['霜刃']},items:{雷核:1,雷鸟翎羽:1}},
- '铁壳骑士':{c:0.2,weapon:{name:'铁壳重剑',atk:18,type:'大剑',fx:['破甲']}},
- '雹铁骑士':{c:0.2,weapon:{name:'雹铁长枪',atk:18,type:'长枪',fx:['霜刃']}},
- '灰壳暴徒':{c:0.05,weapon:{name:'灰壳矿镐',atk:14,type:'斧',fx:['破甲']}},
- '雹铁猎人':{c:0.05,weapon:{name:'雹铁镐',atk:14,type:'斧',fx:['霜刃']}},
- '潮音海妖':{c:1,weapon:{name:'潮音利刃',atk:17,type:'匕首',fx:['灵活']},items:{海鱼:3},acc:{name:'潮音贝坠'}},
- '铁蜈蚣':{c:0.08,weapon:{name:'铁蜈毒刺',atk:14,type:'匕首',fx:['剧毒']}},
+ '血池之眼':{c:1,weapon:{name:'血锈细剑',atk:24,type:'细剑',fx:['血腥']},acc:{name:'血池之瞳'}},
+ '沼底巨蟾':{c:1,weapon:{name:'毒囊短矛',atk:24,type:'长枪',fx:['剧毒']},items:{'锁子甲胸甲·优良':1},acc:{name:'巨蟾毒珠'}},
+ '灰衣督军':{c:1,weapon:{name:'督军佩剑',atk:26,type:'剑',fx:['破甲']}},
+ '无面神父':{c:1,weapon:{name:'无面短剑',atk:23,type:'匕首',fx:['噬魂']}},
+ '骨瘟术士':{c:1,weapon:{name:'骨刺剑',atk:24,type:'剑',fx:['剧毒']},acc:{name:'骨瘟指骨'}},
+ '山贼王':{c:1,weapon:{name:'山贼王砍刀',atk:27,type:'军刀',fx:['锋利']}},
+ '深潜海妖':{c:1,weapon:{name:'珊瑚刺',atk:24,type:'匕首',fx:['灵活']},acc:{name:'海妖泪晶'}},
+ '灰衣指挥官':{c:0.2,weapon:{name:'指挥佩剑',atk:23,type:'剑',fx:['军令']},acc:{name:'灰衣令符'}},
+ '巡防队长':{c:0.2,weapon:{name:'巡防长剑',atk:24,type:'剑',fx:['锋利']}},
+ '黑甲骑士':{c:0.15,weapon:{name:'黑甲重剑',atk:30,type:'大剑',fx:['破甲']},items:{黑甲碎片:1}},
+ '弃誓骑士':{c:0.25,weapon:{name:'弃誓之剑',atk:24,type:'剑',fx:['破甲']}},
+ '狮瞳守卫':{c:1,weapon:{name:'狮瞳短剑',atk:23,type:'匕首',fx:['灵活']},acc:{name:'狮瞳之石'}},
+ '多足的野兽':{c:1,weapon:{name:'多足毒刺',atk:24,type:'匕首',fx:['剧毒']},acc:{name:'千足节坠'}},
+ '星坠之狮':{c:1,weapon:{name:'星辉细剑',atk:30,type:'细剑',fx:['锋利']},acc:{name:'十连星纹'}},
+ '闪耀的小国王':{c:1,weapon:{name:'金冠短剑',atk:29,type:'剑',fx:['破甲']},acc:{name:'金冠徽记'}},
+ '狮形野兽':{c:1,weapon:{name:'狮牙短剑',atk:30,type:'剑',fx:['破甲']},items:{狮鬃:1},acc:{name:'狮鬃结'}},
+ '血盐巨像':{c:1,weapon:{name:'血盐长戟',atk:27,type:'长枪',fx:['血腥']},items:{血盐核心:1},acc:{name:'血盐之心'}},
+ '蛙母':{c:1,weapon:{name:'蛙骨长枪',atk:27,type:'长枪',fx:['剧毒']},items:{蛙母皮:1},acc:{name:'蛙母之卵'}},
+ '虱王':{c:1,weapon:{name:'虱王刺剑',atk:24,type:'剑',fx:['剧毒']},items:{虱王壳:1},acc:{name:'虱王须坠'}},
+ '墓窟守卫':{c:1,weapon:{name:'墓守大剑',atk:33,type:'大剑',fx:['噬魂']},items:{墓石核心:1},acc:{name:'墓守残徽'}},
+ '渡河骨龙':{c:1,weapon:{name:'骨龙重戟',atk:36,type:'战戟',fx:['血腥']},items:{龙骨碎片:2},acc:{name:'龙骸坠'}},
+ '赤河溺魂':{c:1,weapon:{name:'溺魂短剑',atk:23,type:'匕首',fx:['汲血']},items:{溺魂之水:1},acc:{name:'溺魂泪石'}},
+ '沼泽蠕动者':{c:1,weapon:{name:'蠕动骨刃',atk:24,type:'骨刃',fx:['汲血']},items:{蠕动者皮:1}},
+ '疫病编织者':{c:1,weapon:{name:'疫织细剑',atk:26,type:'细剑',fx:['剧毒']},items:{疫病核心:1}},
+ '棺中圣女':{c:1,weapon:{name:'圣女细剑',atk:29,type:'细剑',fx:['泪蚀']},items:{圣棺碎片:1},acc:{name:'棺钉十字'}},
+ '渡河摆渡人':{c:1,weapon:{name:'摆渡长杆',atk:27,type:'长枪',fx:['沉重']},items:{骨器:3},acc:{name:'摆渡人铜钱'}},
+ '赤河骑士':{c:0.2,weapon:{name:'赤河骑士剑',atk:23,type:'剑',fx:['血腥']},acc:{name:'赤河骑士纹'}},
+ '潮岸骑士':{c:0.2,weapon:{name:'潮岸刺枪',atk:24,type:'长枪',fx:['剧毒']}},
+ '灰甲骑士':{c:0.2,weapon:{name:'灰甲阔剑',atk:26,type:'剑',fx:['破甲']}},
+ '腐甲骑士':{c:0.2,weapon:{name:'腐甲长戟',atk:27,type:'战戟',fx:['血腥']}},
+ '疫岸骑士':{c:0.2,weapon:{name:'疫岸重剑',atk:29,type:'大剑',fx:['剧毒']}},
+ '报丧骑士·菲洛斯':{c:1,weapon:{name:'泪蚀细剑',atk:27,type:'细剑',fx:['泪蚀']},items:{泪雾核心:1},acc:{name:'泪雾坠'}},
+ '腐败骑士·多明戈':{c:1,weapon:{name:'毒蚀焰型大剑',atk:33,type:'焰型大剑',fx:['剧毒','血腥']},items:{腐核:1}},
+ '断弓骑士·马特奥':{c:1,weapon:{name:'断弓',atk:24,type:'弓',fx:['精准']},items:{猎人印记:3}},
+ '苍白骑士·塞拉斯':{c:1,weapon:{name:'苍白大剑',atk:36,type:'大剑',fx:['汲血']},items:{苍白板甲碎片:1},accessory:{name:'塞拉斯的纹章'}},
+ '寒铁骑士·维罗妮卡':{c:1,weapon:{name:'寒铁长枪',atk:30,type:'长枪',fx:['霜刃']},items:{霜花碎片:2}},
+ '断剑骑士·塞萨尔':{c:1,weapon:{name:'断剑',atk:27,type:'剑',fx:['锋利','破甲']},items:{铁拳套:1}},
+ '鲸骨骑士·华金':{c:1,weapon:{name:'鲸骨大斧',atk:36,type:'斧',fx:['沉重']},items:{鲸油核心:1,鲸骨甲胄碎片:1}},
+ '铸甲骑士·埃内斯托':{c:1,weapon:{name:'锻造重锤',atk:32,type:'重锤',fx:['破甲']},items:{自修板甲片:1},acc:{name:'铸甲碎屑'}},
+ '灰烬骑士·鲁文':{c:1,weapon:{name:'烬大剑',atk:35,type:'焰型大剑',fx:['血腥']},items:{灰烬核心:1},acc:{name:'灰烬余火'}},
+ '空甲骑士·奥古斯丁':{c:1,weapon:{name:'悬浮长枪',atk:33,type:'长枪',fx:['破甲']},items:{空甲核心:1},acc:{name:'空甲浮环'}},
+ '矿脉巨像':{c:1,weapon:{name:'矿脉重锤',atk:33,type:'重锤',fx:['破甲']},items:{矿脉核心:1}},
+ '雷崖雷鸟':{c:1,weapon:{name:'雷鸟翎枪',atk:33,type:'长枪',fx:['霜刃']},items:{雷核:1,雷鸟翎羽:1}},
+ '铁壳骑士':{c:0.2,weapon:{name:'铁壳重剑',atk:27,type:'大剑',fx:['破甲']}},
+ '雹铁骑士':{c:0.2,weapon:{name:'雹铁长枪',atk:27,type:'长枪',fx:['霜刃']}},
+ '灰壳暴徒':{c:0.05,weapon:{name:'灰壳矿镐',atk:21,type:'斧',fx:['破甲']}},
+ '雹铁猎人':{c:0.05,weapon:{name:'雹铁镐',atk:21,type:'斧',fx:['霜刃']}},
+ '潮音海妖':{c:1,weapon:{name:'潮音利刃',atk:26,type:'匕首',fx:['灵活']},items:{海鱼:3},acc:{name:'潮音贝坠'}},
+ '铁蜈蚣':{c:0.08,weapon:{name:'铁蜈毒刺',atk:21,type:'匕首',fx:['剧毒']}},
  '炉灰魔物':{c:0.08,items:{炉灰核心:1}},
  '焦兽':{c:0.08,items:{焦兽皮:1}},
- '雷蜥':{c:0.08,weapon:{name:'雷蜥尾刺',atk:13,type:'匕首',fx:['霜刃']}},
+ '雷蜥':{c:0.08,weapon:{name:'雷蜥尾刺',atk:20,type:'匕首',fx:['霜刃']}},
  '风暴元素':{c:0.08,items:{雷核:1}},
- '无头战魂':{c:0.1,weapon:{name:'无头断剑',atk:19,type:'剑',fx:['噬魂']}},
+ '无头战魂':{c:0.1,weapon:{name:'无头断剑',atk:29,type:'剑',fx:['噬魂']}},
  '黑原鬣犬':{c:0.06,items:{兽皮:2}},
- '北境战帅':{c:1,weapon:{name:'北境战剑',atk:26,type:'大剑',fx:['破甲']},items:{北境战旗:1}},
- '黑棘战团长':{c:1,weapon:{name:'黑棘战剑',atk:25,type:'大剑',fx:['破甲']}},
- '灰烬狂犬':{c:1,weapon:{name:'狂犬獠牙',atk:22,type:'匕首',fx:['剧毒']}},
- '北境猎龙人':{c:1,weapon:{name:'猎龙长弓',atk:24,type:'弓',fx:['精准']}},
- '霜原巨狼':{c:1,weapon:{name:'霜原狼牙剑',atk:23,type:'剑',fx:['霜刃']}},
- '战旗亡魂':{c:1,weapon:{name:'战旗断刃',atk:25,type:'大剑',fx:['噬魂']}},
- '要塞逃将':{c:1,weapon:{name:'逃将重剑',atk:24,type:'大剑',fx:['破甲']}},
- '荒原骨龙':{c:1,weapon:{name:'荒骨重戟',atk:26,type:'战戟',fx:['血腥']}},
- '黑棘城主':{c:1,weapon:{name:'黑棘王剑',atk:28,type:'大剑',fx:['破甲']}},
- '灰墙守备长':{c:1,weapon:{name:'守备重剑',atk:25,type:'大剑',fx:['破甲']}},
- '冻原矛手':{c:1,weapon:{name:'冻原长矛',atk:24,type:'长枪',fx:['霜刃']}},
- '黑棘双刀客':{c:1,weapon:{name:'黑棘双刀',atk:24,type:'匕首',fx:['灵活']}},
- '北境萨满':{c:1,weapon:{name:'萨满骨杖',atk:24,type:'法杖',fx:['霜刃']},items:{'法术书·北风之怒':1}},
- '荒原巨熊':{c:1,weapon:{name:'巨熊掌锤',atk:25,type:'重锤',fx:['沉重']},items:{熊皮:2}},
- '灰墙弩阵':{c:1,weapon:{name:'灰墙重弩',atk:25,type:'弩',fx:['精准']}},
- '黑原疫兽':{c:1,weapon:{name:'疫兽毒牙',atk:24,type:'匕首',fx:['剧毒']}},
- '旧王侍卫':{c:1,weapon:{name:'旧王卫剑',atk:26,type:'剑',fx:['破甲']}}
+ '北境战帅':{c:1,weapon:{name:'北境战剑',atk:39,type:'大剑',fx:['破甲']},items:{北境战旗:1}},
+ '黑棘战团长':{c:1,weapon:{name:'黑棘战剑',atk:38,type:'大剑',fx:['破甲']}},
+ '灰烬狂犬':{c:1,weapon:{name:'狂犬獠牙',atk:33,type:'匕首',fx:['剧毒']}},
+ '北境猎龙人':{c:1,weapon:{name:'猎龙长弓',atk:36,type:'弓',fx:['精准']}},
+ '霜原巨狼':{c:1,weapon:{name:'霜原狼牙剑',atk:35,type:'剑',fx:['霜刃']}},
+ '战旗亡魂':{c:1,weapon:{name:'战旗断刃',atk:38,type:'大剑',fx:['噬魂']}},
+ '要塞逃将':{c:1,weapon:{name:'逃将重剑',atk:36,type:'大剑',fx:['破甲']}},
+ '荒原骨龙':{c:1,weapon:{name:'荒骨重戟',atk:39,type:'战戟',fx:['血腥']}},
+ '黑棘城主':{c:1,weapon:{name:'黑棘王剑',atk:42,type:'大剑',fx:['破甲']}},
+ '灰墙守备长':{c:1,weapon:{name:'守备重剑',atk:38,type:'大剑',fx:['破甲']}},
+ '冻原矛手':{c:1,weapon:{name:'冻原长矛',atk:36,type:'长枪',fx:['霜刃']}},
+ '黑棘双刀客':{c:1,weapon:{name:'黑棘双刀',atk:36,type:'匕首',fx:['灵活']}},
+ '北境萨满':{c:1,weapon:{name:'萨满骨杖',atk:36,type:'法杖',fx:['霜刃']},items:{'法术书·北风之怒':1}},
+ '荒原巨熊':{c:1,weapon:{name:'巨熊掌锤',atk:38,type:'重锤',fx:['沉重']},items:{熊皮:2}},
+ '灰墙弩阵':{c:1,weapon:{name:'灰墙重弩',atk:38,type:'弩',fx:['精准']}},
+ '黑原疫兽':{c:1,weapon:{name:'疫兽毒牙',atk:36,type:'匕首',fx:['剧毒']}},
+ '旧王侍卫':{c:1,weapon:{name:'旧王卫剑',atk:39,type:'剑',fx:['破甲']}}
 };
 const ELITE_PINNACLE={'报丧骑士·菲洛斯':1,'腐败骑士·多明戈':1,'断弓骑士·马特奥':1,'苍白骑士·塞拉斯':1,'寒铁骑士·维罗妮卡':1,'断剑骑士·塞萨尔':1,'鲸骨骑士·华金':1,'铸甲骑士·埃内斯托':1,'灰烬骑士·鲁文':1,'空甲骑士·奥古斯丁':1,'矿脉巨像':1,'雷崖雷鸟':1,'渡河骨龙':1,'北境战帅':1,'黑棘战团长':1,'灰烬狂犬':1,'北境猎龙人':1,'霜原巨狼':1,'战旗亡魂':1,'要塞逃将':1,'荒原骨龙':1,'黑棘城主':1};
 /* 第一章BOSS名册（血量减半名单，覆盖不在掉落表里的领主/龙/解放祸首/游荡妖魔） */
@@ -4203,7 +4227,7 @@ function titleScreen(){
 '  ██║███████║╚██████╔╝███████╗╚██████╔╝███████╗██████╔╝███████╗\n'+
 '  ╚═╝╚══════╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚══════╝╚═════╝ ╚══════╝\n</pre>';
   log.appendChild(d);
-  print('伊索尔德 0.26 · 第一章：南境 · 领地解放/新城镇/古战场/兰德尔/卡尔沃/地图系统/高危密令/敌人图鉴/法术商店 · 若界面没有，说明浏览器在用旧缓存——请 Ctrl+F5 强制刷新','dim');
+  print('伊索尔德 0.27 · 第一章：南境 · 小镰刀尖刺打击/精英武器强化/领地解放/新城镇/古战场/兰德尔/卡尔沃/地图系统/高危密令/敌人图鉴/法术商店 · 若界面没有，说明浏览器在用旧缓存——请 Ctrl+F5 强制刷新','dim');
   print('说明：按钮即行动；下方输入框支持 看/状态/背包/帮助，开发者刷数值用 /dev营地休息=存档，也是"过一天"','dim');
   hr();
   const o=[['新的开始',()=>{ state=newGame(); riverScene(); }]];
@@ -4284,6 +4308,7 @@ function gotoSmith(){
   o.push(['买：长戟（45铜币，+12攻击，战戟）',()=>buyWeapon('长戟',45,12,null,'战戟')]);
   o.push(['买：猎弓（12铜币，+6攻击，弓）',()=>buyWeapon('猎弓',12,6,null,'弓')]);
   o.push(['买：手弩（20铜币，+7攻击，弩）',()=>buyWeapon('手弩',20,7,null,'弩')]);
+  if(state.p.lastTown==='lienfiel') o.push(['买：小镰刀（300铜币，+24攻击，大剑·专属战技尖刺打击）',()=>buyWeapon('小镰刀',300,24,null,'大剑')]);
   o.push(['买：皮背心（15铜币，胸·+3防）',()=>buyArmorPiece('胸','皮背心',15,3)]);
   o.push(['买：皮革帽（8铜币，头·+1防）',()=>buyArmorPiece('头','皮革帽',8,1)]);
   o.push(['买：皮革护腿（12铜币，腿·+2防）',()=>buyArmorPiece('腿','皮革护腿',12,2)]);
@@ -5884,7 +5909,7 @@ function gotoExotic(){
   o.push(['买：双心之坠（420铜币，饰：每回合35%概率再次行动）',()=>buyAcc('双心之坠',420,gotoExotic)]);
   const st=stockOf('exotic',['肉桂','丁香','藏红花','大马士革刀','陨铁','铁指环','铜坠','麻布护符','木符','铜手环','石坠','草绳结','木珠链','麦饼','烤鱼','苦蜜酒','蛙油膏','疮药膏','胡椒','海鱼','大鱼','蜂蜜','木炭']);
   st.items.forEach(k=>{
-    if(k==='大马士革刀') o.push(['新货：大马士革刀（7200铜币，+50攻击）',()=>{ takeStock('exotic','大马士革刀'); buyExoticWeapon('大马士革刀',7200,50,null,'剑'); }]);
+    if(k==='大马士革刀') o.push(['新货：大马士革刀（7200铜币，+70攻击）',()=>{ takeStock('exotic','大马士革刀'); buyExoticWeapon('大马士革刀',7200,70,null,'剑'); }]);
     else if(k==='陨铁') o.push(['新货：陨铁（300铜币，天外陨铁）',()=>{ takeStock('exotic','陨铁'); buyItem('陨铁',300); }]);
     else if(ACC_DEFS[k]&&ACC_DEFS[k].price) o.push(['新货：'+k+'（'+ACC_DEFS[k].price+'铜币，饰：'+ACC_DEFS[k].desc+'）',()=>{ takeStock('exotic',k); buyAcc(k,ACC_DEFS[k].price,gotoExotic); }]);
     else if(CATALOG[k]) o.push(['新货：'+k+'（'+CATALOG[k].price+'铜币，'+CATALOG[k].desc+'）',()=>{ takeStock('exotic',k); buyItem(k,CATALOG[k].price); }]);

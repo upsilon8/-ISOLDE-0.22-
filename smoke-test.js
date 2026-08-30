@@ -33,7 +33,7 @@ global.document = {
   createElement: el
 };
 
-eval(js + '\n;globalThis.__getState=()=>state;globalThis.__getCtx=()=>ctx;globalThis.__runCmd=runCmd;globalThis.__hunts=HUNT_LIST;globalThis.__highJobs=HIGH_JOBS;globalThis.__curScene=()=>curScene;globalThis.__statsForLevel=statsForLevel;globalThis.__migrate=migrate;globalThis.__xpNeed=xpNeed;globalThis.__prepEnemy=prepEnemy;globalThis.__highFoe=HIGH_FOE;globalThis.__playerAtk=playerAtk;globalThis.__accDefs=ACC_DEFS;globalThis.__skipTw=skipTw;globalThis.__twSpeed=twSpeed;globalThis.__print=print;globalThis.__allySpellPower=allySpellPower;globalThis.__regulusAllyAct=regulusAllyAct;globalThis.__allySkill=allySkill;globalThis.__accFx=accFx;globalThis.__daggerExtraHits=daggerExtraHits;globalThis.__prepEnemy2=prepEnemy;');
+eval(js + '\n;globalThis.__getState=()=>state;globalThis.__getCtx=()=>ctx;globalThis.__runCmd=runCmd;globalThis.__hunts=HUNT_LIST;globalThis.__highJobs=HIGH_JOBS;globalThis.__curScene=()=>curScene;globalThis.__statsForLevel=statsForLevel;globalThis.__migrate=migrate;globalThis.__xpNeed=xpNeed;globalThis.__prepEnemy=prepEnemy;globalThis.__highFoe=HIGH_FOE;globalThis.__playerAtk=playerAtk;globalThis.__accDefs=ACC_DEFS;globalThis.__skipTw=skipTw;globalThis.__twSpeed=twSpeed;globalThis.__print=print;globalThis.__allySpellPower=allySpellPower;globalThis.__regulusAllyAct=regulusAllyAct;globalThis.__allySkill=allySkill;globalThis.__accFx=accFx;globalThis.__daggerExtraHits=daggerExtraHits;globalThis.__prepEnemy2=prepEnemy;globalThis.__eliteLoot=ELITE_LOOT;');
 
 const st = () => globalThis.__getState();
 function btns() { return actEl.children.filter(c => c.tag === 'button' && !c.disabled).map(c => c._text); }
@@ -974,7 +974,7 @@ step('精炼熔断钢铁（大马士革原料）', () => {
     if (wS.atk < 55) throw new Error('精钢攻击+20%未生效: ' + wS.atk);
   }
   click('离开');
-  // 大马士革刀：+50攻击，7200铜币（异域商人轮换货，跨周期找）
+  // 大马士革刀：+70攻击，7200铜币（异域商人轮换货，跨周期找）
   __runCmd('/钱 7300');
   let dam = null, dg = 0;
   while (!dam && dg++ < 10) {
@@ -983,11 +983,11 @@ step('精炼熔断钢铁（大马士革原料）', () => {
     if (!dam) { click('离开'); __runCmd('/天 ' + (st().p.days + 3)); }
   }
   if (!dam) throw new Error('10个刷新周期没刷出大马士革刀（概率极小）');
-  if (!dam.includes('7200') || !dam.includes('+50')) throw new Error('大马士革刀价格/攻击未更新: ' + dam);
+  if (!dam.includes('7200') || !dam.includes('+70')) throw new Error('大马士革刀价格/攻击未更新: ' + dam);
   click(dam);
-  if (!st().p.owned.some(w => w.name === '大马士革刀' && w.atk === 50)) throw new Error('大马士革刀应入背包且+50: ' + JSON.stringify(st().p.owned.filter(w => w.name.includes('大马'))));
+  if (!st().p.owned.some(w => w.name === '大马士革刀' && w.atk === 70)) throw new Error('大马士革刀应入背包且+70: ' + JSON.stringify(st().p.owned.filter(w => w.name.includes('大马'))));
   click('离开');
-  console.log('  · 熔炼精钢×1+精钢剑身必史诗+20%+大马士革刀7200铜币+50攻击（入背包）');
+  console.log('  · 熔炼精钢×1+精钢剑身必史诗+20%+大马士革刀7200铜币+70攻击（入背包）');
 });
 step('连携（匕首→大剑佣兵）', () => {
   __runCmd('/清人');
@@ -2690,6 +2690,54 @@ step('0.26北归之路（斯特恩筹备区）', () => {
   if (!rawBtns().some(b => b.startsWith('北上：赫里克的军营——尚未开放'))) throw new Error('军营入口应关闭: ' + JSON.stringify(rawBtns()));
   click('回城');
   console.log('  · 卡尔沃北上（解放+要塞后）→北归之路三段→斯特恩筹备区（客栈/告示板/回程，军营入口尚未开放）');
+});
+step('0.27小镰刀（利恩菲尔·尖刺打击·大马士革70·精英武器×1.5）', () => {
+  // ① 利恩菲尔铁匠铺有售
+  __runCmd('/利'); __runCmd('/钱 500');
+  click('铁匠铺');
+  const sRow = '买：小镰刀（300铜币，+24攻击，大剑·专属战技尖刺打击）';
+  if (!has(sRow)) throw new Error('小镰刀缺失: ' + JSON.stringify(btns()));
+  click(sRow);
+  if (!st().p.owned.some(w => w.name === '小镰刀' && w.atk === 24 && w.type === '大剑')) throw new Error('小镰刀未入包');
+  click('离开'); click('出城'); click('扎营'); click('换武器');
+  click('小镰刀（伤害+24）');
+  click('离开'); click('回城');
+  // ② 尖刺打击：半血上×2.2、僵直2回合；半血下×3.0（CD1耗5体力）——单人战避免队友把龙打死
+  const partyB = { mercs: st().p.mercs, knight: st().p.knight, companion: st().p.companion, regulus: st().p.regulus, ampthis: st().p.ampthis };
+  st().p.mercs = []; st().p.knight = null; st().p.companion = null; st().p.regulus = null; st().p.ampthis = null;
+  st().p.wprof = st().p.wprof || {}; st().p.wprof['大剑'] = 80;
+  __runCmd('/赤龙');
+  const c2 = () => globalThis.__getCtx();
+  if (!btns().some(b => b.startsWith('战技·尖刺打击'))) throw new Error('尖刺打击按钮缺失: ' + JSON.stringify(btns().filter(b => b.includes('战技'))));
+  __runCmd('/heal');
+  click(btns().find(b => b.startsWith('战技·尖刺打击')));
+  if (!logHas('×2.2')) throw new Error('半血上未×2.2');
+  if (!c2() || !(c2().en.stunned >= 1 && c2().en.stunned <= 2)) throw new Error('僵直两回合未生效: ' + (c2() && c2().en && c2().en.stunned));
+  // 打到半血以下（僵直期间它不还手）
+  let grd = 0;
+  while (c2() && c2().en.hp >= c2().en.maxHp * 0.5 && grd++ < 60) {
+    if (btns().some(b => b.startsWith('攻击·侧面'))) click(btns().find(b => b.startsWith('攻击·侧面')));
+    let ag = 0;
+    while (btns().some(b => b === '战斗') && !btns().some(b => b.startsWith('攻击·侧面')) && ag++ < 8) click('战斗');
+  }
+  if (!c2() || c2().en.hp >= c2().en.maxHp * 0.5) throw new Error('未能打到半血以下: ' + (c2() && c2().en && c2().en.hp));
+  __runCmd('/heal'); // 体力耗到5以下尖刺打击按钮会隐藏——回满再试
+  if (c2() && c2().skillCd > 0) { // 再次行动饰品可能打断回合导致CD未归零——格挡一回合把它走完
+    if (btns().includes('格挡 (减伤50%)')) click('格挡 (减伤50%)');
+    let ag3 = 0;
+    while (btns().some(b => b === '战斗') && !btns().some(b => b.startsWith('攻击·侧面')) && ag3++ < 8) click('战斗');
+  }
+  const sBtn2 = btns().find(b => b.startsWith('战技·尖刺打击'));
+  if (!sBtn2) throw new Error('CD1后尖刺打击应可再用: ' + JSON.stringify(btns()) + ' skillCd=' + (c2() && c2().skillCd) + ' weapon=' + (st().p.weapon && st().p.weapon.name) + ' sta=' + st().p.sta);
+  click(sBtn2);
+  if (!logHas('×3.0')) throw new Error('半血下未×3.0');
+  __runCmd('/kill');
+  if (btns().includes('继续走')) click('继续走');
+  st().p.mercs = partyB.mercs; st().p.knight = partyB.knight; st().p.companion = partyB.companion; st().p.regulus = partyB.regulus; st().p.ampthis = partyB.ampthis;
+  // ③ 精英掉落武器攻击×1.5（矿脉重锤 22→33）
+  const EL = globalThis.__eliteLoot;
+  if (!EL['矿脉巨像'] || EL['矿脉巨像'].weapon.atk !== 33) throw new Error('精英武器×1.5未生效: ' + JSON.stringify(EL['矿脉巨像'] && EL['矿脉巨像'].weapon));
+  console.log('  · 小镰刀（利恩菲尔·尖刺打击×2.2/×3.0·弱点僵直2回合·CD1耗5体力）+大马士革刀70+精英武器×1.5');
 });
 step('0.25安普提斯（黑棘城十委托→荒野三败劝降）', () => {
   const f = st().p.flags;
